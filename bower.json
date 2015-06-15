@@ -1,0 +1,22 @@
+{
+  "name": "sportcourts",
+  "version": "1.0.0",
+  "homepage": "https://github.com/vitaliyharchenko/sportcourts",
+  "authors": [
+    "Vitaliy Kharchenko <harchenko.grape@gmail.com>"
+  ],
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "bootstrap-sass": "~3.3.4",
+    "jquery-ui": "~1.11.4",
+    "fontawesome": "~4.3.0",
+    "social-likes": "~3.0.14"
+  }
+}

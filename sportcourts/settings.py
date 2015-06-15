@@ -29,6 +29,7 @@ ALLOWED_HOSTS = []
 
 
 # Application definition
+# TODO: configure server
 
 INSTALLED_APPS = (
     'django.contrib.admin',
@@ -37,6 +38,7 @@ INSTALLED_APPS = (
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'customuser',
 )
 
 MIDDLEWARE_CLASSES = (
@@ -52,23 +54,9 @@ MIDDLEWARE_CLASSES = (
 
 ROOT_URLCONF = 'sportcourts.urls'
 
-TEMPLATES = [
-    {
-        'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
-        'APP_DIRS': True,
-        'OPTIONS': {
-            'context_processors': [
-                'django.template.context_processors.debug',
-                'django.template.context_processors.request',
-                'django.contrib.auth.context_processors.auth',
-                'django.contrib.messages.context_processors.messages',
-            ],
-        },
-    },
-]
-
 WSGI_APPLICATION = 'sportcourts.wsgi.application'
+
+AUTH_USER_MODEL = 'customuser.User'
 
 
 # Database
@@ -76,8 +64,11 @@ WSGI_APPLICATION = 'sportcourts.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'NAME': 'sc',
+        'HOST': 'localhost',
+        'PASSWORD': '4203',
+        'USER': 'sc'
     }
 }
 
@@ -103,4 +94,14 @@ STATIC_URL = '/static/'
 
 TEMPLATE_DIRS = (
     os.path.join(BASE_DIR,  'templates'),
+)
+
+TEMPLATE_CONTEXT_PROCESSORS = (
+    "django.contrib.auth.context_processors.auth",
+    "django.template.context_processors.debug",
+    "django.template.context_processors.i18n",
+    "django.template.context_processors.media",
+    "django.template.context_processors.static",
+    "django.template.context_processors.tz",
+    "django.contrib.messages.context_processors.messages",
 )
