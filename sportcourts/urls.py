@@ -16,6 +16,7 @@ Including another URLconf
 from django.conf.urls import patterns, include, url
 from django.contrib import admin
 from . import views
+import customuser.urls
 
 urlpatterns = [
     url(r'^admin/', include(admin.site.urls)),
@@ -23,5 +24,5 @@ urlpatterns = [
 
 urlpatterns = patterns('',
                        url(r'^admin/', include(admin.site.urls)),
-                       url(r'^$', views.index),
-                       )
+                       url(r'^$', views.index, name='index'),
+                       ) + customuser.urls.urlpatterns

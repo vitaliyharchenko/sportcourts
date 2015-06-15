@@ -1,0 +1,11 @@
+doctype html
+html(lang="en")
+  head
+    title sportcourts
+  body
+    h1 {{ user }}, {{ user.is_admin }}
+    h2 Login form
+    form(method="post")
+      |{% csrf_token %}
+      |{{ form }}
+      button(type="submit") Войти
