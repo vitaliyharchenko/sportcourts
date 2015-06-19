@@ -3,25 +3,27 @@ from django import forms
 from django.contrib.auth import get_user_model
 from django.contrib.auth.forms import ReadOnlyPasswordHashField
 from models import User
+from utils.forms import BootstrapModelForm, BootstrapForm
+from utils.validators import validate_password
 
 
-class UserCreationForm(forms.ModelForm):
+class UserCreationForm(BootstrapModelForm):
     error_messages = {
         'duplicate_email': "A user with that email already exists.",
         'password_mismatch': "The two password fields didn't match.",
     }
 
     password1 = forms.CharField(
-        label="Password",
+        label="Пароль",
         widget=forms.PasswordInput)
     password2 = forms.CharField(
-        label="Password confirmation",
+        label="Подтвердите",
         widget=forms.PasswordInput,
-        help_text="Enter the same password as above, for verification.")
+        help_text="Введите тот же пароль")
 
     class Meta:
-        model = User
-        fields = ('email',)
+        model = get_user_model()
+        fields = ('email', 'first_name', 'last_name')
 
     def clean_email(self):
         email = self.cleaned_data["email"]
@@ -53,14 +55,13 @@ class UserCreationForm(forms.ModelForm):
 
 
 class UserChangeForm(forms.ModelForm):
-
     password = ReadOnlyPasswordHashField(label="Password", help_text=
-        "Raw passwords are not stored, so there is no way to see "
-        "this user's password, but you can change the password "
-        "using <a href=\"password/\">this form</a>.")
+    "Raw passwords are not stored, so there is no way to see "
+    "this user's password, but you can change the password "
+    "using <a href=\"password/\">this form</a>.")
 
     class Meta:
-        model = User
+        model = get_user_model()
         exclude = ()
 
     def __init__(self, *args, **kwargs):
@@ -73,6 +74,25 @@ class UserChangeForm(forms.ModelForm):
         return self.initial["password"]
 
 
-class UserLoginForm(forms.Form):
+class EmailForm(forms.Form):
+    email = forms.EmailField(label='Емейл', max_length=150)
+
+
+class UserLoginForm(BootstrapForm):
     email = forms.EmailField(label='Email', max_length=150)
     password = forms.CharField(label='Пароль', widget=forms.PasswordInput())
+
+
+class UserRegistrationForm(BootstrapModelForm):
+    # TODO: Override all error messages
+    class Meta:
+        model = get_user_model()
+        fields = User.REGISTRATION_FIELDS
+        widgets = {'vkuserid': forms.HiddenInput(),
+                   'password': forms.PasswordInput(render_value=False),
+                   'email': forms.EmailInput({'readonly': 'True'})}
+
+    def clean_password(self):
+        value = self.cleaned_data['password']
+        validate_password(value)
+        return value

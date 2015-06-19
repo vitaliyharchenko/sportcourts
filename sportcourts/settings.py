@@ -25,11 +25,10 @@ SECRET_KEY = 'o-x00&0e=niyadeseyddr45=!s*@!5xl%)$o-ktbjz8r4lu#k('
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['test.sportcourts.ru', 'sportcourts.ru']
 
 
 # Application definition
-# TODO: configure server
 
 INSTALLED_APPS = (
     'django.contrib.admin',
@@ -39,6 +38,8 @@ INSTALLED_APPS = (
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'customuser',
+    'courts',
+    'utils',
 )
 
 MIDDLEWARE_CLASSES = (
@@ -57,7 +58,24 @@ ROOT_URLCONF = 'sportcourts.urls'
 WSGI_APPLICATION = 'sportcourts.wsgi.application'
 
 AUTH_USER_MODEL = 'customuser.User'
+LOGIN_URL = '/login'
+AUTHENTICATION_BACKENDS = (
+    'django.contrib.auth.backends.ModelBackend',
+#     'customuser.VkontakteAuthBackend',
+)
 
+VKONTAKTE = {
+    'SECRET': 'SyrEE8fNLlkCBUxuxwTL',
+    'APPID': '4963792'
+}
+
+EMAIL_USE_TLS = True
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_HOST_USER = 'info@sportcourts.ru'
+EMAIL_HOST_PASSWORD = 'courtssport2'
+EMAIL_SUBJECT_PREFIX = '[SPORTCOURTS] '
+
+CURRENT_HOST = '127.0.0.1:8000'
 
 # Database
 # https://docs.djangoproject.com/en/1.8/ref/settings/#databases
@@ -76,9 +94,9 @@ DATABASES = {
 # Internationalization
 # https://docs.djangoproject.com/en/1.8/topics/i18n/
 
-LANGUAGE_CODE = 'en-us'
+LANGUAGE_CODE = 'ru-RU'
 
-TIME_ZONE = 'UTC'
+TIME_ZONE = 'Asia/Yekaterinburg'
 
 USE_I18N = True
 
@@ -92,6 +110,10 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 
+STATICFILES_DIRS = (
+    os.path.join(BASE_DIR, 'static'),
+)
+
 TEMPLATE_DIRS = (
     os.path.join(BASE_DIR,  'templates'),
 )
@@ -104,4 +126,5 @@ TEMPLATE_CONTEXT_PROCESSORS = (
     "django.template.context_processors.static",
     "django.template.context_processors.tz",
     "django.contrib.messages.context_processors.messages",
+    "django.core.context_processors.request",
 )

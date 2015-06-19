@@ -4,5 +4,7 @@ from . import views
 urlpatterns = patterns('',
                        url(r'^login/$', views.login, name="login"),
                        url(r'^logout/$', views.logout, name="logout"),
-                       url(r'^reg/$', views.reg, name="reg"),
+                       url(r'^reg/(?P<token>.{5,100})$', views.reg, name="reg"),
+                       url(r'^activation/add_email$', views.add_email_activation, name='add_email_activation'),
+                       url(r'^activation/verify_email/(?P<token>.{5,100})$', views.verify_email, name='verify_email'),
                        )

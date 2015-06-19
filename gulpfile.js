@@ -13,13 +13,16 @@ var gulp = require('gulp'),
 
 var path = {
     build: {
-        templates: 'templates/'
+        templates: 'templates/',
+        js: 'static/js/'
     },
     src: {
-        jade: 'src/jade/**/*.jade'
+        jade: 'src/jade/**/*.jade',
+        js: 'src/js/**/*.js'
     },
     watch: {
-        jade: 'src/jade/**/*.jade'
+        jade: 'src/jade/**/*.jade',
+        js: 'src/js/**/*.js'
     },
     clean: {
         templates: 'templates/'
@@ -40,18 +43,31 @@ gulp.task('jade:build' , function () {
         .pipe(gulp.dest(path.build.templates));
 });
 
+gulp.task('js:build', function () {
+    gulp.src(path.src.js)
+        .pipe(rigger())
+        .pipe(sourcemaps.init())
+        .pipe(uglify())
+        .pipe(sourcemaps.write())
+        .pipe(gulp.dest(path.build.js));
+});
+
 gulp.task('clean', [
     'templates:clean',
 ]);
 
 gulp.task('build', [
     'jade:build',
+    'js:build',
 ]);
 
 gulp.task('watch', function(){
     watch([path.watch.jade], function(event, cb) {
         gulp.start('jade:build');
     });
+    watch([path.watch.js], function(event, cb) {
+        gulp.start('js:build');
+    });
 });
 
-gulp.task('default', ['clean', 'build', 'watch']);
+gulp.task('default', ['build', 'watch']);

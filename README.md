@@ -77,3 +77,15 @@ git add
 git commit -m ''
 git push
 ```
+
+# Работа с БД #
+```
+psql
+DROP DATABASE sc;
+CREATE DATABASE sc OWNER sc;
+ALTER USER sc CREATEDB;
+python manage.py makemigrations customuser
+python manage.py makemigrations
+python manage.py migrate
+python manage.py syncdb
+```

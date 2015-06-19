@@ -1,7 +1,25 @@
-doctype html
-html(lang="en")
-  head
-    title sportcourts
-  body
-    h1 {{ user }}, {{ user.is_admin }}
-    h2 Registration form
+| {% extends 'base.html' %}
+| {% load vkontakte %}
+
+| {% block content %}
+
+h2 Reg form
+| {% if messages %}
+|{% for message in messages %}
+.alert(class="alert-{{ message.tags }}") {{ message }}
+|{% endfor %}
+|{% endif %}
+
+//TODO: check vk auth
+| {% if not vkuserid %}
+p
+  a(href="{% vkontakte_auto_auth_link %}") Получить данные из вконтакте
+| {% endif %}
+
+form(method="post")
+  |{% csrf_token %}
+  |{{ form.as_div }}
+  |{{ email }}
+  button(type="submit") Зарегистрироваться
+
+|{% endblock %}

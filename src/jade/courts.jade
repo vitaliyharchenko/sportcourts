@@ -1,0 +1,12 @@
+| {% extends 'base.html' %}
+| {% block content %}
+
+h1 Площадки
+
+|{% for court in courts %}
+h2 {{ court.title }}
+h3 {{ court.description }}
+hr
+|{% endfor %}
+
+|{% endblock %}

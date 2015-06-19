@@ -1,0 +1,13 @@
+|{% load staticfiles %}
+doctype html
+html(lang="en")
+  head
+    script(src="{% static 'js/main.js' %}")
+  body
+    p
+      a(href="{% url 'index' %}") На главную
+    p
+      a(href="/admin") Админка
+    hr
+    |{% block content %}
+    |{% endblock %}

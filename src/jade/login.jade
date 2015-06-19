@@ -1,11 +1,16 @@
-doctype html
-html(lang="en")
-  head
-    title sportcourts
-  body
-    h1 {{ user }}, {{ user.is_admin }}
-    h2 Login form
-    form(method="post")
-      |{% csrf_token %}
-      |{{ form }}
-      button(type="submit") Войти
+| {% extends 'base.html' %}
+
+| {% block content %}
+
+p Login form
+| {% if messages %}
+|{% for message in messages %}
+.alert(class="alert-{{ message.tags }}") {{ message }}
+|{% endfor %}
+|{% endif %}
+form(method="post")
+  |{% csrf_token %}
+  |{{ form.as_div }}
+  button(type="submit") Войти
+
+|{% endblock %}
