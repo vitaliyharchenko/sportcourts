@@ -1,5 +1,5 @@
-# Stepee
-Educational web service
+# Sportcourts
+Social sport service
 
 # Установка и настройка #
 1) Установка Gulp в директории проекта
