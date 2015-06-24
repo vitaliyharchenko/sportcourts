@@ -1,0 +1,15 @@
+| {% extends 'base.html' %}
+| {% block content %}
+
+h1 события
+hr
+
+|{% for event in events %}
+p
+  a(href="/events/1") {{ event }}
+p {{ event.created_by }}
+p {{ event.court }}
+hr
+|{% endfor %}
+
+|{% endblock %}

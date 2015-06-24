@@ -1,0 +1,13 @@
+| {% extends 'base.html' %}
+| {% block content %}
+
+h1 Пользователи
+hr
+
+|{% for user in users %}
+p
+  a(href="/users/{{ user.id }}") {{ user }}
+hr
+|{% endfor %}
+
+|{% endblock %}

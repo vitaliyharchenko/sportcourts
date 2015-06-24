@@ -2,10 +2,12 @@
 | {% block content %}
 
 h1 Площадки
+hr
 
 |{% for court in courts %}
-h2 {{ court.title }}
-h3 {{ court.description }}
+p
+  a(href="/courts/{{ court.id }}") {{ court.title }}
+p {{ court.description }}
 hr
 |{% endfor %}
 

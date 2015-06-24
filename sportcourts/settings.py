@@ -39,6 +39,7 @@ INSTALLED_APPS = (
     'django.contrib.staticfiles',
     'customuser',
     'courts',
+    'events',
     'utils',
 )
 

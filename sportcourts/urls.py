@@ -18,6 +18,7 @@ from django.contrib import admin
 from . import views
 import customuser.urls
 import courts.urls
+import events.urls
 
 urlpatterns = [
     url(r'^admin/', include(admin.site.urls)),
@@ -26,5 +27,6 @@ urlpatterns = [
 urlpatterns = patterns('',
                        url(r'^admin/', include(admin.site.urls)),
                        url(r'^$', views.index, name='index'),
-                       url(r'^courts/', include(courts.urls, 'courts'))
+                       url(r'^courts/', include(courts.urls, 'courts')),
+                       url(r'^', include(events.urls, 'events')),
                        ) + customuser.urls.urlpatterns

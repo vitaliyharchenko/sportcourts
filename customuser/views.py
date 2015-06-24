@@ -141,3 +141,14 @@ def verify_email(request, token):
     elif activation.status == Activation.REGISTERED:
         return redirect('login', token=token)
     return redirect('reg', token=token)
+
+
+# customuser views #
+def userslist(request):
+    context = {'users': User.objects.all()}
+    return render(request, 'users.html', context)
+
+
+def userdetail(request, user_id):
+    context = {'user': User.objects.get(id=user_id)}
+    return render(request, 'user.html', context)

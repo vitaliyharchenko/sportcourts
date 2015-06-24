@@ -8,6 +8,13 @@ html(lang="en")
       a(href="{% url 'index' %}") На главную
     p
       a(href="/admin") Админка
+    ul
+      li
+        a(href="{% url 'courts:list' %}") Площадки
+      li
+        a(href="{% url 'users' %}") Игроки
+      li
+        a(href="{% url 'events:list' %}") События
     hr
     |{% block content %}
     |{% endblock %}
