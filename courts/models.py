@@ -7,12 +7,20 @@ from phonenumber_field.modelfields import PhoneNumberField
 class Country(models.Model):
     title = models.CharField(max_length=100, verbose_name='Название', unique=True)
 
+    class Meta():
+        verbose_name = 'страна'
+        verbose_name_plural = 'страны'
+
     def __unicode__(self):
         return self.title
 
 
 class City(models.Model):
     title = models.CharField(max_length=100, verbose_name='Название', unique=True)
+
+    class Meta():
+        verbose_name = 'город'
+        verbose_name_plural = 'города'
 
     def __unicode__(self):
         return self.title
@@ -27,6 +35,10 @@ class Place(models.Model):
     latitude = models.FloatField()
     fulladdress = models.CharField(max_length=500, verbose_name='Адрес', unique=True)
 
+    class Meta():
+        verbose_name = 'место'
+        verbose_name_plural = 'места'
+
     def __unicode__(self):
         return self.fulladdress
 
@@ -34,12 +46,20 @@ class Place(models.Model):
 class CourtType(models.Model):
     title = models.CharField(max_length=100, unique=True, verbose_name='Название типа площадки')
 
+    class Meta():
+        verbose_name = 'тип площадки'
+        verbose_name_plural = 'типы площадок'
+
     def __unicode__(self):
         return self.title
 
 
 class Cover(models.Model):
     title = models.CharField(max_length=100, unique=True, verbose_name='Название типа покрытия')
+
+    class Meta():
+        verbose_name = 'тип покрытия'
+        verbose_name_plural = 'типы покрытий'
 
     def __unicode__(self):
         return self.title
@@ -73,6 +93,13 @@ class Court(models.Model):
     # TODO: sporttypes
     # sporttypes = models.ManyToManyField('games.SportType', related_name='+', verbose_name='Типы спорта')
     # TODO: adding number of views
+
+    class Meta():
+        verbose_name = 'площадка'
+        verbose_name_plural = 'площадки'
+
+    def get_absolute_url(self):
+        return "/courts/%i" % self.id
 
     def __unicode__(self):
         return self.title

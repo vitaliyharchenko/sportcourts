@@ -6,7 +6,7 @@ hr
 
 |{% for court in courts %}
 p
-  a(href="/courts/{{ court.id }}") {{ court.title }}
+  a(href="{{ court.get_absolute_url }}") {{ court.title }}
 p {{ court.description }}
 hr
 |{% endfor %}

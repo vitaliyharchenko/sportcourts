@@ -1,15 +1,12 @@
 | {% extends 'base.html' %}
+| {% load eventutils %}
+
 | {% block content %}
 
-h1 события
+h1 События
 hr
-
 |{% for event in events %}
-p
-  a(href="/events/1") {{ event }}
-p {{ event.created_by }}
-p {{ event.court }}
-hr
+|{% event_pane event %}
 |{% endfor %}
 
 |{% endblock %}

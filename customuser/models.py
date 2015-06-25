@@ -104,6 +104,9 @@ class User(AbstractUser):
         swappable = 'AUTH_USER_MODEL'
         app_label = 'customuser'
 
+    def get_absolute_url(self):
+        return "/users/%i" % self.id
+
 
 class Activation(models.Model):
     EMAIL_SENT = 0

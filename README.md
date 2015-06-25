@@ -86,6 +86,7 @@ CREATE DATABASE sc OWNER sc;
 ALTER USER sc CREATEDB;
 python manage.py makemigrations customuser
 python manage.py makemigrations
+python manage.py migrate customuser
 python manage.py migrate
 python manage.py syncdb
 ```

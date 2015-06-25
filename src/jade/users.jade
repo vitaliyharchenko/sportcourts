@@ -6,7 +6,7 @@ hr
 
 |{% for user in users %}
 p
-  a(href="/users/{{ user.id }}") {{ user }}
+  a(href="{{ user.get_absolute_url }}") {{ user }}
 hr
 |{% endfor %}
 

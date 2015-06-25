@@ -1,0 +1,30 @@
+//
+   Created by vitaliyharchenko on 25.06.15.
+
+|{% if event.content_type.model == 'game' %}
+
+p {{ event.id }} | {{ event }}
+p {{ event.datetime }}
+p {{ event.duration }}
+p {{ event.gametype }}
+p {{ event.court }}
+|{% if event.coach %}
+p Тренер: {{ event.coach }}
+|{% endif %}
+p {{ event.cost }} RUB
+p Записано: {{ event.subscribed|length }}
+p Мест: {{ event.capacity }}
+|{% for user in event.subscribed %}
+p {{ user }}
+|{% endfor %}
+hr
+
+|{% elif event.content_type.model == 'event' %}
+
+p {{ event }}
+p {{ event.datetime }}
+p EVENTZZ
+hr
+
+|{% endif %}
+

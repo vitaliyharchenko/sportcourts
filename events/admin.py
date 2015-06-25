@@ -1,12 +1,10 @@
 # coding=utf-8
 from django.contrib import admin
-from models import Event, SportType, GameType
+from models import Event, SportType, GameType, Game, UserGameAction
 
 
 # Register your models here.
-class EventAdmin(admin.ModelAdmin):
-
-    model = Event
+class BaseEventAdmin(admin.ModelAdmin):
     readonly_fields = ['created_by']
 
     def save_model(self, request, obj, form, change):
@@ -15,7 +13,16 @@ class EventAdmin(admin.ModelAdmin):
         print user.id
         obj.save()
 
+
+class EventAdmin(BaseEventAdmin):
+    model = Event
+
+
+class GameAdmin(BaseEventAdmin):
+    model = Game
+
 # Register your models here.
-admin.site.register(Event, EventAdmin)
 admin.site.register(SportType)
 admin.site.register(GameType)
+admin.site.register(Game, GameAdmin)
+admin.site.register(UserGameAction)
