@@ -90,3 +90,31 @@ python manage.py migrate customuser
 python manage.py migrate
 python manage.py syncdb
 ```
+
+# Работа с сервером test.sportcourts.ru #
+```
+https://www.digitalocean.com/community/tutorials/how-to-install-and-configure-django-with-postgres-nginx-and-gunicorn
+```
+1) Установка Ubuntu 12.04
+2) ssh root@194.58.108.127
+3) sudo apt-get update
+4) sudo apt-get upgrade
+5) sudo apt-get install python-virtualenv
+6) sudo virtualenv /opt/myenv
+7) source /opt/myenv/bin/activate
+8) pip install django
+9) deactivate
+10) sudo apt-get install libpq-dev python-dev
+11) sudo apt-get install postgresql postgresql-contrib
+12) sudo apt-get install nginx
+13) source /opt/myenv/bin/activate
+14) pip install gunicorn
+15) ```
+sudo su - postgres
+createdb scdb
+createuser -P
+scuser, 4203, nnn
+psql
+GRANT ALL PRIVILEGES ON DATABASE scdb TO scuser;
+sudo nano /etc/nginx/sites-available/sportcourts
+```

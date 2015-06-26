@@ -5,6 +5,9 @@ from courts.models import Court
 from django.contrib.contenttypes.models import ContentType
 
 from utils.validators import gte_now
+import datetime
+from django.utils import timezone
+from django.core.exceptions import ValidationError
 
 
 # Create your models here.
@@ -31,6 +34,18 @@ class GameType(models.Model):
         return u'{} - {}'.format(self.sporttype.title, self.title)
 
 
+class Amplua(models.Model):
+    sporttype = models.ForeignKey(SportType, verbose_name='Вид спорта', related_name='+')
+    title = models.CharField(max_length=100, verbose_name='Название')
+
+    class Meta():
+        verbose_name = 'амплуа'
+        verbose_name_plural = 'амплуа'
+
+    def __unicode__(self):
+        return u'{} - {}'.format(self.sporttype.title, self.title)
+
+
 class Event(models.Model):
     title = models.CharField(max_length=100, verbose_name='Название')
     description = models.CharField(max_length=300, verbose_name='Описание')
@@ -51,7 +66,7 @@ class Event(models.Model):
     # # Соревнование командное
     # TOURNAMENT = 2
     # type = models.IntegerField(default=OPEN_GAME, verbose_name='Тип события',
-    #                              choices=())
+    # choices=())
 
     responsible_user = models.ForeignKey(User, related_name='responsible_games',
                                          limit_choices_to={'is_responsible': True},
@@ -81,6 +96,8 @@ class Event(models.Model):
 
     # then save, define class of children class
     def save(self):
+        if self.datetime > self.datetime_to:
+            raise ValueError('Проверьте отрезки времени')
         if not self.content_type:
             self.content_type = ContentType.objects.get_for_model(self.__class__)
         self.save_base()
@@ -92,6 +109,30 @@ class Event(models.Model):
         if model == Event:
             return self
         return model.objects.get(id=self.id)
+
+    @property
+    def duration(self):
+        # TODO: beautiful format of duration
+        return self.datetime_to - self.datetime
+
+    @property
+    def time_status(self):
+        now = timezone.now()
+        # считаем продоожительность события и высчитываем погрещнойсть для отображения статусов, аля "скоро начнется"
+        if self.duration > datetime.timedelta(days=7):
+            delta = datetime.timedelta(days=7)
+        else:
+            delta = self.duration
+
+        # все возможные временные статусы события, влияющие на отображение
+        if now <= self.datetime - delta:
+            return 'WILL BE'
+        elif now <= self.datetime:
+            return 'COMING'
+        elif now <= self.datetime_to:
+            return 'IT GOES'
+        else:
+            return 'WAS'
 
 
 class Game(Event):
@@ -113,9 +154,22 @@ class Game(Event):
         return users
 
     @property
-    def duration(self):
-        # TODO: beautiful format of duration
-        return self.datetime_to - self.datetime
+    def reserved(self):
+        actions = UserGameAction.objects.filter(game=self).filter(action=UserGameAction.RESERVED)
+        users = list()
+        for action in actions:
+            users.append(action.user)
+        return users
+
+    @property
+    def unsubscribed(self):
+        actions = UserGameAction.objects.filter(game=self).exclude(action=UserGameAction.SUBSCRIBED).exclude(
+            action=UserGameAction.RESERVED)
+        users = list()
+        for action in actions:
+            users.append(action.user)
+        return users
+
 
     class Meta():
         verbose_name = 'игра'
@@ -124,15 +178,14 @@ class Game(Event):
     def __unicode__(self):
         return self.title
 
-    # TODO: логика удаления игры
-    # def delete(self, using=None):
-    #     # не забыть удалить все уведомления
-    #     # и отправить всем что игра удалена
-    #     return super(Game, self).delete(using)
+        # TODO: логика удаления игры
+        # def delete(self, using=None):
+        # # не забыть удалить все уведомления
+        #     # и отправить всем что игра удалена
+        #     return super(Game, self).delete(using)
 
 
 class UserGameAction(models.Model):
-
     class Meta():
         verbose_name = 'запись на игру'
         verbose_name_plural = 'записи на игру'
@@ -153,10 +206,9 @@ class UserGameAction(models.Model):
     action = models.PositiveSmallIntegerField(verbose_name='Действие', choices=ACTIONS)
 
     def __unicode__(self):
-        return u'{} {} {} {}'.format(self.game.id, self.game, self.user, self.action)
+        return u'{} {} | {} | {}'.format(self.game.id, self.game, self.user, self.get_action_display())
 
-
-# TODO: model для турнира
-# TODO: model для турнира
-# TODO: model для турнира
-# TODO: model для турнира
+        # TODO: model для турнира
+        # TODO: model для турнира
+        # TODO: model для турнира
+        # TODO: model для турнира

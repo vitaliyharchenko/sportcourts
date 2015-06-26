@@ -70,6 +70,7 @@ class AbstractUser(AbstractBaseUser, PermissionsMixin):
     # vkuserid = models.IntegerField(unique=True, null=True, blank=True)
     # sex = models.CharField(max_length=1, choices=(('m', 'М'), ('f', 'Ж')), verbose_name='Пол')
     phone = PhoneNumberField(verbose_name='Телефон', help_text='В формате +7xxxxxxxxxx', unique=True, blank=True)
+    ampluas = models.ManyToManyField('events.Amplua', verbose_name='Амплуа')
     # city = models.ForeignKey(City)
     # TODO: add city model
     # settings = models.OneToOneField('users.UserSettings', verbose_name='Настройки')
@@ -129,3 +130,37 @@ class Activation(models.Model):
 
     def __unicode__(self):
         return self.email
+
+
+class Team(models.Model):
+
+    class Meta:
+        verbose_name = 'команда'
+        verbose_name_plural = 'команды'
+        app_label = 'customuser'
+
+    title = models.CharField(max_length=100, verbose_name='Название команды')
+
+    def __unicode__(self):
+        return self.title
+
+    def get_absolute_url(self):
+        return "/users/%i" % self.id
+
+
+class UserTeam(models.Model):
+
+    class Meta():
+        verbose_name = 'членство в команде'
+        verbose_name_plural = 'членства в команде'
+        app_label = 'customuser'
+
+    user = models.ForeignKey(User, verbose_name='Пользователь')
+    team = models.ForeignKey(Team, verbose_name='Команда')
+    amplua = models.ForeignKey('events.Amplua', verbose_name='Амплуа')
+    datetime = models.DateTimeField(verbose_name='Дата вступления', auto_now=True)
+
+    def __unicode__(self):
+        return u'{} | {} | {}'.format(self.user, self.team, self.amplua)
+
+    # TODO: add inline in admin for team, ordering in admin

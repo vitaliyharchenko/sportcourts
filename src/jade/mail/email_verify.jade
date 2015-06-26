@@ -29,7 +29,7 @@ tbody
                         tbody
                           tr
                             td(align="center" valign="middle")
-                              a(title="Подтвердить" href="http://127.0.0.1:8000{% url 'verify_email' token %}" target="_blank") Подтвердить
+                              a(title="Подтвердить" href="http://{{ current_host }}{% url 'verify_email' token %}" target="_blank") Подтвердить
               table(border="0" cellpadding="0" cellspacing="0" width="100%")
                 tbody
                   tr

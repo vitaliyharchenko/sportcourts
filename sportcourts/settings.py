@@ -76,6 +76,8 @@ EMAIL_HOST_USER = 'info@sportcourts.ru'
 EMAIL_HOST_PASSWORD = 'courtssport2'
 EMAIL_SUBJECT_PREFIX = '[SPORTCOURTS] '
 
+# TODO: adding context processor to add this variable
+# http://stackoverflow.com/questions/12166537/django-settings-py-variables-in-templates
 CURRENT_HOST = '127.0.0.1:8000'
 
 # Database

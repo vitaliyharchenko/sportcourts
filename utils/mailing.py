@@ -10,5 +10,5 @@ def send_email(email, subject, content, plain_content=''):
 
 
 def verify_email(email, token):
-    body = render_to_string('mail/email_verify.html', {'token': token})
+    body = render_to_string('mail/email_verify.html', {'token': token, 'current_host': settings.CURRENT_HOST})
     return send_email(email, u'Подтверждение адреса электронной почты', body)

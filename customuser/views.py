@@ -7,7 +7,7 @@ from django.views.decorators.http import require_POST
 from models import Activation
 from django.core import signing
 from utils import mailing, api
-from models import User
+from models import User, Team
 
 
 # Create your views here.
@@ -152,3 +152,13 @@ def userslist(request):
 def userdetail(request, user_id):
     context = {'user': User.objects.get(id=user_id)}
     return render(request, 'user.html', context)
+
+
+def teamslist(request):
+    context = {'teams': Team.objects.all()}
+    return render(request, 'teams.html', context)
+
+
+def teamdetail(request, team_id):
+    context = {'team': Team.objects.get(id=team_id)}
+    return render(request, 'team.html', context)

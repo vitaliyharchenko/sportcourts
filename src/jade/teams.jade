@@ -1,0 +1,14 @@
+//
+   Created by vitaliyharchenko on 26.06.15.
+
+| {% extends 'base.html' %}
+| {% block content %}
+h1 Команды
+hr
+| {% for team in teams %}
+p
+a(href="{{ team.get_absolute_url }}") {{ team }}
+hr
+| {% endfor %}
+| {% endblock %}
+

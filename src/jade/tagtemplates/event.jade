@@ -1,5 +1,7 @@
 //
    Created by vitaliyharchenko on 25.06.15.
+|{% load eventutils %}
+
 
 |{% if event.content_type.model == 'game' %}
 
@@ -14,9 +16,37 @@ p Тренер: {{ event.coach }}
 p {{ event.cost }} RUB
 p Записано: {{ event.subscribed|length }}
 p Мест: {{ event.capacity }}
-|{% for user in event.subscribed %}
-p {{ user }}
-|{% endfor %}
+br
+p Записанные:
+ul
+  |{% for user in event.subscribed %}
+  li {{ user }}
+  |{% endfor %}
+p В резерве:
+ul
+  |{% for user in event.reserved %}
+  li {{ user }}
+  |{% endfor %}
+p Отписались:
+ul
+  |{% for user in event.unsubscribed %}
+  li {{ user }}
+  |{% endfor %}
+
+|{% if current_user %}
+p Статус записи текущего пользователя: {% usergameaction current_user event %}
+|{% endif %}
+
+|{% if event.time_status == 'WILL BE' %}
+button Игра будет
+|{% elif event.time_status == 'COMING' %}
+button Игра близко
+|{% elif event.time_status == 'IT GOES' %}
+button Игра идет
+|{% else %}
+button Игра прошла
+//TODO: добавить фичу "вы были на этой игре"
+|{% endif %}
 hr
 
 |{% elif event.content_type.model == 'event' %}

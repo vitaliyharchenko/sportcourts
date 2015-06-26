@@ -2,13 +2,23 @@
 __author__ = 'vitaliyharchenko'
 
 from django import template
-from events.models import Event
+from events.models import UserGameAction
 
 register = template.Library()
 
-@register.inclusion_tag('tagtemplates/event.html')
-def event_pane(event):
-    context = {'event': event.as_leaf_class}
-    # if event.content_type.model == 'game':
-    #     context['sub_count'] = event.subscribed.count()
+
+@register.inclusion_tag('tagtemplates/event.html', takes_context=True)
+def event_pane(context, event):
+    context = {'event': event.as_leaf_class,
+               'current_user': context['current_user']}
     return context
+
+
+# находит объект подписи на игру для заданной игры и пользователя
+@register.simple_tag()
+def usergameaction(user, game):
+    try:
+        action = UserGameAction.objects.get(game=game, user=user)
+    except UserGameAction.DoesNotExist:
+        return None
+    return action.get_action_display()
