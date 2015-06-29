@@ -4,4 +4,10 @@
 | {% extends 'base.html' %}
 | {% block content %}
 h1 {{ team }}
+
+h3 Участники
+| {% for userteam in userteams %}
+p {{ userteam }}
+| {% endfor %}
+
 | {% endblock %}

@@ -16,3 +16,7 @@ def events(request):
     except User.DoesNotExist:
         pass
     return render(request, 'events.html', context)
+
+
+def eventaction(request, event_type, action, event_id):
+    pass

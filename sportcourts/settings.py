@@ -40,6 +40,7 @@ INSTALLED_APPS = (
     'customuser',
     'courts',
     'events',
+    'teams',
     'utils',
 )
 

@@ -2,59 +2,66 @@
    Created by vitaliyharchenko on 25.06.15.
 |{% load eventutils %}
 
+div(id="{{ event.id }}-pane")
 
-|{% if event.content_type.model == 'game' %}
+  |{% if event.type == 'game' %}
 
-p {{ event.id }} | {{ event }}
-p {{ event.datetime }}
-p {{ event.duration }}
-p {{ event.gametype }}
-p {{ event.court }}
-|{% if event.coach %}
-p Тренер: {{ event.coach }}
-|{% endif %}
-p {{ event.cost }} RUB
-p Записано: {{ event.subscribed|length }}
-p Мест: {{ event.capacity }}
-br
-p Записанные:
-ul
-  |{% for user in event.subscribed %}
-  li {{ user }}
-  |{% endfor %}
-p В резерве:
-ul
-  |{% for user in event.reserved %}
-  li {{ user }}
-  |{% endfor %}
-p Отписались:
-ul
-  |{% for user in event.unsubscribed %}
-  li {{ user }}
-  |{% endfor %}
+  p {{ event.id }} | {{ event }}
+  p {{ event.type }}
+  p {{ event.datetime }}
+  p {{ event.duration }}
+  p {{ event.gametype }}
+  p {{ event.court }}
+  |{% if event.coach %}
+  p Тренер: {{ event.coach }}
+  |{% endif %}
+  p {{ event.cost }} RUB
+  p Записано: {{ event.subscribed|length }}
+  p Мест: {{ event.capacity }}
+  br
+  p Записанные:
+  ul
+    |{% for user in event.subscribed %}
+    li {{ user }}
+    |{% endfor %}
+  p В резерве:
+  ul
+    |{% for user in event.reserved %}
+    li {{ user }}
+    |{% endfor %}
+  p Отписались:
+  ul
+    |{% for user in event.unsubscribed %}
+    li {{ user }}
+    |{% endfor %}
 
-|{% if current_user %}
-p Статус записи текущего пользователя: {% usergameaction current_user event %}
-|{% endif %}
+  |{% if current_user %}
+  |{% usergameaction current_user event as action %}
+  p Статус записи текущего пользователя: {{ action }}
+  |{% endif %}
 
-|{% if event.time_status == 'WILL BE' %}
-button Игра будет
-|{% elif event.time_status == 'COMING' %}
-button Игра близко
-|{% elif event.time_status == 'IT GOES' %}
-button Игра идет
-|{% else %}
-button Игра прошла
-//TODO: добавить фичу "вы были на этой игре"
-|{% endif %}
-hr
+  |{% if event.time_status == 'WILL BE' %}
+  p Игра будет
+  button.action(id="{{ event.id }}-unsubscribe") Отписаться
 
-|{% elif event.content_type.model == 'event' %}
+  |{% elif event.time_status == 'COMING' %}
+  button Игра близко
 
-p {{ event }}
-p {{ event.datetime }}
-p EVENTZZ
-hr
+  |{% elif event.time_status == 'IT GOES' %}
+  button Игра идет
 
-|{% endif %}
+  |{% else %}
+  button Игра прошла
+  //TODO: добавить фичу "вы были на этой игре"
+  |{% endif %}
+  hr
+
+  |{% elif event.content_type.model == 'event' %}
+
+  p {{ event }}
+  p {{ event.datetime }}
+  p EVENTZZ
+  hr
+
+  |{% endif %}
 

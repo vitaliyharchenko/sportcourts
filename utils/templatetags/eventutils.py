@@ -15,10 +15,10 @@ def event_pane(context, event):
 
 
 # находит объект подписи на игру для заданной игры и пользователя
-@register.simple_tag()
+@register.assignment_tag
 def usergameaction(user, game):
     try:
         action = UserGameAction.objects.get(game=game, user=user)
     except UserGameAction.DoesNotExist:
         return None
-    return action.get_action_display()
+    return action.action

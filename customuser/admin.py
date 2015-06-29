@@ -1,7 +1,7 @@
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin
 from forms import UserCreationForm, UserChangeForm
-from models import User, Activation, Team, UserTeam
+from models import User, Activation
 
 
 # Register your models here.
@@ -48,5 +48,3 @@ class ActivationAdmin(admin.ModelAdmin):
 # Register the new EmailUserAdmin
 admin.site.register(User, UserAdmin)
 admin.site.register(Activation, ActivationAdmin)
-admin.site.register(Team)
-admin.site.register(UserTeam)

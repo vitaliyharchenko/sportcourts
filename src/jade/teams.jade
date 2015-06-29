@@ -7,7 +7,7 @@ h1 Команды
 hr
 | {% for team in teams %}
 p
-a(href="{{ team.get_absolute_url }}") {{ team }}
+  a(href="{{ team.get_absolute_url }}") {{ team }}
 hr
 | {% endfor %}
 | {% endblock %}

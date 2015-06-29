@@ -55,18 +55,7 @@ class Event(models.Model):
 
     # TODO: add image of event
     # TODO: add status for public views
-
-    # TODO: add event types
-    # # Открытая игра
-    # OPEN_GAME = 0
-    # # Тренировка с тренером
-    # PRACTICE = 1
-    # # Соревнование личное
-    # COMPETITION = 2
-    # # Соревнование командное
-    # TOURNAMENT = 2
-    # type = models.IntegerField(default=OPEN_GAME, verbose_name='Тип события',
-    # choices=())
+    # TODO: add working status for unclosed events
 
     responsible_user = models.ForeignKey(User, related_name='responsible_games',
                                          limit_choices_to={'is_responsible': True},
@@ -111,6 +100,10 @@ class Event(models.Model):
         return model.objects.get(id=self.id)
 
     @property
+    def type(self):
+        return self.content_type.model
+
+    @property
     def duration(self):
         # TODO: beautiful format of duration
         return self.datetime_to - self.datetime
@@ -138,9 +131,6 @@ class Event(models.Model):
 class Game(Event):
     reserved_count = models.PositiveIntegerField(verbose_name='Резервных мест', default=0)
     deleted = models.BooleanField(default=False, verbose_name='Игра удалена')
-
-    # default=None, null=True, blank=True, verbose_name='Участники', limit_choices_to={'is_active':True}
-    reserved = models.ManyToManyField(User, related_name='reserved_games', blank=True)
 
     # может быть, а может и не быть тренер на игре
     coach = models.ForeignKey(User, related_name='coach', blank=True, null=True)
@@ -170,7 +160,6 @@ class Game(Event):
             users.append(action.user)
         return users
 
-
     class Meta():
         verbose_name = 'игра'
         verbose_name_plural = 'игры'
@@ -194,11 +183,17 @@ class UserGameAction(models.Model):
     UNSUBSCRIBED = 2
     RESERVED = 3
     UNRESERVED = 4
+    VISITED = 5
+    NOTVISITED = 6
+    NOTPAY = 7
     ACTIONS = (
         (SUBSCRIBED, 'Записался'),
         (UNSUBSCRIBED, 'Отписался'),
         (RESERVED, 'В резерве'),
-        (UNRESERVED, 'Вышел из резерва')
+        (UNRESERVED, 'Вышел из резерва'),
+        (VISITED, 'Посетил'),
+        (NOTVISITED, 'Не пришел'),
+        (NOTPAY, 'Не заплатил')
     )
     user = models.ForeignKey(User, verbose_name='Пользователь')
     game = models.ForeignKey(Game, verbose_name='Игра')

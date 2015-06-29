@@ -52,6 +52,10 @@ class AbstractUser(AbstractBaseUser, PermissionsMixin):
 
     is_active = models.BooleanField('Активность', default=True,
                                     help_text="Сделайте неактивным вместо удаления аккаунта")
+    is_referee = models.BooleanField('Судья', default=False,
+                                         help_text="Может судить игры")
+    is_coach = models.BooleanField('Тренер', default=False,
+                                         help_text="Может вести тренировки")
     is_responsible = models.BooleanField('Ответственный', default=False,
                                          help_text="Заполняет отчеты, редактирует игры")
     is_organizer = models.BooleanField('Организатор', default=False,
@@ -130,37 +134,3 @@ class Activation(models.Model):
 
     def __unicode__(self):
         return self.email
-
-
-class Team(models.Model):
-
-    class Meta:
-        verbose_name = 'команда'
-        verbose_name_plural = 'команды'
-        app_label = 'customuser'
-
-    title = models.CharField(max_length=100, verbose_name='Название команды')
-
-    def __unicode__(self):
-        return self.title
-
-    def get_absolute_url(self):
-        return "/users/%i" % self.id
-
-
-class UserTeam(models.Model):
-
-    class Meta():
-        verbose_name = 'членство в команде'
-        verbose_name_plural = 'членства в команде'
-        app_label = 'customuser'
-
-    user = models.ForeignKey(User, verbose_name='Пользователь')
-    team = models.ForeignKey(Team, verbose_name='Команда')
-    amplua = models.ForeignKey('events.Amplua', verbose_name='Амплуа')
-    datetime = models.DateTimeField(verbose_name='Дата вступления', auto_now=True)
-
-    def __unicode__(self):
-        return u'{} | {} | {}'.format(self.user, self.team, self.amplua)
-
-    # TODO: add inline in admin for team, ordering in admin

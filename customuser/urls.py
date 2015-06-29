@@ -11,7 +11,4 @@ urlpatterns = patterns('',
 
                        url(r'^users/$', views.userslist, name='users'),
                        url(r'^users/(?P<user_id>\d+)$', views.userdetail, name='user'),
-
-                       url(r'^teams/$', views.teamslist, name='teams'),
-                       url(r'^teams/(?P<team_id>\d+)$', views.teamdetail, name='team'),
                        )

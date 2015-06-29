@@ -9,9 +9,12 @@ sys.path.extend(['/Dev/sportcourts'])
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "sportcourts.settings")
 django.setup()
 
-from courts.models import Court, Place, City, Country, CourtType
-from events.models import SportType, GameType, Game
+from courts.models import Court, Place, City, Country, CourtType, Region
+from events.models import SportType, GameType, Amplua, Game
+from teams.models import Team, UserTeam
 from customuser.models import User
+from django.utils import timezone
+import datetime
 
 # print 'Creating superuser...'
 # User.objects.create_superuser(email="harchenko.grape@gmail.com", password="4203", first_name="Vitaliy",
@@ -19,13 +22,15 @@ from customuser.models import User
 #
 # print 'Creating places...'
 # Country.objects.create(title=u'Россия')
-# City.objects.create(title=u'Екатеринбург')
-# City.objects.create(title=u'Москва')
+# Region.objects.create(title=u'Свердловская область', country=Country.objects.get(title=u'Россия'))
+# Region.objects.create(title=u'Московская область', country=Country.objects.get(title=u'Россия'))
+# City.objects.create(title=u'Екатеринбург', region=Region.objects.get(title=u'Свердловская область'))
+# City.objects.create(title=u'Москва', region=Region.objects.get(title=u'Московская область'))
 # CourtType.objects.create(title=u'Крытая')
 # CourtType.objects.create(title=u'Открытая')
-# Place.objects.create(country=Country.objects.get(title=u'Россия'), city=City.objects.get(title=u'Екатеринбург'),
+# Place.objects.create(city=City.objects.get(title=u'Екатеринбург'),
 #                      longitude=60.0, latitude=60.0, fulladdress=u'Техническая 16а')
-# Place.objects.create(country=Country.objects.get(title=u'Россия'), city=City.objects.get(title=u'Екатеринбург'),
+# Place.objects.create(city=City.objects.get(title=u'Екатеринбург'),
 #                      longitude=62.0, latitude=62.0, fulladdress=u'Гражданская 2')
 #
 #
@@ -42,8 +47,17 @@ from customuser.models import User
 # print 'Creating sport types...'
 # SportType.objects.create(title=u'Баскетбол')
 # SportType.objects.create(title=u'Волейбол')
-
-
-print 'Creating game types...'
-GameType.objects.create(title=u'Открытая игра 5х5', sporttype=SportType.objects.get(title=u'Баскетбол'))
-GameType.objects.create(title=u'Стритбол 3х3', sporttype=SportType.objects.get(title=u'Баскетбол'))
+#
+#
+# print 'Creating game types...'
+# GameType.objects.create(title=u'Открытая игра 5х5', sporttype=SportType.objects.get(title=u'Баскетбол'))
+# GameType.objects.create(title=u'Стритбол 3х3', sporttype=SportType.objects.get(title=u'Баскетбол'))
+#
+# print 'Creating ampluas...'
+# Amplua.objects.create(title=u'Центровой', sporttype=SportType.objects.get(title=u'Баскетбол'))
+# Amplua.objects.create(title=u'Нападающий', sporttype=SportType.objects.get(title=u'Баскетбол'))
+#
+# print 'Creating teams...'
+# Team.objects.create(title=u'Быки')
+# UserTeam.objects.create(user=User.objects.get(id=1), team=Team.objects.get(title=u'Быки'),
+#                         amplua=Amplua.objects.get(title=u'Центровой'))

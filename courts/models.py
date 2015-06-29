@@ -15,8 +15,21 @@ class Country(models.Model):
         return self.title
 
 
+class Region(models.Model):
+    title = models.CharField(max_length=100, verbose_name='Название', unique=True)
+    country = models.ForeignKey(Country)
+
+    class Meta():
+        verbose_name = 'область'
+        verbose_name_plural = 'области'
+
+    def __unicode__(self):
+        return self.title
+
+
 class City(models.Model):
     title = models.CharField(max_length=100, verbose_name='Название', unique=True)
+    region = models.ForeignKey(Region)
 
     class Meta():
         verbose_name = 'город'
@@ -27,7 +40,6 @@ class City(models.Model):
 
 
 class Place(models.Model):
-    country = models.ForeignKey(Country)
     city = models.ForeignKey(City)
     # долгота
     longitude = models.FloatField()
