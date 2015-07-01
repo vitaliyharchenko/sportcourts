@@ -160,6 +160,24 @@ class Game(Event):
             users.append(action.user)
         return users
 
+    @property
+    def has_place(self):
+        actions = UserGameAction.objects.filter(game=self).filter(action=UserGameAction.SUBSCRIBED)
+        count = actions.count()
+        if count >= self.capacity:
+            return False
+        else:
+            return True
+
+    @property
+    def has_reserved_place(self):
+        actions = UserGameAction.objects.filter(game=self).filter(action=UserGameAction.RESERVED)
+        count = actions.count()
+        if count >= self.reserved_count:
+            return False
+        else:
+            return True
+
     class Meta():
         verbose_name = 'игра'
         verbose_name_plural = 'игры'
@@ -203,7 +221,9 @@ class UserGameAction(models.Model):
     def __unicode__(self):
         return u'{} {} | {} | {}'.format(self.game.id, self.game, self.user, self.get_action_display())
 
-        # TODO: model для турнира
-        # TODO: model для турнира
-        # TODO: model для турнира
-        # TODO: model для турнира
+    # TODO: проверка соответствия количеству мест при сохраниении
+
+# TODO: model для турнира
+# TODO: model для турнира
+# TODO: model для турнира
+# TODO: model для турнира
