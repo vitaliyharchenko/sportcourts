@@ -78,6 +78,7 @@ def reg(request, token):
                 activation.save()
                 user.save()
                 return redirect('login')
+                #TODO: autho auth
             else:
                 messages.success(request, "Form is not valid!")
                 return shortcut()

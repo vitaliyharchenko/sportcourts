@@ -85,10 +85,16 @@ DROP DATABASE sc;
 CREATE DATABASE sc OWNER sc;
 ALTER USER sc CREATEDB;
 python manage.py makemigrations customuser
-python manage.py makemigrations
 python manage.py migrate customuser
-python manage.py migrate
 python manage.py syncdb
+python manage.py makemigrations courts
+python manage.py migrate courts --fake-initial
+python manage.py syncdb
+```
+
+# Работа с удаленкой #
+```
+lt --port 8000
 ```
 
 # Работа с сервером test.sportcourts.ru #
@@ -109,7 +115,8 @@ https://www.digitalocean.com/community/tutorials/how-to-install-and-configure-dj
 12) sudo apt-get install nginx
 13) source /opt/myenv/bin/activate
 14) pip install gunicorn
-15) ```
+15)
+```
 sudo su - postgres
 createdb scdb
 createuser -P

@@ -41,6 +41,7 @@ class Amplua(models.Model):
     class Meta():
         verbose_name = 'амплуа'
         verbose_name_plural = 'амплуа'
+        app_label = 'events'
 
     def __unicode__(self):
         return u'{} - {}'.format(self.sporttype.title, self.title)
@@ -79,6 +80,7 @@ class Event(models.Model):
         verbose_name_plural = 'События'
         ordering = ['-datetime']
         get_latest_by = 'datetime'
+        app_label = 'events'
 
     def __unicode__(self):
         return self.title
@@ -131,6 +133,7 @@ class Event(models.Model):
 class Game(Event):
     reserved_count = models.PositiveIntegerField(verbose_name='Резервных мест', default=0)
     deleted = models.BooleanField(default=False, verbose_name='Игра удалена')
+    is_reported = models.BooleanField(verbose_name='Отчет отправлен', default=False)
 
     # может быть, а может и не быть тренер на игре
     coach = models.ForeignKey(User, related_name='coach', blank=True, null=True)
@@ -153,8 +156,34 @@ class Game(Event):
 
     @property
     def unsubscribed(self):
-        actions = UserGameAction.objects.filter(game=self).exclude(action=UserGameAction.SUBSCRIBED).exclude(
-            action=UserGameAction.RESERVED)
+        actions1 = UserGameAction.objects.filter(game=self).filter(action=UserGameAction.UNSUBSCRIBED)
+        actions2 = UserGameAction.objects.filter(game=self).filter(action=UserGameAction.UNRESERVED)
+        users = list()
+        for action in actions1:
+            users.append(action.user)
+        for action in actions2:
+            users.append(action.user)
+        return users
+
+    @property
+    def visited(self):
+        actions = UserGameAction.objects.filter(game=self).filter(action=UserGameAction.VISITED)
+        users = list()
+        for action in actions:
+            users.append(action.user)
+        return users
+
+    @property
+    def notvisited(self):
+        actions = UserGameAction.objects.filter(game=self).filter(action=UserGameAction.NOTVISITED)
+        users = list()
+        for action in actions:
+            users.append(action.user)
+        return users
+
+    @property
+    def notpay(self):
+        actions = UserGameAction.objects.filter(game=self).filter(action=UserGameAction.NOTPAY)
         users = list()
         for action in actions:
             users.append(action.user)
@@ -181,6 +210,7 @@ class Game(Event):
     class Meta():
         verbose_name = 'игра'
         verbose_name_plural = 'игры'
+        app_label = 'events'
 
     def __unicode__(self):
         return self.title
@@ -221,9 +251,7 @@ class UserGameAction(models.Model):
     def __unicode__(self):
         return u'{} {} | {} | {}'.format(self.game.id, self.game, self.user, self.get_action_display())
 
-    # TODO: проверка соответствия количеству мест при сохраниении
-
-# TODO: model для турнира
-# TODO: model для турнира
-# TODO: model для турнира
-# TODO: model для турнира
+        # TODO: model для турнира
+        # TODO: model для турнира
+        # TODO: model для турнира
+        # TODO: model для турнира

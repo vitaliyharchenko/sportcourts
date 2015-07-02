@@ -7,9 +7,9 @@ from models import User, Activation
 # Register your models here.
 class UserAdmin(UserAdmin):
     fieldsets = (
-        (None, {'fields': ('email', 'password', 'first_name', 'last_name', 'phone')}),
+        (None, {'fields': ('email', 'password', 'first_name', 'last_name', 'phone', 'ampluas')}),
         ('Permissions',
-         {'fields': ('is_active', 'is_responsible', 'is_organizer', 'is_admin', 'is_staff', 'is_superuser')}),
+         {'fields': ('is_active', 'is_referee', 'is_coach', 'is_responsible', 'is_organizer', 'is_admin', 'is_staff', 'is_superuser')}),
         ('Optional', {'fields': ('last_login', 'date_joined')}),
     )
     add_fieldsets = ((
@@ -28,10 +28,10 @@ class UserAdmin(UserAdmin):
     # These override the definitions on the base UserAdmin
     # that reference specific fields on auth.User.
     list_display = ('id', 'first_name', 'last_name', 'phone', 'email')
-    list_filter = ('is_active', 'is_responsible', 'is_organizer', 'is_admin', 'groups')
+    list_filter = ('is_active', 'is_referee', 'is_coach', 'is_responsible', 'is_organizer', 'is_admin', 'groups')
     search_fields = ('email',)
     ordering = ('email',)
-    filter_horizontal = ('groups', 'user_permissions',)
+    filter_horizontal = ('ampluas',)
 
 
 class ActivationAdmin(admin.ModelAdmin):

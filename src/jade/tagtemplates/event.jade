@@ -1,5 +1,6 @@
 |{% load eventutils %}
 
+//#TODO: add popup window for login or registration
 div(id="{{ event.id }}-pane")
   //IF MODEL IS GAME
   |{% if event.type == 'game' %}
@@ -13,10 +14,27 @@ div(id="{{ event.id }}-pane")
   |{% if event.coach %}
   p Тренер: {{ event.coach }}
   |{% endif %}
+  p Ответственный: {{ event.responsible_user }}
   p {{ event.cost }} RUB
   p Записано: {{ event.subscribed|length }}
   p Мест: {{ event.capacity }}
-  br
+  |{% if event.is_reported %}
+  p Пришли:
+  ul
+    |{% for user in event.visited %}
+    li {{ user }}
+    |{% endfor %}
+  p Прогуляли:
+  ul
+    |{% for user in event.notvisited %}
+    li {{ user }}
+    |{% endfor %}
+  p Не заплатили:
+  ul
+    |{% for user in event.notpay %}
+    li {{ user }}
+    |{% endfor %}
+  |{% else %}
   p Записанные:
   ul
     |{% for user in event.subscribed %}
@@ -32,13 +50,12 @@ div(id="{{ event.id }}-pane")
     |{% for user in event.unsubscribed %}
     li {{ user }}
     |{% endfor %}
+  |{% endif %}
 
   |{% if current_user %}
   |{% usergameaction current_user event as action %}
   p Статус записи текущего пользователя: {{ action }}
   |{% endif %}
-
-  hr
 
   //Если игра будет
   | {% if event.time_status == 'WILL BE' %}
@@ -77,7 +94,11 @@ div(id="{{ event.id }}-pane")
   button Мест нет
   | {% endif %}
   | {% else %}
-  button Мест нет
+  | {% if event.has_reserved_place %}
+  button Записаться в резерв, показать попап
+  | {% else %}
+  button Мест нет, показать попап
+  | {% endif %}
   | {% endif %}
   | {% endif %}
   //Конец проверки - Если есть места

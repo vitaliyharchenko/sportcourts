@@ -18,12 +18,30 @@ class EventAdmin(BaseEventAdmin):
     model = Event
 
 
+class UserGameActionInline(admin.TabularInline):
+    model = UserGameAction
+    extra = 0
+
+
 class GameAdmin(BaseEventAdmin):
     model = Game
+    inlines = [UserGameActionInline]
+
+
+class GameTypeInline(admin.TabularInline):
+    model = GameType
+    extra = 0
+
+
+class AmpluaInline(admin.TabularInline):
+    model = Amplua
+    extra = 0
+
+
+class SportTypeAdmin(admin.ModelAdmin):
+    model = SportType
+    inlines = [GameTypeInline, AmpluaInline]
 
 # Register your models here.
-admin.site.register(SportType)
-admin.site.register(GameType)
+admin.site.register(SportType, SportTypeAdmin)
 admin.site.register(Game, GameAdmin)
-admin.site.register(UserGameAction)
-admin.site.register(Amplua)

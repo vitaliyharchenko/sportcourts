@@ -1,6 +1,8 @@
 # coding=utf-8
 from django.db import models
 from phonenumber_field.modelfields import PhoneNumberField
+from yandex_maps import api
+from sportcourts import settings
 
 
 # Create your models here.
@@ -53,6 +55,14 @@ class Place(models.Model):
 
     def __unicode__(self):
         return self.fulladdress
+
+    # FIXME: save coords
+    # def save(self):
+    #     api_key = settings.YANDEX_MAPS_API_KEY
+    #     pos = api.geocode(api_key, self.fulladdress)
+    #     self.longitude = pos[0]
+    #     self.latitude = pos[1]
+    #     self.save_base()
 
 
 class CourtType(models.Model):

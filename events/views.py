@@ -26,7 +26,7 @@ def events(request):
     return render(request, 'events.html', context)
 
 
-# TODO: error rendering in json format using api._Error
+# TODO: error alert
 @require_POST
 def eventaction(request):
     if request.is_ajax():
@@ -51,15 +51,18 @@ def eventaction(request):
                     if current_action == set_action:
                         return error_response('Action already save')
                     else:
+                        # TODO: add check of game in similar time
                         if set_action == UserGameAction.SUBSCRIBED and not game.has_place:
                             return error_response('There is no place now')
                         elif set_action == UserGameAction.RESERVED and not game.has_reserved_place:
                             return error_response('There is no place now')
                         usergameaction.action = set_action
                         usergameaction.save()
+                        # TODO: email user
                         return render(request, 'tagtemplates/event.html', {'event': game, 'current_user': user})
                 except UserGameAction.DoesNotExist:
                     UserGameAction.objects.create(game=game, user=user, action=set_action)
+                    # TODO: email user
                     return render(request, 'tagtemplates/event.html', {'event': game, 'current_user': user})
             else:
                 return error_response('Unknown type of event')

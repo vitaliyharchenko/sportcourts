@@ -74,7 +74,7 @@ class AbstractUser(AbstractBaseUser, PermissionsMixin):
     # vkuserid = models.IntegerField(unique=True, null=True, blank=True)
     # sex = models.CharField(max_length=1, choices=(('m', 'М'), ('f', 'Ж')), verbose_name='Пол')
     phone = PhoneNumberField(verbose_name='Телефон', help_text='В формате +7xxxxxxxxxx', unique=True, blank=True)
-    ampluas = models.ManyToManyField('events.Amplua', verbose_name='Амплуа')
+    ampluas = models.ManyToManyField('events.Amplua', verbose_name=u'Амплуа')
     # city = models.ForeignKey(City)
     # TODO: add city model
     # settings = models.OneToOneField('users.UserSettings', verbose_name='Настройки')
@@ -133,4 +133,4 @@ class Activation(models.Model):
         verbose_name_plural = 'Подтверждения почты'
 
     def __unicode__(self):
-        return self.email
+        return u'{}' % self.email
