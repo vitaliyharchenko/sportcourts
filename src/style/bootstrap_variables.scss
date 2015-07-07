@@ -1,0 +1,20 @@
+/*
+* Custom
+* Themes to load:
+* cosmo
+* darkly (SO SAD)
+* flatly
+* lumen (NO)
+* readable (NO)
+* paper (NO)
+* simplex
+* superhero
+* united
+*/
+
+// Core variables and mixins
+@import "../../bower_components/bootstrap-sass/assets/stylesheets/bootstrap/variables";
+//@import "bootstrap_themes/yeti/variables";
+@import "../../bower_components/bootstrap-sass/assets/stylesheets/bootstrap/mixins";
+//@import "bootstrap_themes/yeti/bootswatch";
+$icon-font-path: "/static/fonts/bootstrap/";

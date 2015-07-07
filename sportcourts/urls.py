@@ -20,10 +20,7 @@ import customuser.urls
 import courts.urls
 import events.urls
 import teams.urls
-
-urlpatterns = [
-    url(r'^admin/', include(admin.site.urls)),
-]
+import finances.urls
 
 urlpatterns = patterns('',
                        url(r'^admin/', include(admin.site.urls)),
@@ -31,4 +28,5 @@ urlpatterns = patterns('',
                        url(r'^courts/', include(courts.urls, 'courts')),
                        url(r'^teams/', include(teams.urls, 'teams')),
                        url(r'^', include(events.urls, 'events')),
+                       url(r'^fin/', include(finances.urls, 'finances')),
                        ) + customuser.urls.urlpatterns

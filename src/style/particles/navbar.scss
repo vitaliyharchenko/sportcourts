@@ -1,0 +1,27 @@
+@import "../bootstrap_variables";
+
+/* Fixed navbar styles
+-------------------------------------------------- */
+
+#content > .container {
+  padding-top: 90px;
+}
+
+.navbar-brand {
+  padding-top: 0;
+  padding-right: 0;
+  img {
+    height: 150%;
+    padding: 0;
+  }
+}
+
+.topmenu {
+  img {
+    display: inline;
+    height: $navbar-height - 10px;
+    width: $navbar-height - 10px;;
+    margin-top: -5px;
+    margin-bottom: -5px;
+  }
+}

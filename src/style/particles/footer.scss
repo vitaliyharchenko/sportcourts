@@ -1,0 +1,43 @@
+.footer{
+  p {
+    margin-bottom: 0;
+    .clip {
+      white-space: nowrap; /* Запрещаем перенос строк */
+      overflow: hidden;
+    }
+  }
+  a {
+    position: relative;
+  }
+  img {
+    position: absolute;
+    top: -6px;
+    right: 0;
+  }
+  .footerright {
+    float: right;
+  }
+}
+
+/* Sticky footer styles
+-------------------------------------------------- */
+$footerpadding: 40px;
+
+html {
+  position: relative;
+  min-height: 100%;
+}
+
+body {
+  /* Margin bottom by footer height */
+  margin-bottom: 21px + $footerpadding * 2;
+}
+
+.footer {
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  /* Set the fixed height of the footer here */
+  padding-top: $footerpadding;
+  padding-bottom: $footerpadding;
+}

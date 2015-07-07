@@ -2,169 +2,171 @@
 
 //#TODO: add popup window for login or registration
 div(id="{{ event.id }}-pane")
-  //IF MODEL IS GAME
-  |{% if event.type == 'game' %}
+  .panel.panel-default
+    .panel-heading
+      a # {{ event.id }} | {{ event.title }}
+      |{% if current_user.is_staff %}
+      |&nbsp;
+      a(href="/admin/events/game/{{ event.pk }}/" target="_blank") Edit
+      |{% endif %}
+    .panel-body
+      |{% if event.type == 'game' %}
+      .row
+        .col-md-2
+          p {{ event.datetime }}
+        .col-md-6
+          p {{ event.type }} | {{ event.gametype }}
+          p
+            a(href="{% url 'courts:detail' event.court.id %}" target="_blank") {{ event.court }}
+          |{% if event.coach %}
+          p Тренер: {{ event.coach }}
+          |{% endif %}
+          p Ответственный: {{ event.responsible_user }}
+          p Записано: {{ event.subscribed|length }}
+          p Мест: {{ event.capacity }}
+          |{% if event.is_reported %}
+          p Пришли:
+          ul
+            |{% for user in event.visited %}
+            li {{ user }}
+            |{% endfor %}
+          p Прогуляли:
+          ul
+            |{% for user in event.notvisited %}
+            li {{ user }}
+            |{% endfor %}
+          p Не заплатили:
+          ul
+            |{% for user in event.notpay %}
+            li {{ user }}
+            |{% endfor %}
+          |{% else %}
+          p Записанные:
+          ul
+            |{% for user in event.subscribed %}
+            li {{ user }}
+            |{% endfor %}
+          p В резерве:
+          ul
+            |{% for user in event.reserved %}
+            li {{ user }}
+            |{% endfor %}
+          p Отписались:
+          ul
+            |{% for user in event.unsubscribed %}
+            li {{ user }}
+            |{% endfor %}
+          |{% endif %}
 
-  p {{ event.id }} | {{ event }}
-  p {{ event.type }}
-  p {{ event.datetime }}
-  p {{ event.duration }}
-  p {{ event.gametype }}
-  p {{ event.court }}
-  |{% if event.coach %}
-  p Тренер: {{ event.coach }}
-  |{% endif %}
-  p Ответственный: {{ event.responsible_user }}
-  p {{ event.cost }} RUB
-  p Записано: {{ event.subscribed|length }}
-  p Мест: {{ event.capacity }}
-  |{% if event.is_reported %}
-  p Пришли:
-  ul
-    |{% for user in event.visited %}
-    li {{ user }}
-    |{% endfor %}
-  p Прогуляли:
-  ul
-    |{% for user in event.notvisited %}
-    li {{ user }}
-    |{% endfor %}
-  p Не заплатили:
-  ul
-    |{% for user in event.notpay %}
-    li {{ user }}
-    |{% endfor %}
-  |{% else %}
-  p Записанные:
-  ul
-    |{% for user in event.subscribed %}
-    li {{ user }}
-    |{% endfor %}
-  p В резерве:
-  ul
-    |{% for user in event.reserved %}
-    li {{ user }}
-    |{% endfor %}
-  p Отписались:
-  ul
-    |{% for user in event.unsubscribed %}
-    li {{ user }}
-    |{% endfor %}
-  |{% endif %}
+          |{% if current_user %}
+          |{% usergameaction current_user event as action %}
+          p Статус записи текущего пользователя: {{ action }}
+          |{% endif %}
+        .col-md-2
+          p {{ event.cost }} RUB за {{ event.duration }}
+        .col-md-2
+          //Если игра будет
+          | {% if event.time_status == 'WILL BE' %}
+          //Если записан
+          | {% if action == 1 %}
+          p
+            a Записан
+          button.action(id="{{ event.id }}-unsubscribe") Отписаться
+          //Если в резерве
+          | {% elif action == 3 %}
+          p
+            a В резерве
+          button.action(id="{{ event.id }}-unreserve") Выйти из резерва
+          | {% if event.has_place %}
+          button.action(id="{{ event.id }}-subscribe") Перейти в основу
+          | {% endif %}
+          //Если не записан и не в резерве, проверяем наличие мест
+          | {% else %}
+          //Если есть места
+          | {% if event.has_place %}
+          p
+            a Место есть
+          | {% if current_user %}
+          button.action(id="{{ event.id }}-subscribe") Записаться
+          | {% else %}
+          button Записаться, По нажатию показать окно входа
+          | {% endif %}
+          //Если нет мест
+          | {% else %}
+          p
+            a Мест нет
+          | {% if current_user %}
+          | {% if event.has_reserved_place %}
+          button.action(id="{{ event.id }}-reserve") Записаться в резерв
+          | {% else %}
+          button Мест нет
+          | {% endif %}
+          | {% else %}
+          | {% if event.has_reserved_place %}
+          button Записаться в резерв, показать попап
+          | {% else %}
+          button Мест нет, показать попап
+          | {% endif %}
+          | {% endif %}
+          | {% endif %}
+          //Конец проверки - Если есть места
+          | {% endif %}
+          //Конец проверки - Если игра будет
 
-  |{% if current_user %}
-  |{% usergameaction current_user event as action %}
-  p Статус записи текущего пользователя: {{ action }}
-  |{% endif %}
+          //Начало проверки - Если игра близко
+          | {% elif event.time_status == 'COMING' %}
+          p Игра близко
+          //Если записан
+          | {% if action == 1 %}
+          p
+            a Записан
+          button Отписаться - попап с телефоном ответственного
+          //Если в резерве
+          | {% elif action == 3 %}
+          p
+            a В резерве
+          button.action(id="{{ event.id }}-unreserve") Выйти из резерва
+          | {% if event.has_place %}
+          button.action(id="{{ event.id }}-subscribe") Перейти в основу
+          | {% endif %}
+          //Если не записан и не в резерве, проверяем наличие мест
+          | {% else %}
+          //Если есть места
+          | {% if event.has_place %}
+          p
+            a Место есть
+          | {% if current_user %}
+          button.action(id="{{ event.id }}-subscribe") Записаться
+          | {% else %}
+          button Записаться, По нажатию показать окно входа
+          | {% endif %}
+          //Если нет мест
+          | {% else %}
+          p Мест нет
+          | {% endif %}
+          //Конец проверки - Если есть места
+          | {% endif %}
+          //Конец проверки - Если игра близко
 
-  //Если игра будет
-  | {% if event.time_status == 'WILL BE' %}
-  //Если записан
-  | {% if action == 1 %}
-  p
-    a Записан
-  button.action(id="{{ event.id }}-unsubscribe") Отписаться
-  //Если в резерве
-  | {% elif action == 3 %}
-  p
-    a В резерве
-  button.action(id="{{ event.id }}-unreserve") Выйти из резерва
-  | {% if event.has_place %}
-  button.action(id="{{ event.id }}-subscribe") Перейти в основу
-  | {% endif %}
-  //Если не записан и не в резерве, проверяем наличие мест
-  | {% else %}
-  //Если есть места
-  | {% if event.has_place %}
-  p
-    a Место есть
-  | {% if current_user %}
-  button.action(id="{{ event.id }}-subscribe") Записаться
-  | {% else %}
-  button Записаться, По нажатию показать окно входа
-  | {% endif %}
-  //Если нет мест
-  | {% else %}
-  p
-    a Мест нет
-  | {% if current_user %}
-  | {% if event.has_reserved_place %}
-  button.action(id="{{ event.id }}-reserve") Записаться в резерв
-  | {% else %}
-  button Мест нет
-  | {% endif %}
-  | {% else %}
-  | {% if event.has_reserved_place %}
-  button Записаться в резерв, показать попап
-  | {% else %}
-  button Мест нет, показать попап
-  | {% endif %}
-  | {% endif %}
-  | {% endif %}
-  //Конец проверки - Если есть места
-  | {% endif %}
-  //Конец проверки - Если игра будет
+          |{% elif event.time_status == 'IT GOES' %}
+          button Игра идет
 
-  //Начало проверки - Если игра близко
-  | {% elif event.time_status == 'COMING' %}
-  p Игра близко
-  //Если записан
-  | {% if action == 1 %}
-  p
-    a Записан
-  button Отписаться - попап с телефоном ответственного
-  //Если в резерве
-  | {% elif action == 3 %}
-  p
-    a В резерве
-  button.action(id="{{ event.id }}-unreserve") Выйти из резерва
-  | {% if event.has_place %}
-  button.action(id="{{ event.id }}-subscribe") Перейти в основу
-  | {% endif %}
-  //Если не записан и не в резерве, проверяем наличие мест
-  | {% else %}
-  //Если есть места
-  | {% if event.has_place %}
-  p
-    a Место есть
-  | {% if current_user %}
-  button.action(id="{{ event.id }}-subscribe") Записаться
-  | {% else %}
-  button Записаться, По нажатию показать окно входа
-  | {% endif %}
-  //Если нет мест
-  | {% else %}
-  p Мест нет
-  | {% endif %}
-  //Конец проверки - Если есть места
-  | {% endif %}
-  //Конец проверки - Если игра близко
+          |{% elif event.time_status == 'WAS' %}
+          | {% if action == 5 %}
+          button Вы были на этой игре
+          | {% elif action == 6 %}
+          button Вы прогуляли эту игру
+          | {% elif action == 7 %}
+          button Вы не заплатили за игру
+          | {% else %}
+          button Игра прошла
+          | {% endif %}
+          |{% endif %}
 
-  |{% elif event.time_status == 'IT GOES' %}
-  button Игра идет
-
-  |{% elif event.time_status == 'WAS' %}
-  | {% if action == 5 %}
-  button Вы были на этой игре
-  | {% elif action == 6 %}
-  button Вы прогуляли эту игру
-  | {% elif action == 7 %}
-  button Вы не заплатили за игру
-  | {% else %}
-  button Игра прошла
-  | {% endif %}
-  |{% endif %}
-  //END IF MODEL IS GAME
-
-  //IF MODEL IS EVENT
-  |{% elif event.content_type.model == 'event' %}
-
-  p {{ event }}
-  p {{ event.datetime }}
-  p EVENTZZ
-  hr
-
-  |{% endif %}
-
-  hr
-
+      //IF MODEL IS ELSE
+      |{% else %}
+      p {{ event }}
+      p {{ event.datetime }}
+      p EVENTZZ
+      hr
+      |{% endif %}

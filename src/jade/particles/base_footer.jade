@@ -1,0 +1,21 @@
+footer.footer
+  .container.text-center
+    p.text-muted.clip
+      |&copy; Sportcourts 2014
+      |&nbsp&nbsp&nbsp&nbsp
+      a.topmenu(href="") О нас
+      |&nbsp&nbsp&nbsp&nbsp
+      a.topmenu(href="") Контакты
+      |&nbsp&nbsp&nbsp&nbsp
+      a.topmenu(target="_blank" href="https://vk.com/write28638603") Сообщить об ошибке
+      a.footerright.hidden-xs(href="http://vk.com/sportcourts" target="_blank")
+        img(src="{% static 'images/vk.png' %}" width="32")
+
+a(style="display: none;" href="https://metrika.yandex.ru/stat/?id=25660223&amp;from=informer" target="_blank" rel="nofollow")
+  img(src="//bs.yandex.ru/informer/25660223/3_0_FFFFFFFF_FFFFFFFF_0_pageviews" style="width:88px; height:31px; border:0;" alt="РЇРЅРґРµРєСЃ.РњРµС‚СЂРёРєР°" title="РЇРЅРґРµРєСЃ.РњРµС‚СЂРёРєР°: РґР°РЅРЅС‹Рµ Р·Р° СЃРµРіРѕРґРЅСЏ (РїСЂРѕСЃРјРѕС‚СЂС‹, РІРёР·РёС‚С‹ Рё СѓРЅРёРєР°Р»СЊРЅС‹Рµ РїРѕСЃРµС‚РёС‚РµР»Рё)")
+script(type="text/javascript" href="{% static 'js/particles/metrika.js' %}")
+noscript
+  div
+    img(src="//mc.yandex.ru/watch/25660223" style="position:absolute; left:-9999px;" alt="")
+
+|{% block footer %}{% endblock %}

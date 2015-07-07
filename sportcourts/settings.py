@@ -40,6 +40,7 @@ INSTALLED_APPS = (
     'courts',
     'events',
     'teams',
+    'finances',
     'utils',
 )
 

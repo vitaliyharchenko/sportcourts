@@ -5,10 +5,11 @@
 
 h1 События
 hr
-|{% for event in events %}
-|{% event_pane event=event %}
-|{% endfor %}
-
+.row
+  |{% for event in events %}
+  .col-md-9
+    |{% event_pane event=event %}
+  |{% endfor %}
 script
   include ../js/templates/events.js
 
