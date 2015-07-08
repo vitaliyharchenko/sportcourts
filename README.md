@@ -125,3 +125,7 @@ psql
 GRANT ALL PRIVILEGES ON DATABASE scdb TO scuser;
 sudo nano /etc/nginx/sites-available/sportcourts
 ```
+
+```
+/opt/scenv
+```

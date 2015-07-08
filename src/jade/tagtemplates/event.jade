@@ -22,6 +22,59 @@ div(id="{{ event.id }}-pane")
           p Тренер: {{ event.coach }}
           |{% endif %}
           p Ответственный: {{ event.responsible_user }}
+
+          |{% if event.capacity > 0 %}
+          .progress
+            |{% if event.is_reported %}
+            .progress-bar.progress-bar-info(role="progressbar" style="width: {% widthratio event.visited|length event.capacity 100 %}%;")
+              span {{ event.visited|length }} / {{ event.capacity }}
+            |{% else %}
+            |{% if event.has_place %}
+            .progress-bar.progress-bar-default.progress-bar-striped.active(role="progressbar" style="width: {% widthratio event.subscribed|length event.capacity 100 %}%; min-width: 1em;")
+              span {{ event.subscribed|length }} / {{ event.capacity }}
+            |{% else %}
+            .progress-bar.progress-bar-success.progress-bar-striped.active(role="progressbar" style="width: {% widthratio event.subscribed|length event.capacity 100 %}%; min-width: 1em;")
+              span {{ event.subscribed|length }} / {{ event.capacity }}
+            |{% endif %}
+            |{% endif %}
+          |{% else %}
+          p
+            span.glyphicon.glyphicon-user
+            |Заявок: {{ event.subscribed|length }}
+          |{% endif %}
+
+          |{% if event.is_reported %}
+          .panel-group(id="accordion-{{ event.pk }}")
+            .panel.panel-default
+              .panel-heading
+                a(data-toogle="collapse" data-parent="#accordion-{{ event.pk }}" href="#collapse-{{ event.pk }}")
+                  h5.panel-title Список участников
+              .panel-collapse.collapse(id="collapse-{{ event.pk }}")
+                .panel-body
+                  |{% for user in event.visited %}
+                  p
+                    a(href="{{ user.get_absolute_url }}") {{ forloop.counter }}. {{ user }}
+                  |{% endfor %}
+          |{% else %}
+          |{% if event.subscribed|length > 0 %}
+          .panel-group#accordion(role="tablist" aria-multiselectable="true")
+            .panel.panel-default
+              .panel-heading(role="tab" id="heading-{{ event.pk }}")
+                h4.panel-title
+                  a(role="button" data-toggle="collapse" data-parent="#accordion" href="#collapse-{{ event.pk }}" aria-expanded="true" aria-controls="collapse-{{ event.pk }}")
+                    |Список участников
+                    span.caret
+              .panel-collapse.collapse(role="tabpanel" aria-labelledby="headingOne" id="collapse-{{ event.pk }}")
+                ul.list-group
+                  |{% for user in event.subscribed %}
+                  li.list-group-item
+                    a(href="{{ user.get_absolute_url }}") {{ forloop.counter }}. {{ user }}
+                  |{% endfor %}
+          |{% endif %}
+          |{% endif %}
+
+
+
           p Записано: {{ event.subscribed|length }}
           p Мест: {{ event.capacity }}
           |{% if event.is_reported %}
