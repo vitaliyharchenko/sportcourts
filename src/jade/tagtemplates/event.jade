@@ -14,8 +14,8 @@ div(id="{{ event.id }}-pane")
       .row
         .col-md-2
           p {{ event.datetime }}
-        .col-md-6
-          p {{ event.type }} | {{ event.gametype }}
+        .col-md-7
+          p {{ event.gametype }}
           p
             a(href="{% url 'courts:detail' event.court.id %}" target="_blank") {{ event.court }}
           |{% if event.coach %}
@@ -40,21 +40,53 @@ div(id="{{ event.id }}-pane")
           |{% else %}
           p
             span.glyphicon.glyphicon-user
-            |Заявок: {{ event.subscribed|length }}
+            |&nbsp; {{ event.subscribed|length }}
           |{% endif %}
 
           |{% if event.is_reported %}
-          .panel-group(id="accordion-{{ event.pk }}")
+          .panel-group#accordion(role="tablist" aria-multiselectable="true")
             .panel.panel-default
-              .panel-heading
-                a(data-toogle="collapse" data-parent="#accordion-{{ event.pk }}" href="#collapse-{{ event.pk }}")
-                  h5.panel-title Список участников
-              .panel-collapse.collapse(id="collapse-{{ event.pk }}")
-                .panel-body
+              .panel-heading(role="tab" id="heading-{{ event.pk }}")
+                h4.panel-title
+                  a(role="button" data-toggle="collapse" data-parent="#accordion" href="#collapse-{{ event.pk }}-visited" aria-expanded="true" aria-controls="collapse-{{ event.pk }}")
+                    |Посетили игру
+                    span.caret
+              .panel-collapse.collapse(role="tabpanel" aria-labelledby="headingOne" id="collapse-{{ event.pk }}-visited")
+                ul.list-group
                   |{% for user in event.visited %}
-                  p
-                    a(href="{{ user.get_absolute_url }}") {{ forloop.counter }}. {{ user }}
+                  li.list-group-item
+                    a(href="{{ user.get_absolute_url }}" target="_blank") {{ forloop.counter }}. {{ user }}
                   |{% endfor %}
+            |{% if current_user.is_staff %}
+            |{% if event.notvisited|length > 0 %}
+            .panel.panel-default
+              .panel-heading(role="tab" id="heading-{{ event.pk }}")
+                h4.panel-title
+                  a(role="button" data-toggle="collapse" data-parent="#accordion" href="#collapse-{{ event.pk }}-notvisited" aria-expanded="true" aria-controls="collapse-{{ event.pk }}")
+                    |Не пришли
+                    span.caret
+              .panel-collapse.collapse(role="tabpanel" aria-labelledby="headingOne" id="collapse-{{ event.pk }}-notvisited")
+                ul.list-group
+                  |{% for user in event.notvisited %}
+                  li.list-group-item
+                    a(href="{{ user.get_absolute_url }}" target="_blank") {{ forloop.counter }}. {{ user }}
+                  |{% endfor %}
+            |{% endif %}
+            |{% if event.notpay|length > 0 %}
+            .panel.panel-default
+              .panel-heading(role="tab" id="heading-{{ event.pk }}")
+                h4.panel-title
+                  a(role="button" data-toggle="collapse" data-parent="#accordion" href="#collapse-{{ event.pk }}-notpay" aria-expanded="true" aria-controls="collapse-{{ event.pk }}")
+                    |Не заплатили
+                    span.caret
+              .panel-collapse.collapse(role="tabpanel" aria-labelledby="headingOne" id="collapse-{{ event.pk }}-notpay")
+                ul.list-group
+                  |{% for user in event.notpay %}
+                  li.list-group-item
+                    a(href="{{ user.get_absolute_url }}" target="_blank") {{ forloop.counter }}. {{ user }}
+                  |{% endfor %}
+            |{% endif %}
+            |{% endif %}
           |{% else %}
           |{% if event.subscribed|length > 0 %}
           .panel-group#accordion(role="tablist" aria-multiselectable="true")
@@ -68,153 +100,167 @@ div(id="{{ event.id }}-pane")
                 ul.list-group
                   |{% for user in event.subscribed %}
                   li.list-group-item
-                    a(href="{{ user.get_absolute_url }}") {{ forloop.counter }}. {{ user }}
+                    a(href="{{ user.get_absolute_url }}" target="_blank") {{ forloop.counter }}. {{ user }}
                   |{% endfor %}
+            |{% if current_user.is_staff %}
+            |{% if event.reserved|length > 0 %}
+            .panel.panel-default
+              .panel-heading(role="tab" id="heading-{{ event.pk }}")
+                h4.panel-title
+                  a(role="button" data-toggle="collapse" data-parent="#accordion" href="#collapse-{{ event.pk }}-reserved" aria-expanded="true" aria-controls="collapse-{{ event.pk }}")
+                    |В резерве
+                    span.caret
+              .panel-collapse.collapse(role="tabpanel" aria-labelledby="headingOne" id="collapse-{{ event.pk }}-reserved")
+                ul.list-group
+                  |{% for user in event.reserved %}
+                  li.list-group-item
+                    a(href="{{ user.get_absolute_url }}" target="_blank") {{ forloop.counter }}. {{ user }}
+                  |{% endfor %}
+            |{% endif %}
+            |{% if event.unsubscribed|length > 0 %}
+            .panel.panel-default
+              .panel-heading(role="tab" id="heading-{{ event.pk }}")
+                h4.panel-title
+                  a(role="button" data-toggle="collapse" data-parent="#accordion" href="#collapse-{{ event.pk }}-unsubscribed" aria-expanded="true" aria-controls="collapse-{{ event.pk }}")
+                    |Отписались
+                    span.caret
+              .panel-collapse.collapse(role="tabpanel" aria-labelledby="headingOne" id="collapse-{{ event.pk }}-unsubscribed")
+                ul.list-group
+                  |{% for user in event.unsubscribed %}
+                  li.list-group-item
+                    a(href="{{ user.get_absolute_url }}" target="_blank") {{ forloop.counter }}. {{ user }}
+                  |{% endfor %}
+            |{% endif %}
+            |{% endif %}
           |{% endif %}
           |{% endif %}
-
-
-
-          p Записано: {{ event.subscribed|length }}
-          p Мест: {{ event.capacity }}
-          |{% if event.is_reported %}
-          p Пришли:
-          ul
-            |{% for user in event.visited %}
-            li {{ user }}
-            |{% endfor %}
-          p Прогуляли:
-          ul
-            |{% for user in event.notvisited %}
-            li {{ user }}
-            |{% endfor %}
-          p Не заплатили:
-          ul
-            |{% for user in event.notpay %}
-            li {{ user }}
-            |{% endfor %}
-          |{% else %}
-          p Записанные:
-          ul
-            |{% for user in event.subscribed %}
-            li {{ user }}
-            |{% endfor %}
-          p В резерве:
-          ul
-            |{% for user in event.reserved %}
-            li {{ user }}
-            |{% endfor %}
-          p Отписались:
-          ul
-            |{% for user in event.unsubscribed %}
-            li {{ user }}
-            |{% endfor %}
-          |{% endif %}
-
+        .col-md-3.text-right
           |{% if current_user %}
           |{% usergameaction current_user event as action %}
-          p Статус записи текущего пользователя: {{ action }}
           |{% endif %}
-        .col-md-2
-          p {{ event.cost }} RUB за {{ event.duration }}
-        .col-md-2
-          //Если игра будет
-          | {% if event.time_status == 'WILL BE' %}
-          //Если записан
-          | {% if action == 1 %}
-          p
-            a Записан
-          button.action(id="{{ event.id }}-unsubscribe") Отписаться
-          //Если в резерве
-          | {% elif action == 3 %}
-          p
-            a В резерве
-          button.action(id="{{ event.id }}-unreserve") Выйти из резерва
-          | {% if event.has_place %}
-          button.action(id="{{ event.id }}-subscribe") Перейти в основу
-          | {% endif %}
-          //Если не записан и не в резерве, проверяем наличие мест
-          | {% else %}
-          //Если есть места
-          | {% if event.has_place %}
-          p
-            a Место есть
-          | {% if current_user %}
-          button.action(id="{{ event.id }}-subscribe") Записаться
-          | {% else %}
-          button Записаться, По нажатию показать окно входа
-          | {% endif %}
-          //Если нет мест
-          | {% else %}
-          p
-            a Мест нет
-          | {% if current_user %}
-          | {% if event.has_reserved_place %}
-          button.action(id="{{ event.id }}-reserve") Записаться в резерв
-          | {% else %}
-          button Мест нет
-          | {% endif %}
-          | {% else %}
-          | {% if event.has_reserved_place %}
-          button Записаться в резерв, показать попап
-          | {% else %}
-          button Мест нет, показать попап
-          | {% endif %}
-          | {% endif %}
-          | {% endif %}
-          //Конец проверки - Если есть места
-          | {% endif %}
-          //Конец проверки - Если игра будет
+          .btn-group
+            //Если игра будет
+            | {% if event.time_status == 'WILL BE' %}
+            //Если записан
+            | {% if action == 1 %}
+            button.btn.btn-success.btn-sm.dropdown-toggle(type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false")
+              |Вы записаны
+              |&nbsp;
+              span.caret
+            ul.dropdown-menu
+              li
+                a.action(id="{{ event.id }}-unsubscribe") Отписаться
+            //Если в резерве
+            | {% elif action == 3 %}
+            button.btn.btn-warning.btn-sm.dropdown-toggle(type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false")
+              |Вы в резерве
+              |&nbsp;
+              span.caret
+            ul.dropdown-menu
+              li
+                a.action(id="{{ event.id }}-unreserve") Выйти из резерва
+              |{% if event.has_place %}
+              li
+                a.action(id="{{ event.id }}-subscribe") Перейти в основу
+              |{% endif %}
+            //Если не записан и не в резерве, проверяем наличие мест
+            | {% else %}
+            //Если есть места
+            | {% if event.has_place %}
+            button.btn.btn-primary.btn-sm.dropdown-toggle(type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false")
+              |Идет набор
+              |&nbsp;
+              span.caret
+            ul.dropdown-menu
+              | {% if current_user %}
+              li
+                a.action(id="{{ event.id }}-subscribe") Записаться
+              | {% else %}
+              li
+                a Записаться, По нажатию показать окно входа
+              | {% endif %}
+            //Если нет мест
+            | {% else %}
+            button.btn.btn-default.btn-sm.dropdown-toggle(type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false") Мест нет
+            ul.dropdown-menu
+              | {% if current_user %}
+              | {% if event.has_reserved_place %}
+              li
+                a.action(id="{{ event.id }}-reserve") Записаться в резерв
+              | {% else %}
+              //pass
+              | {% endif %}
+              | {% else %}
+              | {% if event.has_reserved_place %}
+              li
+                a Записаться в резерв, показать попап
+              | {% else %}
+              li
+                a Мест нет, показать попап
+              | {% endif %}
+              | {% endif %}
+            | {% endif %}
+            //Конец проверки - Если есть места
+            | {% endif %}
+            //Конец проверки - Если игра будет
 
-          //Начало проверки - Если игра близко
-          | {% elif event.time_status == 'COMING' %}
-          p Игра близко
-          //Если записан
-          | {% if action == 1 %}
-          p
-            a Записан
-          button Отписаться - попап с телефоном ответственного
-          //Если в резерве
-          | {% elif action == 3 %}
-          p
-            a В резерве
-          button.action(id="{{ event.id }}-unreserve") Выйти из резерва
-          | {% if event.has_place %}
-          button.action(id="{{ event.id }}-subscribe") Перейти в основу
-          | {% endif %}
-          //Если не записан и не в резерве, проверяем наличие мест
-          | {% else %}
-          //Если есть места
-          | {% if event.has_place %}
-          p
-            a Место есть
-          | {% if current_user %}
-          button.action(id="{{ event.id }}-subscribe") Записаться
-          | {% else %}
-          button Записаться, По нажатию показать окно входа
-          | {% endif %}
-          //Если нет мест
-          | {% else %}
-          p Мест нет
-          | {% endif %}
-          //Конец проверки - Если есть места
-          | {% endif %}
-          //Конец проверки - Если игра близко
+            //Начало проверки - Если игра близко
+            | {% elif event.time_status == 'COMING' %}
 
-          |{% elif event.time_status == 'IT GOES' %}
-          button Игра идет
+            |{% if action == 1 %}
+            button.btn.btn-success.btn-sm.dropdown-toggle(type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false") Вы записаны
+            ul.dropdown-menu
+              li
+                a Отписаться - попап с телефоном ответственного
+            //Если в резерве
+            | {% elif action == 3 %}
+            button.btn.btn-warning.btn-sm.dropdown-toggle(type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false") Вы в резерве
+            ul.dropdown-menu
+              li
+                a.action(id="{{ event.id }}-unreserve") Выйти из резерва
+              | {% if event.has_place %}
+              li
+                a.action(id="{{ event.id }}-subscribe") Перейти в основу
+              | {% endif %}
+            //Если не записан и не в резерве, проверяем наличие мест
+            | {% else %}
+            //Если есть места
+            | {% if event.has_place %}
+            button.btn.btn-primary.btn-sm.dropdown-toggle(type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false") Идет набор
+            ul.dropdown-menu
+              | {% if current_user %}
+              li
+                a.action(id="{{ event.id }}-subscribe") Записаться
+              | {% else %}
+              li
+                a Записаться, По нажатию показать окно входа
+              | {% endif %}
+            //Если нет мест
+            | {% else %}
+            button.btn.btn-default.btn-sm.dropdown-toggle(type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false") Мест нет
+            | {% endif %}
+            //Конец проверки - Если есть места
+            | {% endif %}
+            //Конец проверки - Если игра близко
 
-          |{% elif event.time_status == 'WAS' %}
-          | {% if action == 5 %}
-          button Вы были на этой игре
-          | {% elif action == 6 %}
-          button Вы прогуляли эту игру
-          | {% elif action == 7 %}
-          button Вы не заплатили за игру
-          | {% else %}
-          button Игра прошла
-          | {% endif %}
-          |{% endif %}
+            |{% elif event.time_status == 'IT GOES' %}
+            button.btn.btn-info.btn-sm Игра идет
+
+            |{% elif event.time_status == 'WAS' %}
+            | {% if action == 5 %}
+            button.btn.btn-success.btn-sm Вы играли тут
+            | {% elif action == 6 %}
+            button.btn.btn-danger.btn-sm Вы прогуляли
+            | {% elif action == 7 %}
+            button.btn.btn-danger.btn-sm Вы не заплатили
+            | {% else %}
+            button.btn.btn-default.btn-sm Игра прошла
+            | {% endif %}
+            |{% endif %}
+          br
+          br
+          p.lead.m-b-10 {{ event.cost }} RUB
+          p {{ event.duration }}
 
       //IF MODEL IS ELSE
       |{% else %}

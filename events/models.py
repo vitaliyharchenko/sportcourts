@@ -72,8 +72,9 @@ class Event(models.Model):
 
     cost = models.PositiveIntegerField(verbose_name='Цена')
 
-    datetime = models.DateTimeField(verbose_name='Дата проведения', validators=[gte_now])
-    datetime_to = models.DateTimeField(verbose_name='Дата окончания', validators=[gte_now], blank=True)
+    # TODO: validators validators=[gte_now]
+    datetime = models.DateTimeField(verbose_name='Дата проведения')
+    datetime_to = models.DateTimeField(verbose_name='Дата окончания', blank=True)
 
     class Meta():
         verbose_name = 'Событие'
@@ -114,8 +115,8 @@ class Event(models.Model):
     def time_status(self):
         now = timezone.now()
         # считаем продоожительность события и высчитываем погрещнойсть для отображения статусов, аля "скоро начнется"
-        if self.duration > datetime.timedelta(days=7):
-            delta = datetime.timedelta(days=7)
+        if self.duration > datetime.timedelta(days=2):
+            delta = datetime.timedelta(days=2)
         else:
             delta = self.duration
 
@@ -191,6 +192,8 @@ class Game(Event):
 
     @property
     def has_place(self):
+        if self.capacity == 0:
+            return True
         actions = UserGameAction.objects.filter(game=self).filter(action=UserGameAction.SUBSCRIBED)
         count = actions.count()
         if count >= self.capacity:
