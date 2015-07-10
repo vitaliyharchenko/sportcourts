@@ -15,6 +15,7 @@ Including another URLconf
 """
 from django.conf.urls import patterns, include, url
 from django.contrib import admin
+from sportcourts import settings
 from . import views
 import customuser.urls
 import courts.urls
@@ -30,3 +31,7 @@ urlpatterns = patterns('',
                        url(r'^', include(events.urls, 'events')),
                        url(r'^fin/', include(finances.urls, 'finances')),
                        ) + customuser.urls.urlpatterns
+
+urlpatterns += patterns('',
+                        (r"^media/(?P<path>.*)$", 'django.views.static.serve', {
+                            'document_root': settings.MEDIA_ROOT}))

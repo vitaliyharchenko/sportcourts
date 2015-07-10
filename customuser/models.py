@@ -64,6 +64,7 @@ class AbstractUser(AbstractBaseUser, PermissionsMixin):
                                    help_text="Назначает организаторов, работает с зарплатами и базами данных")
     is_staff = models.BooleanField('Статус сотрудника', default=False,
                                    help_text="Определяет , может ли пользователь войти в админку")
+    avatar = models.ImageField(upload_to='avatars', blank=True, null=True, verbose_name='Аватар')
 
     date_joined = models.DateTimeField('Дата регистрации', default=timezone.now)
     # bdate = models.DateField('Дата рождения', auto_now_add=False)
@@ -74,7 +75,7 @@ class AbstractUser(AbstractBaseUser, PermissionsMixin):
     # vkuserid = models.IntegerField(unique=True, null=True, blank=True)
     # sex = models.CharField(max_length=1, choices=(('m', 'М'), ('f', 'Ж')), verbose_name='Пол')
     phone = PhoneNumberField(verbose_name='Телефон', help_text='В формате +7xxxxxxxxxx', unique=True, blank=True)
-    ampluas = models.ManyToManyField('events.Amplua', verbose_name=u'Амплуа')
+    ampluas = models.ManyToManyField('events.Amplua', verbose_name=u'Амплуа', blank=True)
     # city = models.ForeignKey(City)
     # TODO: add city model
     # settings = models.OneToOneField('users.UserSettings', verbose_name='Настройки')

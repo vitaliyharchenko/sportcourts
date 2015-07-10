@@ -1,0 +1,27 @@
+| {% extends 'base.html' %}
+| {% load eventutils %}
+
+|{% block headers %}
+script(type="text/javascript")
+  |VK.init({apiId: 4963792, onlyWidgets: true});
+|{% endblock %}
+
+| {% block content %}
+hr
+.row
+  .col-md-9
+    |{% event_pane event=event %}
+    #vk_comments
+    script(type="text/javascript")
+      |VK.Widgets.Comments("vk_comments", {limit: 5, attach: false});
+  .col-md-3.visible-md.visible-lg
+    p.lead.m-t-0 Расскажи о нас друзьям!
+    .social-likes.social-likes_notext.social-likes-compact
+      .facebook
+      .twitter
+      .vkontakte
+      .odnoklassniki
+script
+  include ../js/templates/events.js
+
+|{% endblock %}

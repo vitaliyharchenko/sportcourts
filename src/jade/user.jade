@@ -1,7 +1,13 @@
 | {% extends 'base.html' %}
+|{% load staticfiles %}
 | {% block content %}
 
 h1 {{ user }}
+|{% if user.avatar %}
+img.img-thumbnail(src="{{ user.avatar.url }}" width="300")
+|{% else %}
+img.img-thumbnail(src="{% static 'images/blank.jpg' %}" width="300x")
+|{% endif %}
 p {{ user.phone }}
 p {{ user.email }}
 

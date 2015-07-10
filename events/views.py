@@ -26,6 +26,20 @@ def events(request):
     return render(request, 'events.html', context)
 
 
+def event(request, event_id):
+    context = {'event': Event.objects.get(id=event_id),
+               'standalone': True}
+    try:
+        if request.user.is_authenticated():
+            user = User.objects.get(email=request.user.email)
+            context['current_user'] = user
+        else:
+            context['current_user'] = None
+    except User.DoesNotExist:
+        pass
+    return render(request, 'event.html', context)
+
+
 # TODO: error alert
 @require_POST
 def eventaction(request):

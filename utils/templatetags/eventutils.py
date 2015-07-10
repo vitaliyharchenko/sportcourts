@@ -9,9 +9,13 @@ register = template.Library()
 
 @register.inclusion_tag('tagtemplates/event.html', takes_context=True)
 def event_pane(context, event):
-    context = {'event': event.as_leaf_class,
-               'current_user': context['current_user']}
-    return context
+    newcontext = {'event': event.as_leaf_class,
+                  'current_user': context['current_user']}
+    try:
+        newcontext['standalone'] = context['standalone']
+    except KeyError:
+        pass
+    return newcontext
 
 
 # находит объект подписи на игру для заданной игры и пользователя

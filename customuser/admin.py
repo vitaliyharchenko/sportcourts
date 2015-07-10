@@ -7,7 +7,7 @@ from models import User, Activation
 # Register your models here.
 class UserAdmin(UserAdmin):
     fieldsets = (
-        (None, {'fields': ('email', 'password', 'first_name', 'last_name', 'phone', 'ampluas')}),
+        (None, {'fields': ('email', 'password', 'first_name', 'last_name', 'phone', 'ampluas', 'avatar')}),
         ('Permissions',
          {'fields': ('is_active', 'is_referee', 'is_coach', 'is_responsible', 'is_organizer', 'is_admin', 'is_staff', 'is_superuser')}),
         ('Optional', {'fields': ('last_login', 'date_joined')}),

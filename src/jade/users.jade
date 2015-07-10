@@ -1,13 +1,25 @@
 | {% extends 'base.html' %}
+|{% load staticfiles %}
+
 | {% block content %}
 
 h1 Пользователи
 hr
 
-|{% for user in users %}
-p
-  a(href="{{ user.get_absolute_url }}") {{ user }}
-hr
-|{% endfor %}
+.row
+  .col-md-9
+    |{% for user in users %}
+    .row
+      .col-md-3
+        | {% if user.avatar %}
+        img.img-thumbnail(src="{{ user.avatar.url }}" width="150")
+        | {% else %}
+        img.img-thumbnail(src="{% static 'images/blank.jpg' %}" width="150x")
+        | {% endif %}
+      .col-md-9
+        p.lead
+          a(href="{{ user.get_absolute_url }}") {{ user }}
+    hr
+    |{% endfor %}
 
 |{% endblock %}

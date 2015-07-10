@@ -4,12 +4,17 @@
 div(id="{{ event.id }}-pane")
   .panel.panel-default
     .panel-heading
-      a # {{ event.id }} | {{ event.title }}
+      |{% if standalone %}
+      |# {{ event.id }} | {{ event.title }}
+      |{% else %}
+      a(href="{% url 'events:detail' event.id %}") # {{ event.id }} | {{ event.title }}
+      |{% endif %}
+
       |{% if current_user.is_staff %}
       |&nbsp;
       a(href="/admin/events/game/{{ event.pk }}/" target="_blank") Edit
       |{% endif %}
-    .panel-body
+    .panel-body.p-b-5
       |{% if event.type == 'game' %}
       .row
         .col-md-2
@@ -44,7 +49,7 @@ div(id="{{ event.id }}-pane")
           |{% endif %}
 
           |{% if event.is_reported %}
-          .panel-group#accordion(role="tablist" aria-multiselectable="true")
+          .panel-group#accordion.m-b-5(role="tablist" aria-multiselectable="true")
             .panel.panel-default
               .panel-heading(role="tab" id="heading-{{ event.pk }}")
                 h4.panel-title
@@ -52,9 +57,9 @@ div(id="{{ event.id }}-pane")
                     |Посетили игру
                     span.caret
               .panel-collapse.collapse(role="tabpanel" aria-labelledby="headingOne" id="collapse-{{ event.pk }}-visited")
-                ul.list-group
+                .panel-body.p-b-5
                   |{% for user in event.visited %}
-                  li.list-group-item
+                  p
                     a(href="{{ user.get_absolute_url }}" target="_blank") {{ forloop.counter }}. {{ user }}
                   |{% endfor %}
             |{% if current_user.is_staff %}
@@ -66,9 +71,9 @@ div(id="{{ event.id }}-pane")
                     |Не пришли
                     span.caret
               .panel-collapse.collapse(role="tabpanel" aria-labelledby="headingOne" id="collapse-{{ event.pk }}-notvisited")
-                ul.list-group
+                .panel-body
                   |{% for user in event.notvisited %}
-                  li.list-group-item
+                  p
                     a(href="{{ user.get_absolute_url }}" target="_blank") {{ forloop.counter }}. {{ user }}
                   |{% endfor %}
             |{% endif %}
@@ -80,16 +85,16 @@ div(id="{{ event.id }}-pane")
                     |Не заплатили
                     span.caret
               .panel-collapse.collapse(role="tabpanel" aria-labelledby="headingOne" id="collapse-{{ event.pk }}-notpay")
-                ul.list-group
+                .panel-body
                   |{% for user in event.notpay %}
-                  li.list-group-item
+                  p
                     a(href="{{ user.get_absolute_url }}" target="_blank") {{ forloop.counter }}. {{ user }}
                   |{% endfor %}
             |{% endif %}
             |{% endif %}
           |{% else %}
-          |{% if event.subscribed|length > 0 %}
-          .panel-group#accordion(role="tablist" aria-multiselectable="true")
+          .panel-group#accordion.m-b-5(role="tablist" aria-multiselectable="true")
+            |{% if event.subscribed|length > 0 %}
             .panel.panel-default
               .panel-heading(role="tab" id="heading-{{ event.pk }}")
                 h4.panel-title
@@ -97,11 +102,12 @@ div(id="{{ event.id }}-pane")
                     |Список участников
                     span.caret
               .panel-collapse.collapse(role="tabpanel" aria-labelledby="headingOne" id="collapse-{{ event.pk }}")
-                ul.list-group
+                .panel-body.p-b-5
                   |{% for user in event.subscribed %}
-                  li.list-group-item
+                  p
                     a(href="{{ user.get_absolute_url }}" target="_blank") {{ forloop.counter }}. {{ user }}
                   |{% endfor %}
+            |{% endif %}
             |{% if current_user.is_staff %}
             |{% if event.reserved|length > 0 %}
             .panel.panel-default
@@ -111,9 +117,9 @@ div(id="{{ event.id }}-pane")
                     |В резерве
                     span.caret
               .panel-collapse.collapse(role="tabpanel" aria-labelledby="headingOne" id="collapse-{{ event.pk }}-reserved")
-                ul.list-group
+                .panel-body.p-b-5
                   |{% for user in event.reserved %}
-                  li.list-group-item
+                  p
                     a(href="{{ user.get_absolute_url }}" target="_blank") {{ forloop.counter }}. {{ user }}
                   |{% endfor %}
             |{% endif %}
@@ -125,14 +131,13 @@ div(id="{{ event.id }}-pane")
                     |Отписались
                     span.caret
               .panel-collapse.collapse(role="tabpanel" aria-labelledby="headingOne" id="collapse-{{ event.pk }}-unsubscribed")
-                ul.list-group
+                .panel-body.p-b-5
                   |{% for user in event.unsubscribed %}
-                  li.list-group-item
+                  p
                     a(href="{{ user.get_absolute_url }}" target="_blank") {{ forloop.counter }}. {{ user }}
                   |{% endfor %}
             |{% endif %}
             |{% endif %}
-          |{% endif %}
           |{% endif %}
         .col-md-3.text-right
           |{% if current_user %}
