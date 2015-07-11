@@ -4,6 +4,10 @@ from django.contrib.auth.models import (AbstractBaseUser, BaseUserManager, Permi
 from django.core.mail import send_mail
 from django.utils import timezone
 from phonenumber_field.modelfields import PhoneNumberField
+from utils.validators import validate_height, validate_weight
+from courts.models import City
+import datetime
+from utils.formatters import age_format
 
 
 class AbstractUserManager(BaseUserManager):
@@ -53,31 +57,36 @@ class AbstractUser(AbstractBaseUser, PermissionsMixin):
     is_active = models.BooleanField('Активность', default=True,
                                     help_text="Сделайте неактивным вместо удаления аккаунта")
     is_referee = models.BooleanField('Судья', default=False,
-                                         help_text="Может судить игры")
+                                     help_text="Может судить игры")
     is_coach = models.BooleanField('Тренер', default=False,
-                                         help_text="Может вести тренировки")
+                                   help_text="Может вести тренировки")
     is_responsible = models.BooleanField('Ответственный', default=False,
                                          help_text="Заполняет отчеты, редактирует игры")
     is_organizer = models.BooleanField('Организатор', default=False,
-                                   help_text="Создает игры, площадки, назначает ответственных")
+                                       help_text="Создает игры, площадки, назначает ответственных")
     is_admin = models.BooleanField('Админ', default=False,
                                    help_text="Назначает организаторов, работает с зарплатами и базами данных")
     is_staff = models.BooleanField('Статус сотрудника', default=False,
                                    help_text="Определяет , может ли пользователь войти в админку")
+
+    banned = models.BooleanField('Бан', default=False,
+                                   help_text="Ставит бан пользователю")
+
     avatar = models.ImageField(upload_to='avatars', blank=True, null=True, verbose_name='Аватар')
 
     date_joined = models.DateTimeField('Дата регистрации', default=timezone.now)
-    # bdate = models.DateField('Дата рождения', auto_now_add=False)
+    bdate = models.DateField('Дата рождения', auto_now_add=False, blank=True, null=True)
 
     first_name = models.CharField('Имя', max_length=255)
     last_name = models.CharField('Фамилия', max_length=255)
 
-    # vkuserid = models.IntegerField(unique=True, null=True, blank=True)
-    # sex = models.CharField(max_length=1, choices=(('m', 'М'), ('f', 'Ж')), verbose_name='Пол')
+    vkuserid = models.IntegerField(unique=True, null=True, blank=True)
+    sex = models.CharField(max_length=1, choices=(('m', 'М'), ('f', 'Ж')), verbose_name='Пол')
     phone = PhoneNumberField(verbose_name='Телефон', help_text='В формате +7xxxxxxxxxx', unique=True, blank=True)
     ampluas = models.ManyToManyField('events.Amplua', verbose_name=u'Амплуа', blank=True)
-    # city = models.ForeignKey(City)
-    # TODO: add city model
+    weight = models.PositiveSmallIntegerField(default=0, verbose_name='Вес', validators=[validate_weight])
+    height = models.PositiveSmallIntegerField(default=0, verbose_name='Рост', validators=[validate_height])
+    city = models.ForeignKey(City, null=True, blank=True)
     # settings = models.OneToOneField('users.UserSettings', verbose_name='Настройки')
     # TODO: add settings model
 
@@ -85,7 +94,7 @@ class AbstractUser(AbstractBaseUser, PermissionsMixin):
 
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = ['first_name', 'last_name']
-    REGISTRATION_FIELDS = REQUIRED_FIELDS + ['phone'] + [USERNAME_FIELD] + ['password']
+    REGISTRATION_FIELDS = REQUIRED_FIELDS + ['sex'] + ['bdate'] + ['phone'] + [USERNAME_FIELD] + ['password']
 
     class Meta:
         verbose_name = 'Игрок'
@@ -97,6 +106,18 @@ class AbstractUser(AbstractBaseUser, PermissionsMixin):
 
     def get_short_name(self):
         return self.email
+
+    def get_beautiful_phone(self):
+        phone = self.phone.__str__()
+        return phone[:2] + ' (' + phone[2:5] + ') ' + phone[5:8] + '-' + phone[8:10] + '-' + phone[10:12]
+
+    @property
+    def age(self):
+        today = datetime.date.today()
+        return today.year - self.bdate.year - ((today.month, today.day) < (self.bdate.month, self.bdate.day))
+
+    def beautiful_age(self):
+        return age_format(self.age)
 
     def email_user(self, subject, message, from_email=None, **kwargs):
         send_mail(subject, message, from_email, [self.email], **kwargs)
@@ -134,4 +155,4 @@ class Activation(models.Model):
         verbose_name_plural = 'Подтверждения почты'
 
     def __unicode__(self):
-        return u'{}' % self.email
+        return self.email

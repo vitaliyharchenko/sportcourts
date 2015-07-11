@@ -17,6 +17,7 @@ class SportType(models.Model):
     class Meta():
         verbose_name = 'Вид спорта'
         verbose_name_plural = 'Виды спорта'
+        app_label = 'events'
 
     def __unicode__(self):
         return self.title
@@ -29,6 +30,7 @@ class GameType(models.Model):
     class Meta():
         verbose_name = 'Тип игры'
         verbose_name_plural = 'Типы игры'
+        app_label = 'events'
 
     def __unicode__(self):
         return u'{} - {}'.format(self.sporttype.title, self.title)
@@ -137,7 +139,8 @@ class Game(Event):
     is_reported = models.BooleanField(verbose_name='Отчет отправлен', default=False)
 
     # может быть, а может и не быть тренер на игре
-    coach = models.ForeignKey(User, related_name='coach', blank=True, null=True)
+    coach = models.ForeignKey(User, related_name='coach', blank=True, null=True,
+                              limit_choices_to={'is_coach': True})
 
     @property
     def subscribed(self):

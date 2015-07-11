@@ -1,14 +1,111 @@
-| {% extends 'base.html' %}
+|{% extends 'base.html' %}
 |{% load staticfiles %}
-| {% block content %}
+|{% load vkontakte %}
 
-h1 {{ user }}
-|{% if user.avatar %}
-img.img-thumbnail(src="{{ user.avatar.url }}" width="300")
-|{% else %}
-img.img-thumbnail(src="{% static 'images/blank.jpg' %}" width="300x")
-|{% endif %}
-p {{ user.phone }}
-p {{ user.email }}
+|{% block title %}{{ user }}{% endblock %}
+
+|{% block content %}
+.row
+  .col-md-3
+    .thumbnail
+      |{% if user.avatar %}
+      img.img-thumbnail(src="{{ user.avatar.url }}" width="300")
+      |{% else %}
+      img.img-thumbnail(src="{% static 'images/blank.jpg' %}" width="300x")
+      |{% endif %}
+      .caption
+        | {% if not user.is_active %}
+        p
+          a.btn.btn-warning.btn-block Забанен
+        | {% endif %}
+        | {% if current_user.is_admin %}
+        p
+          a.btn.btn-primary.btn-block(href="mailto:{{ user.email }}") {{ user.email }}
+        | {% endif %}
+  .col-md-9
+    h1.m-t-0
+      |{{ user }}
+      small
+        |&nbsp;&nbsp;&nbsp;
+        |{% if user.is_admin %}
+        span#badge1.glyphicon.glyphicon-exclamation-sign(data-toggle="tooltip" data-placement="bottom" title="Администратор")
+        | &nbsp;
+        |{% endif %}
+
+        |{% if user.is_organizer %}
+        span#badge2.glyphicon.glyphicon-star(data-toggle="tooltip" data-placement="bottom" title="Организатор")
+        | &nbsp;
+        | {% endif %}
+
+        | {% if user.is_responsible %}
+        span#badge3.glyphicon.glyphicon-star-empty(data-toggle="tooltip" data-placement="bottom" title="Ответственный")
+        | &nbsp;
+        | {% endif %}
+
+        | {% if user.is_referee %}
+        span#badge3.glyphicon.glyphicon-king(data-toggle="tooltip" data-placement="bottom" title="Судья")
+        | &nbsp;
+        | {% endif %}
+    p
+      | {% if current %}
+      small
+        span.glyphicon.glyphicon-pencil
+        a(href="#") &nbsp;Ред.
+      | &nbsp;&nbsp;&nbsp;
+      small
+        span.glyphicon.glyphicon-cog
+        a(href="#") &nbsp;Настройки
+      | {% else %}
+      small Последний раз заходил{% ifequal user.sex 'f' %}a{% endifequal %}: {{ user.last_login }}
+      | {% endif %}
+
+    br
+    p {{ user.beautiful_age }}, {{ user.city }}
+
+    | {% if user.height > 0 %}
+    br
+    p Рост: {{ user.height }} см.
+    | {% elif current %}
+    p
+      | Рост:
+      small
+        | &nbsp;
+        a(href="") Заполнить...
+    | {% endif %}
+
+    | {% if user.weight > 0 %}
+    p Вес: {{ user.weight }} кг.
+    | {% elif current %}
+    p
+      | Вес:
+      small
+        | &nbsp;
+        a(href="") Заполнить...
+    | {% endif %}
+
+    |{% if user.phone %}
+    br
+    p Телефон: {{ user.get_beautiful_phone }}
+    |{% else %}
+    br
+    p Телефон не указан
+    |{% endif %}
+
+    | {% if user.vkuserid %}
+    p
+      a(href="{% vkontakte_profile_link user.vkuserid %}" target="_blank")
+        img(src="{% static 'images/vk.png' %}" width="32")
+    | {% elif current %}
+    | {% url 'setvkid' as setvkid_url %}
+    p
+      a(href="{% vkontakte_auth_link setvkid_url %}" target="_blank") + связать свой аккаунт с вконтакте
+    | {% endif %}
+
+    | {% if user.ampluas.count > 0 %}
+    br
+    | {% for amplua in user.ampluas.all %}
+    p {{ amplua }}
+    | {% endfor %}
+    | {% endif %}
 
 |{% endblock %}

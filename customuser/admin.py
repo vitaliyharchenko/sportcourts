@@ -7,9 +7,12 @@ from models import User, Activation
 # Register your models here.
 class UserAdmin(UserAdmin):
     fieldsets = (
-        (None, {'fields': ('email', 'password', 'first_name', 'last_name', 'phone', 'ampluas', 'avatar')}),
+        (None, {'fields': (
+            'email', 'password', 'first_name', 'last_name', 'bdate', 'city', 'phone', 'ampluas', 'avatar', 'weight', 'height', 'sex',
+            'vkuserid')}),
         ('Permissions',
-         {'fields': ('is_active', 'is_referee', 'is_coach', 'is_responsible', 'is_organizer', 'is_admin', 'is_staff', 'is_superuser')}),
+         {'fields': ('is_active', 'is_referee', 'is_coach', 'is_responsible', 'is_organizer', 'is_admin', 'is_staff',
+                     'is_superuser', 'banned')}),
         ('Optional', {'fields': ('last_login', 'date_joined')}),
     )
     add_fieldsets = ((
@@ -27,7 +30,7 @@ class UserAdmin(UserAdmin):
     # The fields to be used in displaying the User model.
     # These override the definitions on the base UserAdmin
     # that reference specific fields on auth.User.
-    list_display = ('id', 'first_name', 'last_name', 'phone', 'email')
+    list_display = ('id', 'first_name', 'last_name', 'phone', 'email', 'sex')
     list_filter = ('is_active', 'is_referee', 'is_coach', 'is_responsible', 'is_organizer', 'is_admin', 'groups')
     search_fields = ('email',)
     ordering = ('email',)
@@ -42,7 +45,10 @@ class ActivationAdmin(admin.ModelAdmin):
         return False
 
     def has_delete_permission(self, request, obj=None):
-        return False
+        if request.user.is_superuser:
+            return True
+        else:
+            return False
 
 
 # Register the new EmailUserAdmin

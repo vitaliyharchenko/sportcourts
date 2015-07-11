@@ -1,14 +1,14 @@
 | {% extends 'base.html' %}
-| {% block content %}
 
+|{% block title %}Спортивные площадки{% endblock %}
+
+| {% block content %}
 h1 Площадки
 hr
-
 |{% for court in courts %}
 p
   a(href="{{ court.get_absolute_url }}") {{ court.title }}
 p {{ court.description }}
 hr
 |{% endfor %}
-
 |{% endblock %}

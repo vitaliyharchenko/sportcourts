@@ -1,8 +1,17 @@
 | {% extends 'base.html' %}
-| {% block content %}
 
+|{% block title %}{{ court.title }}{% endblock %}
+
+| {% block content %}
 h1 {{ court.title }}
 p {{ court.description }}
 p {{ court.place }}
+p Views: {{ court.views }}
+| {% if court.sporttypes.count > 0 %}
+br
+| {% for sporttype in court.sporttypes.all %}
+p {{ sporttype }}
+| {% endfor %}
+| {% endif %}
 
 |{% endblock %}

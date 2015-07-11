@@ -14,3 +14,13 @@ def gte_now(d):
     error = ValidationError('Нельзя добавить в прошлое.')
     if d < DateTime.now():
         raise error
+
+
+def validate_height(value):
+    if value != 0 and (value > 250 or value < 100):
+        raise ValidationError('Твой рост {}. Серьезно?'.format(value))
+
+
+def validate_weight(value):
+    if value != 0 and (value > 200 or value < 20):
+        raise ValidationError('Твой вес {}. Серьезно?'.format(value))

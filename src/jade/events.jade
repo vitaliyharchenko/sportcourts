@@ -1,8 +1,9 @@
 | {% extends 'base.html' %}
 | {% load eventutils %}
 
-| {% block content %}
+|{% block title %}Спортивные события{% endblock %}
 
+| {% block content %}
 h1 События
 hr
 .row
@@ -19,5 +20,4 @@ hr
       .odnoklassniki
 script
   include ../js/templates/events.js
-
 |{% endblock %}

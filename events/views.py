@@ -15,28 +15,12 @@ def error_response(description):
 # Create your views here.
 def events(request):
     context = {'events': Event.objects.all()}
-    try:
-        if request.user.is_authenticated():
-            user = User.objects.get(email=request.user.email)
-            context['current_user'] = user
-        else:
-            context['current_user'] = None
-    except User.DoesNotExist:
-        pass
     return render(request, 'events.html', context)
 
 
 def event(request, event_id):
     context = {'event': Event.objects.get(id=event_id),
                'standalone': True}
-    try:
-        if request.user.is_authenticated():
-            user = User.objects.get(email=request.user.email)
-            context['current_user'] = user
-        else:
-            context['current_user'] = None
-    except User.DoesNotExist:
-        pass
     return render(request, 'event.html', context)
 
 

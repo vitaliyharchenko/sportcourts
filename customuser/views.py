@@ -3,7 +3,7 @@ from django.shortcuts import render, redirect
 from django.contrib import auth
 from forms import UserLoginForm, UserRegistrationForm, EmailForm
 from django.contrib import messages
-from django.views.decorators.http import require_POST
+from django.views.decorators.http import require_POST, require_GET
 from models import Activation
 from django.core import signing
 from utils import mailing, api
@@ -77,8 +77,9 @@ def reg(request, token):
                 activation.status = activation.REGISTERED
                 activation.save()
                 user.save()
-                return redirect('login')
-                #TODO: autho auth
+                newuser = auth.authenticate(username=form.cleaned_data['email'], password=form.cleaned_data['password'])
+                auth.login(request, newuser)
+                return redirect('index')
             else:
                 messages.success(request, "Form is not valid!")
                 return shortcut()
@@ -151,5 +152,15 @@ def userslist(request):
 
 
 def userdetail(request, user_id):
-    context = {'user': User.objects.get(id=user_id)}
+    user = User.objects.get(id=user_id)
+    context = {'user': user}
+    if request.user.pk == user.pk:
+        context['current'] = True
+    else:
+        pass
     return render(request, 'user.html', context)
+
+
+@require_GET
+def setvkid(request):
+    pass

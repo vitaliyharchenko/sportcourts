@@ -1,8 +1,9 @@
 |{% extends 'base.html' %}
 
-|{% block content %}
+|{% block title %}Будь в игре! {% endblock %}
 
-|{% if user.is_authenticated %}
+|{% block content %}
+|{% if current_user %}
 h2 {{ user }}
 p
   a(href="{% url 'logout' %}") Выйти

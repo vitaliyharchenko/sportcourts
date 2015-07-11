@@ -1,25 +1,33 @@
 | {% extends 'base.html' %}
 |{% load staticfiles %}
 
-| {% block content %}
+|{% block title %}Игроки{% endblock %}
 
+| {% block content %}
 h1 Пользователи
 hr
-
 .row
   .col-md-9
     |{% for user in users %}
     .row
-      .col-md-3
+      .col-xs-3
         | {% if user.avatar %}
         img.img-thumbnail(src="{{ user.avatar.url }}" width="150")
         | {% else %}
         img.img-thumbnail(src="{% static 'images/blank.jpg' %}" width="150x")
         | {% endif %}
-      .col-md-9
+      .col-xs-9
         p.lead
           a(href="{{ user.get_absolute_url }}") {{ user }}
+        p
+          |{{ user.beautiful_age }}{% if user.city %}, {{ user.city }}{% endif %}
+        | {% if user.ampluas.count > 0 %}
+        p
+          | {% for amplua in user.ampluas.all %}
+          |{{ amplua }}
+          br
+          | {% endfor %}
+        | {% endif %}
     hr
     |{% endfor %}
-
 |{% endblock %}

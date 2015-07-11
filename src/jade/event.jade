@@ -1,6 +1,8 @@
 | {% extends 'base.html' %}
 | {% load eventutils %}
 
+|{% block title %}{{ event.title }}{% endblock %}
+
 |{% block headers %}
 script(type="text/javascript")
   |VK.init({apiId: 4963792, onlyWidgets: true});
