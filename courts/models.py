@@ -12,6 +12,7 @@ class Country(models.Model):
     class Meta():
         verbose_name = 'страна'
         verbose_name_plural = 'страны'
+        app_label = 'courts'
 
     def __unicode__(self):
         return self.title
@@ -24,6 +25,7 @@ class Region(models.Model):
     class Meta():
         verbose_name = 'область'
         verbose_name_plural = 'области'
+        app_label = 'courts'
 
     def __unicode__(self):
         return self.title
@@ -36,6 +38,7 @@ class City(models.Model):
     class Meta():
         verbose_name = 'город'
         verbose_name_plural = 'города'
+        app_label = 'courts'
 
     def __unicode__(self):
         return self.title
@@ -52,6 +55,7 @@ class Place(models.Model):
     class Meta():
         verbose_name = 'место'
         verbose_name_plural = 'места'
+        app_label = 'courts'
 
     def __unicode__(self):
         return self.fulladdress
@@ -71,6 +75,7 @@ class CourtType(models.Model):
     class Meta():
         verbose_name = 'тип площадки'
         verbose_name_plural = 'типы площадок'
+        app_label = 'courts'
 
     def __unicode__(self):
         return self.title
@@ -82,6 +87,7 @@ class Cover(models.Model):
     class Meta():
         verbose_name = 'тип покрытия'
         verbose_name_plural = 'типы покрытий'
+        app_label = 'courts'
 
     def __unicode__(self):
         return self.title
@@ -90,6 +96,9 @@ class Cover(models.Model):
 class Worktime(models.Model):
     timefrom = models.TimeField(verbose_name='Начало работы')
     timeto = models.TimeField(verbose_name='Конец работы')
+
+    class Meta():
+        app_label = 'courts'
 
     def __unicode__(self):
         return u'с {} до {}'.format(self.timefrom, self.timeto)
@@ -112,13 +121,13 @@ class Court(models.Model):
 
     cost = models.IntegerField(verbose_name='Стоимость аренды, RUB/час', default=0)
     # photo = JasnyImageModelField(upload_to='courts', verbose_name='Изображение', blank=True, null=True)
-    # TODO: sporttypes
-    # sporttypes = models.ManyToManyField('games.SportType', related_name='+', verbose_name='Типы спорта')
-    # TODO: adding number of views
+    sporttypes = models.ManyToManyField('events.SportType', verbose_name=u'Типы спорта', blank=True)
+    views = models.IntegerField(default=0)
 
     class Meta():
         verbose_name = 'площадка'
         verbose_name_plural = 'площадки'
+        app_label = 'courts'
 
     def get_absolute_url(self):
         return "/courts/%i" % self.id

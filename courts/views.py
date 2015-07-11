@@ -9,5 +9,8 @@ def courtlist(request):
 
 
 def court(request, court_id):
-    context = {'court': Court.objects.get(id=court_id)}
+    court = Court.objects.get(id=court_id)
+    context = {'court': court}
+    court.views += 1
+    court.save()
     return render(request, 'court.html', context)

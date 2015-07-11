@@ -26,8 +26,9 @@ import finances.urls
 urlpatterns = patterns('',
                        url(r'^admin/', include(admin.site.urls)),
                        url(r'^$', views.index, name='index'),
-                       url(r'^courts/', include(courts.urls, 'courts')),
-                       url(r'^teams/', include(teams.urls, 'teams')),
+                       url(r'^contacts$', views.contacts, name='contacts'),
+                       url(r'^courts', include(courts.urls, 'courts')),
+                       url(r'^teams', include(teams.urls, 'teams')),
                        url(r'^', include(events.urls, 'events')),
                        url(r'^fin/', include(finances.urls, 'finances')),
                        ) + customuser.urls.urlpatterns
