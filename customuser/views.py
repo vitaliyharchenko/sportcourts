@@ -1,9 +1,11 @@
 # coding=utf-8
 from django.shortcuts import render, redirect
+from django.core.urlresolvers import reverse
 from django.contrib import auth
-from forms import UserLoginForm, UserRegistrationForm, EmailForm
+from forms import UserLoginForm, UserRegistrationForm, EmailForm, UpdateForm
 from django.contrib import messages
 from django.views.decorators.http import require_POST, require_GET
+from django.contrib.auth.decorators import login_required
 from models import Activation
 from django.core import signing
 from utils import mailing, api
@@ -31,7 +33,8 @@ class _Error(api.Error):
 # login view
 def login(request):
     context = dict()
-    context['form'] = UserLoginForm
+    return_path = request.META.get('HTTP_REFERER', '/')
+    print return_path
     shortcut = lambda: render(request, 'login.html', context)
     if request.method == 'POST':
         form = UserLoginForm(request.POST)
@@ -43,10 +46,13 @@ def login(request):
                 return shortcut()
             else:
                 auth.login(request, user)
-                return redirect('index')
+                # FIXME: if loginpath? redirect to index
+                return redirect(return_path)
         else:
             messages.success(request, "Form is not valid!")
+            context['form'] = form
             return shortcut()
+    context['form'] = UserLoginForm
     return shortcut()
 
 
@@ -159,6 +165,22 @@ def userdetail(request, user_id):
     else:
         pass
     return render(request, 'user.html', context)
+
+
+# TODO: create my own context processor for forms
+# FIXME: update form view
+@login_required
+def update(request):
+    if request.method == 'POST':
+        form = UpdateForm(request.POST)
+        if form.is_valid():
+            form.save()
+        else:
+            messages.success(request, "Form is not valid!")
+        return render(request, 'user_update.html', {'form': form})
+    user = User.objects.get(email=request.user.email)
+    context = {'form': UpdateForm(instance=user)}
+    return render(request, 'user_update.html', context)
 
 
 @require_GET

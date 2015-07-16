@@ -23,4 +23,25 @@ nav.navbar.navbar-default.navbar-fixed-top(role="navigation")
           a.topmenu(href="{% url 'teams:list' %}") Команды
         li
           a.topmenu(href="{% url 'events:list' %}") События
+      ul.nav.navbar-nav.navbar-right
+        |{% if loggedin %}
+        li.dropdown
+          a.topmenu.dropdown-toggle(href="#" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false")
+            .visible-xs-inline
+              |Мой профиль
+            .visible-sm-inline
+              |{% avatar current_user.avatar circle="True" %}
+            .visible-lg-inline.visible-md-inline
+              |{{ current_user }}&nbsp;
+              |{% avatar current_user.avatar circle="True" %}
+            ul.dropdown-menu
+              li
+                a(href="{% url 'logout' %}") Выход
+              li
+                a(href="{% url 'user' current_user.id %}") Мой профиль
+        |{% else %}
+        li
+          a.topmenu(href="#" data-toggle="modal" data-target="#loginModal") Вход
+        |{% endif %}
+
 | {% endblock %}

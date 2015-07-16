@@ -1,0 +1,67 @@
+| {% extends './base.html' %}
+|{% load blogutils %}
+
+| {% block title %}Блог{% endblock %}
+
+| {% block content %}
+.row
+  .col-md-9
+    |{% for post in posts %}
+    |{% render_post post %}
+    |{% endfor %}
+  .col-md-3.visible-md.visible-lg
+    p.lead.m-t-0 Расскажи о нас друзьям!
+    .social-likes.social-likes_notext.social-likes-compact
+      .facebook
+      .twitter
+      .vkontakte
+      .odnoklassniki
+
+
+.row
+  .col-md-12
+    h1.page-header Блог о спорте, питании и образе жизни
+.row
+  .col-sm-12.col-md-9
+    .post
+      .post_tags
+        span.post_tag
+          a(href="") Баскетбол
+        span.post_tag
+          a(href="") Питание
+      .blog_post
+        h2 Самореализация №1. Начало.
+        small
+          p.post_date 21 февраля, 2014
+        br
+        img(src="https://unsplash.imgix.net/photo-1434139240289-56c519f77cb0?fit=crop&fm=jpg&h=700&q=75&w=1050" alt="" style="width:100%;")
+        br
+        br
+        p Итак, начнем. В рубрике “Саморазвитие” я начну по порядку упоминать шаги на пути к построению из себя успешного и самодостаточного человека. Следует понимать, что все это будет сугубо моим личным мнением, и вам, дорогие читатели, следует адаптировать все шаги к себе.
+        p
+          a(href="/blog") Читать далее...
+    hr
+    .post
+      .post_tags
+        span.post_tag
+          a(href="") Баскетбол
+        span.post_tag
+          a(href="") Питание
+      .blog_post
+        h2 Самореализация №1. Начало.
+        smal
+          p.post_date 21 февраля, 2014
+        br
+        img(src="https://unsplash.imgix.net/photo-1434139240289-56c519f77cb0?fit=crop&fm=jpg&h=700&q=75&w=1050" alt="" style="width:100%;")
+        br
+        br
+        p Итак, начнем. В рубрике “Саморазвитие” я начну по порядку упоминать шаги на пути к построению из себя успешного и самодостаточного человека. Следует понимать, что все это будет сугубо моим личным мнением, и вам, дорогие читатели, следует адаптировать все шаги к себе.
+  .col-md-3.visible-lg.visible-md
+    .panel.panel-default.tag_toolbar
+      .panel-body
+        p.lead Теги
+        p
+          a(href="") Баскетбол
+          br
+          a(href="") Тренинг
+|{% endblock %}

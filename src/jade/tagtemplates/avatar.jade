@@ -1,0 +1,15 @@
+| {% load thumbnail %}
+| {% load static %}
+| {% thumbnail avatar_field size crop="center" as avatar %}
+| {% if circle %}
+img.img-circle(src="{{ avatar.url }}" width="{{ avatar.width }}" height="{{ avatar.height }}")
+| {% else %}
+img(src="{{ avatar.url }}" width="{{ avatar.width }}" height="{{ avatar.height }}")
+| {% endif %}
+| {% empty %}
+| {% if circle %}
+img.img-circle(src="{% static 'images/blank.jpg' %}" width="{{ avatar.width }}" height="{{ avatar.height }}")
+| {% else %}
+img(src="{% static 'images/blank.jpg' %}" width="{{ avatar.width }}" height="{{ avatar.height }}")
+| {% endif %}
+| {% endthumbnail %}

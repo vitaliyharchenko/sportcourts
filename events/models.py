@@ -57,7 +57,8 @@ class Event(models.Model):
     content_type = models.ForeignKey(ContentType, editable=False, null=True)
 
     # TODO: add image of event
-    # TODO: add status for public views
+    is_public = models.BooleanField('Публичный статус', default=True,
+                                   help_text="Делает видимым в потоке")
     # TODO: add working status for unclosed events
 
     responsible_user = models.ForeignKey(User, related_name='responsible_games',
@@ -257,7 +258,4 @@ class UserGameAction(models.Model):
     def __unicode__(self):
         return u'{} {} | {} | {}'.format(self.game.id, self.game, self.user, self.get_action_display())
 
-        # TODO: model для турнира
-        # TODO: model для турнира
-        # TODO: model для турнира
         # TODO: model для турнира

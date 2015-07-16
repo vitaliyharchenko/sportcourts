@@ -96,3 +96,9 @@ class UserRegistrationForm(BootstrapModelForm):
         value = self.cleaned_data['password']
         validate_password(value)
         return value
+
+
+class UpdateForm(BootstrapModelForm):
+    class Meta:
+        model = User
+        fields = ['avatar', 'first_name', 'last_name', 'bdate', 'city', 'phone', 'weight', 'height', 'ampluas']

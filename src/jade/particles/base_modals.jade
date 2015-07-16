@@ -1,2 +1,18 @@
-
+|{% if not current_user %}
+#loginModal.modal.fade(tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true")
+  .modal-dialog
+    .modal-content
+      .modal-header
+        button.close(type="button" data-dismiss="modal" aria-label="Close")
+          span(aria-hidden="true") &times;
+        h4.modal-title Авторизация
+      .modal-body
+        form(method="post" action="{% url 'login' %}")
+          |{% csrf_token %}
+          |{{ loginform.as_div }}
+          button.btn.btn-default(type="submit") Войти
+          br
+          br
+          a(href="") Забыли пароль?
+|{% endif %}
 

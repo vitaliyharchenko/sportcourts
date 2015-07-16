@@ -36,11 +36,14 @@ INSTALLED_APPS = (
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'sorl.thumbnail',
+    'bootstrapform',
     'customuser',
     'courts',
     'events',
     'teams',
     'finances',
+    'blog',
     'utils',
 )
 
@@ -79,8 +82,6 @@ EMAIL_SUBJECT_PREFIX = '[SPORTCOURTS] '
 
 YANDEX_MAPS_API_KEY = 'ADtA-FMBAAAAO_95dwIAb8cxoJ0XVsmlrrEljkqDE8QIFgsAAAAAAAAAAADwojBjdahSnZySk0zChxiVovWqNw=='
 
-# TODO: adding context processor to add this variable
-# http://stackoverflow.com/questions/12166537/django-settings-py-variables-in-templates
 CURRENT_HOST = '127.0.0.1:8000'
 
 # Database
@@ -136,5 +137,7 @@ TEMPLATE_CONTEXT_PROCESSORS = (
     "django.template.context_processors.tz",
     "django.contrib.messages.context_processors.messages",
     "django.core.context_processors.request",
-    "customuser.loggedin_user_context_processor"
+    "customuser.loggedin_user_context_processor",
+    "sportcourts.context_processors.variables",
+    "customuser.context_processors.userforms"
 )

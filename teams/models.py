@@ -33,5 +33,3 @@ class UserTeam(models.Model):
 
     def __unicode__(self):
         return u'{} | {} | {}'.format(self.user, self.team, self.amplua)
-
-    # TODO: add inline in admin for team, ordering in admin

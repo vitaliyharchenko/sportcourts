@@ -97,6 +97,13 @@ python manage.py syncdb
 lt --port 8000
 ```
 
+# Работа с зависимостями #
+```
+Длясоздания файла зависимостей
+pip freeze > requirements.txt
+```
+
+
 # Работа с сервером test.sportcourts.ru #
 ```
 https://www.digitalocean.com/community/tutorials/how-to-install-and-configure-django-with-postgres-nginx-and-gunicorn
