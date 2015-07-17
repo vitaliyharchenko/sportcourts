@@ -6,27 +6,31 @@
 
 |{% block content %}
 .row
-  .col-md-3
-    .thumbnail
+  .col-md-4.col-sm-4.col-xs-4
+    .thumbnail.profile-avatar
       |{% if user.avatar %}
-      img.img-thumbnail(src="{{ user.avatar.url }}" width="300")
+      img.img-thumbnail(src="{{ user.avatar.url }}")
       |{% else %}
-      img.img-thumbnail(src="{% static 'images/blank.jpg' %}" width="300x")
+      | {% if user.sex = 'f' %}
+      img.img-thumbnail(src="{% static 'images/blank_female.jpg' %}")
+      | {% else %}
+      img.img-thumbnail(src="{% static 'images/blank_male.jpg' %}")
+      | {% endif %}
       |{% endif %}
+      | {% if not user.is_active %}
       .caption
-        | {% if not user.is_active %}
-        p
-          a.btn.btn-warning.btn-block Забанен
-        | {% endif %}
-        | {% if current_user.is_admin %}
-        p
-          a.btn.btn-primary.btn-block(href="mailto:{{ user.email }}") {{ user.email }}
-        | {% endif %}
-  .col-md-9
+        a.btn.btn-warning.btn-block Забанен
+      | {% endif %}
+      | {% if current_user.is_admin %}
+      .caption
+        a.btn.btn-primary.btn-block(href="mailto:{{ user.email }}") {{ user.email }}
+      | {% endif %}
+  .col-md-8.col-sm-8.col-xs-8
     h1.m-t-0
       |{{ user }}
       small
         |&nbsp;&nbsp;&nbsp;
+        br.visible-xs
         |{% if user.is_admin %}
         span#badge1.glyphicon.glyphicon-exclamation-sign(data-toggle="tooltip" data-placement="bottom" title="Администратор")
         | &nbsp;
@@ -47,20 +51,13 @@
         | &nbsp;
         | {% endif %}
     p
-      | {% if current %}
-      small
-        span.glyphicon.glyphicon-pencil
-        a(href="{% url 'user_update' %}") &nbsp;Ред.
-      | &nbsp;&nbsp;&nbsp;
-      small
-        span.glyphicon.glyphicon-cog
-        a(href="#") &nbsp;Настройки
-      | {% else %}
+      | {% if not current %}
       small Последний раз заходил{% ifequal user.sex 'f' %}a{% endifequal %}: {{ user.last_login }}
       | {% endif %}
 
     br
-    p {{ user.beautiful_age }}, {{ user.city }}
+    p
+      |{{ user.beautiful_age }}{% if user.city %}, {{ user.city }}{% endif %}
 
     | {% if user.height > 0 %}
     br
@@ -70,7 +67,7 @@
       | Рост:
       small
         | &nbsp;
-        a(href="") Заполнить...
+        a(href="{% url 'user_update' %}") Заполнить...
     | {% endif %}
 
     | {% if user.weight > 0 %}
@@ -80,7 +77,7 @@
       | Вес:
       small
         | &nbsp;
-        a(href="") Заполнить...
+        a(href="{% url 'user_update' %}") Заполнить...
     | {% endif %}
 
     |{% if user.phone %}

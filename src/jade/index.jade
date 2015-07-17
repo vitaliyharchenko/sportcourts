@@ -3,24 +3,4 @@
 |{% block title %}Будь в игре! {% endblock %}
 
 |{% block content %}
-|{% if current_user %}
-h2 {{ user }}
-p
-  a(href="{% url 'logout' %}") Выйти
-|{% else %}
-p
-  |{{loginform.as_div}}
-  a(href="{% url 'login' %}") Войти
-p Регистрация
-form(action="{% url 'add_email_activation' %}" method="POST")
-  |{% csrf_token %}
-  input#email(type="text" name="email" placeholder="Введи свой email")
-  a#emailbutton(disabled) Зарегистрироваться
-  #userclient
-|{% endif %}
-
-hr
-
-script
-  include ../js/templates/index.js
 |{% endblock %}

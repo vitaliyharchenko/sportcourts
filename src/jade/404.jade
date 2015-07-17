@@ -1,0 +1,20 @@
+|{% extends 'base.html' %}
+|{% load staticfiles %}
+
+|{% block title %}Ошибка 404! {% endblock %}
+
+|{% block content %}
+.row
+  .col-md-6.col-md-offset-3
+    .text-center
+      h1 Ошибка
+      br
+      .thumbnail
+        img(src="{% static 'images/404.jpg' %}")
+      .alert.alert-warning(role="alert")
+        |Мы ничего не нашли по запрошенному адресу
+      p.lead Если это настоящая ошибка,&nbsp;
+        a(href="https://vk.com/write17610278" target="_blank")
+          kbd сообщите
+        |&nbsp;про нее нам
+|{% endblock %}

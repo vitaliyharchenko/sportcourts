@@ -24,7 +24,7 @@ SECRET_KEY = 'o-x00&0e=niyadeseyddr45=!s*@!5xl%)$o-ktbjz8r4lu#k('
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['test.sportcourts.ru', 'sportcourts.ru']
+ALLOWED_HOSTS = ['test.sportcourts.ru', 'sportcourts.ru', '127.0.0.1']
 
 
 # Application definition
@@ -66,7 +66,6 @@ AUTH_USER_MODEL = 'customuser.User'
 LOGIN_URL = '/login'
 AUTHENTICATION_BACKENDS = (
     'django.contrib.auth.backends.ModelBackend',
-#     'customuser.VkontakteAuthBackend',
 )
 
 VKONTAKTE = {
@@ -79,6 +78,7 @@ EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_HOST_USER = 'info@sportcourts.ru'
 EMAIL_HOST_PASSWORD = 'courtssport2'
 EMAIL_SUBJECT_PREFIX = '[SPORTCOURTS] '
+ADMINS = ('Vitaliy', 'harchenko.grape@gmail.com')
 
 YANDEX_MAPS_API_KEY = 'ADtA-FMBAAAAO_95dwIAb8cxoJ0XVsmlrrEljkqDE8QIFgsAAAAAAAAAAADwojBjdahSnZySk0zChxiVovWqNw=='
 
@@ -119,6 +119,7 @@ MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 STATIC_URL = '/static/'
+STATIC_ROOT = '/static/'
 
 STATICFILES_DIRS = (
     os.path.join(BASE_DIR, 'static'),

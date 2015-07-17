@@ -1,21 +1,32 @@
 | {% extends 'base.html' %}
 |{% load staticfiles %}
+|{% load global_tags %}
 
 |{% block title %}Игроки{% endblock %}
 
 | {% block content %}
-h1 Пользователи
-hr
 .row
-  .col-md-9
+  .col-sm-4.col-md-3
+    .panel.panel-default
+      .panel-body
+        p.lead Поиск
+        input#searchquery.form-control(type="text" name="query" placeholder="Поиск по имени" value="{{ query }}")
+        br
+        a#searchbutton.btn.btn-primary.btn-block(href="#" disabled) Найти
+    .panel.panel-default.hidden-xs
+      .panel-body
+        p.lead Расскажи о нас друзьям!
+        .social-likes.social-likes_notext.social-likes-compact
+          .facebook
+          .twitter
+          .vkontakte
+          .odnoklassniki
+  .col-sm-8.col-md-9
+    |{% if users|length > 0 %}
     |{% for user in users %}
     .row
       .col-xs-3
-        | {% if user.avatar %}
-        img.img-thumbnail(src="{{ user.avatar.url }}" width="150")
-        | {% else %}
-        img.img-thumbnail(src="{% static 'images/blank.jpg' %}" width="150x")
-        | {% endif %}
+        |{% avatar user.avatar size='200' sex=user.sex thumbnail="True" %}
       .col-xs-9
         p.lead
           a(href="{{ user.get_absolute_url }}") {{ user }}
@@ -30,4 +41,12 @@ hr
         | {% endif %}
     hr
     |{% endfor %}
+    |{% else %}
+    .alert.alert-dismissable.alert-warning
+      button.close(type="button" data-dismiss="alert" aria-label="Close")
+        span(aria-hidden="true") &times;
+      | По вашему запросу ничего не найдено
+    |{% endif %}
+script
+  include ../js/templates/users.js
 |{% endblock %}

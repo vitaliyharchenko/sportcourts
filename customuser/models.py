@@ -86,7 +86,7 @@ class AbstractUser(AbstractBaseUser, PermissionsMixin):
     ampluas = models.ManyToManyField('events.Amplua', verbose_name=u'Амплуа', blank=True)
     weight = models.PositiveSmallIntegerField(default=0, verbose_name='Вес', validators=[validate_weight])
     height = models.PositiveSmallIntegerField(default=0, verbose_name='Рост', validators=[validate_height])
-    city = models.ForeignKey(City, null=True, blank=True)
+    city = models.ForeignKey(City, null=True, blank=True, verbose_name='Город')
     # settings = models.OneToOneField('users.UserSettings', verbose_name='Настройки')
     # TODO: add settings model
 

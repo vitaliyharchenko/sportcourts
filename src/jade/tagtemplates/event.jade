@@ -4,16 +4,24 @@
 div(id="{{ event.id }}-pane")
   .panel.panel-default
     .panel-heading
-      |{% if standalone %}
-      |# {{ event.id }} | {{ event.title }}
-      |{% else %}
-      a(href="{% url 'events:detail' event.id %}") # {{ event.id }} | {{ event.title }}
-      |{% endif %}
-
-      |{% if current_user.is_staff %}
-      |&nbsp;
-      a(href="/admin/events/game/{{ event.pk }}/" target="_blank") Edit
-      |{% endif %}
+      .row
+        .col-xs-10
+          |{% if standalone %}
+          |# {{ event.id }} | {{ event.title }}
+          |{% else %}
+          a(href="{% url 'events:detail' event.id %}") # {{ event.id }} | {{ event.title }}
+          |{% endif %}
+        .col-xs-2.text-right
+          |{% if current_user.is_staff %}
+          .btn-group.btn-group-compact
+            button.close.dropdown-toggle(type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false")
+              span.glyphicon.glyphicon-option-vertical
+            ul.dropdown-menu.pull-right
+              li
+                a(href="/admin/events/game/{{ event.pk }}/" target="_blank") Редактировать
+              li
+                a(href="#") Печатать списки
+          |{% endif %}
     .panel-body.p-b-5
       |{% if event.type == 'game' %}
       .row
@@ -38,7 +46,7 @@ div(id="{{ event.id }}-pane")
             .progress-bar.progress-bar-default.progress-bar-striped.active(role="progressbar" style="width: {% widthratio event.subscribed|length event.capacity 100 %}%; min-width: 1em;")
               span {{ event.subscribed|length }} / {{ event.capacity }}
             |{% else %}
-            .progress-bar.progress-bar-success.progress-bar-striped.active(role="progressbar" style="width: {% widthratio event.subscribed|length event.capacity 100 %}%; min-width: 1em;")
+            .progress-bar.progress-bar-success(role="progressbar" style="width: {% widthratio event.subscribed|length event.capacity 100 %}%; min-width: 1em;")
               span {{ event.subscribed|length }} / {{ event.capacity }}
             |{% endif %}
             |{% endif %}
@@ -182,7 +190,7 @@ div(id="{{ event.id }}-pane")
                 a.action(id="{{ event.id }}-subscribe") Записаться
               | {% else %}
               li
-                a Записаться, По нажатию показать окно входа
+                a(href="#" data-toggle="modal" data-target="#loginModal") Записаться
               | {% endif %}
             //Если нет мест
             | {% else %}
@@ -198,10 +206,10 @@ div(id="{{ event.id }}-pane")
               | {% else %}
               | {% if event.has_reserved_place %}
               li
-                a Записаться в резерв, показать попап
+                a(href="#" data-toggle="modal" data-target="#loginModal") Записаться в резерв
               | {% else %}
               li
-                a Мест нет, показать попап
+                a(href="#" data-toggle="modal" data-target="#loginModal") Мест нет
               | {% endif %}
               | {% endif %}
             | {% endif %}
@@ -216,6 +224,7 @@ div(id="{{ event.id }}-pane")
             button.btn.btn-success.btn-sm.dropdown-toggle(type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false") Вы записаны
             ul.dropdown-menu
               li
+                //TODO: popup with phone
                 a Отписаться - попап с телефоном ответственного
             //Если в резерве
             | {% elif action == 3 %}
@@ -238,7 +247,7 @@ div(id="{{ event.id }}-pane")
                 a.action(id="{{ event.id }}-subscribe") Записаться
               | {% else %}
               li
-                a Записаться, По нажатию показать окно входа
+                a(href="#" data-toggle="modal" data-target="#loginModal") Записаться
               | {% endif %}
             //Если нет мест
             | {% else %}

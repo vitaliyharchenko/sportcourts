@@ -102,3 +102,15 @@ class UpdateForm(BootstrapModelForm):
     class Meta:
         model = User
         fields = ['avatar', 'first_name', 'last_name', 'bdate', 'city', 'phone', 'weight', 'height', 'ampluas']
+
+
+class ChangePasswordForm(BootstrapForm):
+    password = forms.CharField(label='Новый пароль', widget=forms.PasswordInput())
+    password1 = forms.CharField(label='Еще раз', widget=forms.PasswordInput())
+
+    def clean_password1(self):
+        password = self.cleaned_data.get("password")
+        password1 = self.cleaned_data.get("password1")
+        if password and password1 and password != password1:
+            raise forms.ValidationError("Введенные пароли не совпадают", code='password_mismatch',)
+        return password1

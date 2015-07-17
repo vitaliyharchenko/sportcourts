@@ -1,15 +1,11 @@
 | {% load thumbnail %}
 | {% load static %}
 | {% thumbnail avatar_field size crop="center" as avatar %}
-| {% if circle %}
-img.img-circle(src="{{ avatar.url }}" width="{{ avatar.width }}" height="{{ avatar.height }}")
-| {% else %}
-img(src="{{ avatar.url }}" width="{{ avatar.width }}" height="{{ avatar.height }}")
-| {% endif %}
+img.m-w-100(src="{{ avatar.url }}" class="{% if circle %}img-circle{% endif %}{% if thumbnail == 'True' %}img-thumbnail{% endif %}" width="{{ avatar.width }}" height="{{ avatar.height }}")
 | {% empty %}
-| {% if circle %}
-img.img-circle(src="{% static 'images/blank.jpg' %}" width="{{ avatar.width }}" height="{{ avatar.height }}")
+| {% if sex == 'f' %}
+img.m-w-100(src="{% static 'images/blank_female.jpg' %}" class="{% if circle %}img-circle{% endif %}{% if thumbnail == 'True' %}img-thumbnail{% endif %}" width="{{ side_size }}")
 | {% else %}
-img(src="{% static 'images/blank.jpg' %}" width="{{ avatar.width }}" height="{{ avatar.height }}")
+img.m-w-100(src="{% static 'images/blank_male.jpg' %}" class="{% if circle %}img-circle{% endif %}{% if thumbnail == 'True' %}img-thumbnail{% endif %}" width="{{ side_size }}")
 | {% endif %}
 | {% endthumbnail %}

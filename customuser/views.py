@@ -2,7 +2,7 @@
 from django.shortcuts import render, redirect
 from django.core.urlresolvers import reverse
 from django.contrib import auth
-from forms import UserLoginForm, UserRegistrationForm, EmailForm, UpdateForm
+from forms import UserLoginForm, UserRegistrationForm, EmailForm, UpdateForm, ChangePasswordForm
 from django.contrib import messages
 from django.views.decorators.http import require_POST, require_GET
 from django.contrib.auth.decorators import login_required
@@ -34,22 +34,26 @@ class _Error(api.Error):
 def login(request):
     context = dict()
     return_path = request.META.get('HTTP_REFERER', '/')
-    print return_path
     shortcut = lambda: render(request, 'login.html', context)
+
     if request.method == 'POST':
         form = UserLoginForm(request.POST)
         if form.is_valid():
             email, password = form.cleaned_data['email'], form.data['password']
             user = auth.authenticate(username=email, password=password)
             if not user:
-                messages.success(request, "Not user!")
+                messages.warning(request, "Пользователь не найден!", extra_tags='login')
                 return shortcut()
             else:
                 auth.login(request, user)
-                # FIXME: if loginpath? redirect to index
-                return redirect(return_path)
+                try:
+                    next = request.GET.__getitem__('next')
+                    print next
+                    return redirect(next)
+                except KeyError:
+                    return redirect(return_path)
         else:
-            messages.success(request, "Form is not valid!")
+            messages.warning(request, "Введенные данные некорректны!", extra_tags='login')
             context['form'] = form
             return shortcut()
     context['form'] = UserLoginForm
@@ -153,7 +157,12 @@ def verify_email(request, token):
 
 # customuser views #
 def userslist(request):
-    context = {'users': User.objects.all()}
+    try:
+        query = request.GET.__getitem__('q')
+        users = User.objects.filter(first_name__icontains=query) | User.objects.filter(last_name__icontains=query)
+        context = {'users': users, 'query': query}
+    except KeyError:
+        context = {'users': User.objects.all()}
     return render(request, 'users.html', context)
 
 
@@ -171,16 +180,34 @@ def userdetail(request, user_id):
 # FIXME: update form view
 @login_required
 def update(request):
+    user = User.objects.get(email=request.user.email)
+    form = UpdateForm(request.POST or None, request.FILES or None, instance=user)
     if request.method == 'POST':
-        form = UpdateForm(request.POST)
         if form.is_valid():
             form.save()
+            messages.success(request, "Успешно сохранено!", extra_tags='info')
+            return redirect('user_update')
         else:
-            messages.success(request, "Form is not valid!")
-        return render(request, 'user_update.html', {'form': form})
-    user = User.objects.get(email=request.user.email)
-    context = {'form': UpdateForm(instance=user)}
-    return render(request, 'user_update.html', context)
+            messages.warning(request, "Некорректные данные", extra_tags='info')
+    return render(request, 'user_update.html', {'form': form, 'passform': ChangePasswordForm})
+
+
+@login_required
+def changepass(request):
+    form = ChangePasswordForm(request.POST)
+    u = User.objects.get(email=request.user.email)
+    if request.method == 'POST':
+        if form.is_valid():
+            password = form.cleaned_data.get("password")
+            u.set_password(password)
+            u.save()
+            validation = auth.authenticate(username=u.email, password=password)
+            auth.login(request, validation)
+            messages.success(request, "Пароль изменен", extra_tags='changepass')
+        else:
+            messages.warning(request, "Введенные пароли некорректны!", extra_tags='changepass')
+        return render(request, 'user_update.html', {'form': UpdateForm(instance=u), 'passform': form})
+    return redirect('user_update')
 
 
 @require_GET
