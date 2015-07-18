@@ -23,6 +23,7 @@ import events.urls
 import teams.urls
 import finances.urls
 import blog.urls
+import notifications.urls
 
 urlpatterns = patterns('',
                        url(r'^admin/', include(admin.site.urls)),
@@ -33,6 +34,7 @@ urlpatterns = patterns('',
                        url(r'^blog', include(blog.urls, 'blog')),
                        url(r'^', include(events.urls, 'events')),
                        url(r'^fin/', include(finances.urls, 'finances')),
+                       url(r'^notifications', include(notifications.urls, 'notifications')),
                        ) + customuser.urls.urlpatterns
 
 urlpatterns += patterns('',

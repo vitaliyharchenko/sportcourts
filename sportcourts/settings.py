@@ -39,6 +39,7 @@ INSTALLED_APPS = (
     'sorl.thumbnail',
     'bootstrapform',
     'customuser',
+    'notifications',
     'courts',
     'events',
     'teams',
@@ -140,5 +141,6 @@ TEMPLATE_CONTEXT_PROCESSORS = (
     "django.core.context_processors.request",
     "customuser.loggedin_user_context_processor",
     "sportcourts.context_processors.variables",
-    "customuser.context_processors.userforms"
+    "customuser.context_processors.userforms",
+    "notifications.context_processors.notifications"
 )

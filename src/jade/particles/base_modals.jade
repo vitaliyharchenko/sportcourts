@@ -48,8 +48,30 @@
               .hidden-xs Присоединиться
               .visible-xs Go!
         #userclient
+
 //TODO: Get it to the right place
 script
   include ../../js/particles/reg.js
+
+|{% else %}
+
+#notificationsModal.modal.fade(tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true")
+  .modal-dialog
+    .modal-content
+      .modal-header
+        button.close(type="button" data-dismiss="modal" aria-label="Close")
+          span(aria-hidden="true") &times;
+        h4.modal-title Уведомления
+      .modal-body
+        .container-fluid
+          .row
+            .col-xs-12
+              | {% for notification in notifications %}
+              .alert.fade.in(class="{% if notification.level == 0 %}alert-info{% elif notification.level == 1 %}alert-warning{% elif notification.level == 2 %}alert-danger{% endif %}")
+                button.close(type="button" data-dismiss="alert" aria-hidden="true") &times;
+                p
+                  small {{notification.datetime}}
+                p.lead {{ notification }} | {{ notification.level }} | {{ notification.read }}
+              | {% endfor %}
 |{% endif %}
 
