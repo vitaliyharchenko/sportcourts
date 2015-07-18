@@ -1,0 +1,15 @@
+.notifications {
+  position: fixed;
+  z-index: 3;
+}
+
+.notifications.bottom-left {
+  left: 10px;
+  bottom: 5px;
+}
+
+/* Notification Element */
+.notifications > div {
+  position: relative;
+  margin: 5px 0px;
+}

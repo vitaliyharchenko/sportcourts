@@ -71,7 +71,7 @@ class AbstractUser(AbstractBaseUser, PermissionsMixin):
 
     banned = models.BooleanField('Бан', default=False,
                                    help_text="Ставит бан пользователю")
-
+    # TODO: Jasny image field
     avatar = models.ImageField(upload_to='avatars', blank=True, null=True, verbose_name='Аватар')
 
     date_joined = models.DateTimeField('Дата регистрации', default=timezone.now)

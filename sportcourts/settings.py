@@ -46,6 +46,7 @@ INSTALLED_APPS = (
     'finances',
     'blog',
     'utils',
+    'rest_framework',
 )
 
 MIDDLEWARE_CLASSES = (
