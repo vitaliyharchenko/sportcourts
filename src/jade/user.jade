@@ -9,22 +9,35 @@
   .col-md-4.col-sm-4.col-xs-4
     .thumbnail.profile-avatar
       |{% if user.avatar %}
-      img.img-thumbnail(src="{{ user.avatar.url }}")
+      .avatar-parent
+        img(src="{{ user.avatar.url }}")
+        | {% if current %}
+        .avatar-edit
+          a(href="{% url 'user_update' %}") Редактировать
+        | {% endif %}
       |{% else %}
       | {% if user.sex = 'f' %}
-      img.img-thumbnail(src="{% static 'images/blank_female.jpg' %}")
+      .avatar-parent
+        img(src="{% static 'images/blank_female.jpg' %}")
+        | {% if current %}
+        .avatar-edit
+          a(href="{% url 'user_update' %}") Редактировать
+        | {% endif %}
       | {% else %}
-      img.img-thumbnail(src="{% static 'images/blank_male.jpg' %}")
+      .avatar-parent
+        img(src="{% static 'images/blank_male.jpg' %}")
+        | {% if current %}
+        .avatar-edit
+          a(href="{% url 'user_update' %}") Редактировать
+        | {% endif %}
       | {% endif %}
       |{% endif %}
-      | {% if not user.is_active %}
-      .caption
-        a.btn.btn-warning.btn-block Забанен
-      | {% endif %}
-      | {% if current_user.is_admin %}
-      .caption
-        a.btn.btn-primary.btn-block(href="mailto:{{ user.email }}") {{ user.email }}
-      | {% endif %}
+    | {% if not user.is_active %}
+    a.btn.btn-warning.btn-block Забанен
+    | {% endif %}
+    | {% if current_user.is_admin %}
+    a.btn.btn-primary.btn-block(href="mailto:{{ user.email }}") {{ user.email }}
+    | {% endif %}
   .col-md-8.col-sm-8.col-xs-8
     h1.m-t-0
       |{{ user }}

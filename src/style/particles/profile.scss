@@ -11,3 +11,17 @@
 .stats-body {
   padding: 10px 0 0 10px;
 }
+
+.avatar-parent {
+  position: relative;
+}
+
+.avatar-edit {
+  position: absolute;
+  top: 0;
+  height: 30px;
+  padding-top: 5px;
+  background-color: rgba(255,255,255,0.8);
+  width: 100%;
+  text-align: center;
+}
