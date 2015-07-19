@@ -1,30 +1,34 @@
-from django.shortcuts import render
-from django.views.decorators.http import require_GET
-from django.contrib.auth.decorators import login_required
+# coding=utf-8
+from django.shortcuts import HttpResponse, redirect
+from django.views.decorators.http import require_POST
 from models import Notification
-import datetime
+import json
 
 
-# # Create your views here.
-# @require_GET
-# @login_required
-# def notification_read(request, *args, **kwargs):
-#     Notification.objects.filter(pk=kwargs['pk'], user_id=request.user.id).update(read=True)
-#     if request.is_ajax():
-#         return HttpResponse('')
-#     else:
-#         return redirect(notifications_view)
-#
-#
-# @require_GET
-# @login_required
-# def notification_delete(request, *args, **kwargs):
-#     pk = kwargs.get('pk', 0)
-#     if pk:
-#         Notification.objects.filter(pk=pk, user_id=request.user.id).delete()
-#     else:
-#         Notification.objects.filter(user_id=request.user.id, datetime__lte=datetime.datetime.now()).delete()
-#     if request.is_ajax():
-#         return HttpResponse('')
-#     else:
-#         return redirect(notifications_view)
+# Create your views here.
+@require_POST
+def notification_read(request):
+    Notification.objects.filter(user_id=request.user.id, read=0).update(read=1)
+    response = {'result': 'OK'}
+    if request.is_ajax():
+        return HttpResponse(json.dumps(response), content_type="application/json")
+
+
+@require_POST
+def notification_delete(request):
+    if request.POST['notification_id']:
+        notification_id = request.POST['notification_id']
+    else:
+        notification_id = 0
+
+    if notification_id != 0:
+        Notification.objects.filter(pk=notification_id, user_id=request.user.id).update(read=2)
+        response = {'result': 'OK'}
+    else:
+        Notification.objects.filter(user_id=request.user.id, read=1).update(read=2)
+        Notification.objects.filter(user_id=request.user.id, read=0).update(read=2)
+        response = {'result': 'OK'}
+    if request.is_ajax():
+        return HttpResponse(json.dumps(response), content_type="application/json")
+    else:
+        return redirect('index')
