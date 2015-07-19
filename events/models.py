@@ -114,6 +114,9 @@ class Event(models.Model):
         # TODO: beautiful format of duration
         return self.datetime_to - self.datetime
 
+    def get_absolute_url(self):
+        return "/event/%i" % self.id
+
     @property
     def time_status(self):
         now = timezone.now()
