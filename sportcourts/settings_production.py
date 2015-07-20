@@ -91,12 +91,12 @@ CURRENT_HOST = '127.0.0.1:8000'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.psycopg2',
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
         'NAME': 'scdb',
+        'USER': 'scuser',
+        'PASSWORD': '4203',
         'HOST': 'localhost',
         'POST': '',
-        'PASSWORD': '4203',
-        'USER': 'scuser'
     }
 }
 
