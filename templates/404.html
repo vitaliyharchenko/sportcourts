@@ -1,0 +1,15 @@
+
+{% extends 'base.html' %}
+{% load staticfiles %}
+{% block title %}Ошибка 404! {% endblock %}
+{% block content %}
+<div class="row">
+  <div class="col-md-6 col-md-offset-3">
+    <div class="text-center">
+      <h1>Ошибка</h1><br/>
+      <div class="thumbnail"><img src="{% static 'images/404.jpg' %}"/></div>
+      <div role="alert" class="alert alert-warning">Мы ничего не нашли по запрошенному адресу</div>
+      <p class="lead">Если это настоящая ошибка,&nbsp;<a href="https://vk.com/write17610278" target="_blank"><kbd>сообщите</kbd></a>&nbsp;про нее нам</p>
+    </div>
+  </div>
+</div>{% endblock %}

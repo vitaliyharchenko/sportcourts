@@ -1,0 +1,12 @@
+
+{% extends 'base.html' %}
+{% block title %}Уведомления{% endblock %}
+{% block content %}
+<h1 class="m-t-0">Уведомления</h1>
+<hr/>{% for notification in notifications %}
+<div class="alert fade in {% if notification.level == 0 %}alert-info{% elif notification.level == 1 %}alert-warning{% elif notification.level == 2 %}alert-danger{% endif %}">
+  <button type="button" data-dismiss="alert" aria-hidden="true" class="close">&times;</button>
+  <p><small>{{notification.datetime}}</small></p>
+  <p class="lead">{{ notification }} | {{ notification.level }} | {{ notification.read }}</p>
+</div>{% endfor %}
+{% endblock %}

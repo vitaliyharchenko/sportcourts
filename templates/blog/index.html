@@ -1,0 +1,58 @@
+
+{% extends './base.html' %}
+{% load blogutils %}
+{% block title %}Блог{% endblock %}
+{% block content %}
+<div class="row">
+  <div class="col-md-9">
+    {% for post in posts %}
+    {% render_post post %}
+    {% endfor %}
+  </div>
+  <div class="col-md-3 visible-md visible-lg">
+    <p class="lead m-t-0">Расскажи о нас друзьям!</p>
+    <div class="social-likes social-likes_notext social-likes-compact">
+      <div class="facebook"></div>
+      <div class="twitter"></div>
+      <div class="vkontakte"></div>
+      <div class="odnoklassniki"></div>
+    </div>
+  </div>
+</div>
+<div class="row">
+  <div class="col-md-12">
+    <h1 class="page-header">Блог о спорте, питании и образе жизни</h1>
+  </div>
+</div>
+<div class="row">
+  <div class="col-sm-12 col-md-9">
+    <div class="post">
+      <div class="post_tags"><span class="post_tag"><a href="">Баскетбол</a></span><span class="post_tag"><a href="">Питание</a></span></div>
+      <div class="blog_post">
+        <h2>Самореализация №1. Начало.</h2><small>
+          <p class="post_date">21 февраля, 2014</p></small><br/><img src="https://unsplash.imgix.net/photo-1434139240289-56c519f77cb0?fit=crop&amp;fm=jpg&amp;h=700&amp;q=75&amp;w=1050" alt="" style="width:100%;"/><br/><br/>
+        <p>Итак, начнем. В рубрике “Саморазвитие” я начну по порядку упоминать шаги на пути к построению из себя успешного и самодостаточного человека. Следует понимать, что все это будет сугубо моим личным мнением, и вам, дорогие читатели, следует адаптировать все шаги к себе.</p>
+        <p><a href="/blog">Читать далее...</a></p>
+      </div>
+    </div>
+    <hr/>
+    <div class="post">
+      <div class="post_tags"><span class="post_tag"><a href="">Баскетбол</a></span><span class="post_tag"><a href="">Питание</a></span></div>
+      <div class="blog_post">
+        <h2>Самореализация №1. Начало.</h2>
+        <smal>
+          <p class="post_date">21 февраля, 2014</p>
+        </smal><br/><img src="https://unsplash.imgix.net/photo-1434139240289-56c519f77cb0?fit=crop&amp;fm=jpg&amp;h=700&amp;q=75&amp;w=1050" alt="" style="width:100%;"/><br/><br/>
+        <p>Итак, начнем. В рубрике “Саморазвитие” я начну по порядку упоминать шаги на пути к построению из себя успешного и самодостаточного человека. Следует понимать, что все это будет сугубо моим личным мнением, и вам, дорогие читатели, следует адаптировать все шаги к себе.</p>
+      </div>
+    </div>
+  </div>
+  <div class="col-md-3 visible-lg visible-md">
+    <div class="panel panel-default tag_toolbar">
+      <div class="panel-body">
+        <p class="lead">Теги</p>
+        <p><a href="">Баскетбол</a><br/><a href="">Тренинг</a></p>
+      </div>
+    </div>
+  </div>
+</div>{% endblock %}

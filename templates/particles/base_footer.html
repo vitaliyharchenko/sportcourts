@@ -1,0 +1,72 @@
+
+<footer class="footer">
+  <div class="container text-center">
+    <p class="text-muted clip">
+      &copy; Sportcourts 2014
+      &nbsp&nbsp&nbsp&nbsp<a href="{% url 'contacts' %}" class="topmenu">Контакты</a>&nbsp&nbsp&nbsp&nbsp<a target="_blank" href="https://vk.com/write17610278" class="topmenu">Сообщить об ошибке</a><a href="http://vk.com/sportcourts" target="_blank" class="footerright hidden-xs"><img src="{% static 'images/vk.png' %}" width="32"/></a>
+    </p>
+  </div>
+</footer><a style="display: none;" href="https://metrika.yandex.ru/stat/?id=25660223&amp;amp;from=informer" target="_blank" rel="nofollow"><img src="//bs.yandex.ru/informer/25660223/3_0_FFFFFFFF_FFFFFFFF_0_pageviews" style="width:88px; height:31px; border:0;" alt="РЇРЅРґРµРєСЃ.РњРµС‚СЂРёРєР°" title="РЇРЅРґРµРєСЃ.РњРµС‚СЂРёРєР°: РґР°РЅРЅС‹Рµ Р·Р° СЃРµРіРѕРґРЅСЏ (РїСЂРѕСЃРјРѕС‚СЂС‹, РІРёР·РёС‚С‹ Рё СѓРЅРёРєР°Р»СЊРЅС‹Рµ РїРѕСЃРµС‚РёС‚РµР»Рё)"/></a>
+<script type="text/javascript" href="{% static 'js/particles/metrika.js' %}"></script>
+<noscript>
+  <div><img src="//mc.yandex.ru/watch/25660223" style="position:absolute; left:-9999px;" alt=""/></div>
+</noscript>
+<script>$(document).ready(function () {
+    $('.notifications .alert').each(function () {
+        $(this).fadeIn('slow');
+    });
+    setTimeout(function () {
+        $.ajax({
+            url: "{% url 'notifications:read' %}",
+            data: {
+                csrfmiddlewaretoken: '{{ csrf_token }}'
+            },
+            async: true,
+            success: function (data, textStatus) {
+                if (data['response'] = 'OK') {
+                    $('.notifications .alert').each(function () {
+                        $(this).fadeOut('slow');
+                    });
+                } else {
+                    alert('Ошибка чтения уведомлений');
+                }
+            },
+            error: function (response, status, errorThrown) {
+                alert('Все плохо, расскажите нам про эту ошибку \n\r\n\r' + response + status + errorThrown);
+                console.log(response);
+            },
+            type: "POST",
+            dataType: "json"
+        });
+    }, 6000);
+});
+
+$(document).on('click','.delete-notification', function(){
+    var arr = $(this).attr("id").split('-');
+    var notification_id = arr[1];
+    $.ajax({
+        url: "{% url 'notifications:delete' %}",
+        data: {
+            csrfmiddlewaretoken: '{{ csrf_token }}',
+            notification_id: notification_id
+        },
+        async: true,
+        success: function (data, textStatus) {
+            var count = $(".notifications-count").html();
+            count = count - 1;
+            if (count == 0) {
+                $(".notifications-menu-item").html('');
+                $('#notificationsModal').modal('hide')
+            } else {
+                $(".notifications-count").html(count);
+            }
+        },
+        error: function (response, status, errorThrown) {
+            alert('Все плохо, расскажите нам про эту ошибку \n\r\n\r' + response + status + errorThrown);
+            console.log(response);
+        },
+        type: "POST",
+        dataType: "json"
+    });
+});
+</script>{% block footer %}{% endblock %}

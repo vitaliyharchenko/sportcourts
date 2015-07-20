@@ -1,0 +1,55 @@
+
+{% extends 'base.html' %}
+{% load bootstrap %}
+{% block title %}Редактирование профиля{% endblock %}
+{% block headers %}
+{{ form.media }}
+{% endblock %}
+{% block content %}
+<h1 class="m-t-0">Настройки</h1>
+<hr/>
+<div class="row">
+  <div class="col-md-6">
+    <div class="panel panel-default">
+      <div class="panel-body">
+        <h3>Редактирование профиля</h3><br/>{% if messages %}
+        {% for message in messages %}
+        {% if message.extra_tags == 'info' %}
+        <div class="alert alert-dismissible {% if message.tags == 'info success' %}alert-success{% else %}alert-warning{% endif %}">
+          <button href="#" data-dismiss="alert" aria-label="close" class="close">&times;</button>{{ message }}
+        </div>{% endif %}
+        {% endfor %}
+        {% endif %}
+        <form method="post" action="{% url 'user_update' %}" enctype="multipart/form-data">
+          {% csrf_token %}
+          {{ form|bootstrap }}
+          <button type="submit" name="saveinfo" class="btn btn-primary">Сохранить</button>
+        </form>
+      </div>
+    </div>
+  </div>
+  <div class="col-md-6">
+    <div class="panel panel-default">
+      <div class="panel-body">
+        <h3>Приватность</h3>
+      </div>
+    </div>
+    <div class="panel panel-default">
+      <div class="panel-body">
+        <h3>Сменить пароль</h3><br/>{% if messages %}
+        {% for message in messages %}
+        {% if message.extra_tags == 'changepass' %}
+        <div class="alert alert-dismissible {% if message.tags == 'changepass success' %}alert-success{% else %}alert-warning{% endif %}">
+          <button href="#" data-dismiss="alert" aria-label="close" class="close">&times;</button>{{ message }}
+        </div>{% endif %}
+        {% endfor %}
+        {% endif %}
+        <form method="post" action="{% url 'changepass' %}" enctype="multipart/form-data">
+          {% csrf_token %}
+          {{ passform|bootstrap }}<br/>
+          <button type="submit" name="changepass" class="btn btn-warning">Изменить пароль</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>{% endblock %}

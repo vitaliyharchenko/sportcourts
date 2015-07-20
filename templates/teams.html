@@ -1,0 +1,9 @@
+
+{% extends 'base.html' %}
+{% block title %}Команды{% endblock %}
+{% block content %}
+<h1 class="m-t-0">Команды</h1>
+<hr/>{% for team in teams %}
+<p><a href="{{ team.get_absolute_url }}">{{ team }}</a></p>
+<hr/>{% endfor %}
+{% endblock %}

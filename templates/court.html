@@ -1,0 +1,11 @@
+
+{% extends 'base.html' %}
+{% block title %}{{ court.title }}{% endblock %}
+{% block content %}
+<h1>{{ court.title }}</h1>
+<p>{{ court.description }}</p>
+<p>{{ court.place }}</p>
+<p>Views: {{ court.views }}</p>{% if court.sporttypes.count > 0 %}<br/>{% for sporttype in court.sporttypes.all %}
+<p>{{ sporttype }}</p>{% endfor %}
+{% endif %}
+{% endblock %}

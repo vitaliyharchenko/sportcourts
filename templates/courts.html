@@ -1,0 +1,10 @@
+
+{% extends 'base.html' %}
+{% block title %}Спортивные площадки{% endblock %}
+{% block content %}
+<h1>Площадки</h1>
+<hr/>{% for court in courts %}
+<p><a href="{{ court.get_absolute_url }}">{{ court.title }}</a></p>
+<p>{{ court.description }}</p>
+<hr/>{% endfor %}
+{% endblock %}

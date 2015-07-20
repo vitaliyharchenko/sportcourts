@@ -1,0 +1,37 @@
+{% block navbar %}
+<nav role="navigation" class="navbar navbar-default navbar-fixed-top">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" data-toggle="collapse" data-target="#navbar" class="navbar-toggle collapsed"><span class="sr-only">Toogle navigation</span><span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span></button><a href="/" class="navbar-brand"><img src="{% static 'images/logo.png' %}" alt="brand"/></a>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+        <li class="{% active '/courts$' %}"><a href="{% url 'courts:list' %}" class="topmenu"><span class="glyphicon glyphicon-globe"></span>&nbsp;Площадки</a></li>
+        <li class="{% active '/users$' %}"><a href="{% url 'users' %}" class="topmenu">Игроки</a></li>
+        <li class="{% active '/teams$' %}"><a href="{% url 'teams:list' %}" class="topmenu">Команды</a></li>
+        <li class="{% active '/events$' %}"><a href="{% url 'events:list' %}" class="topmenu">События</a></li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        {% if loggedin %}
+        {% if notifications_count > 0 %}
+        <li class="notifications-menu-item"><a href="#" data-toggle="modal" data-target="#notificationsModal" class="topmenu"><span class="glyphicon glyphicon-bell"></span>&nbsp;<span class="notifications-count">{{ notifications_count }}</span></a></li>{% endif %}
+        <li class="dropdown"><a href="#" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false" class="topmenu dropdown-toggle">
+            <div class="visible-xs-inline">Мой профиль</div>
+            <div class="visible-sm-inline">{% avatar current_user.avatar circle="True" %}</div>
+            <div class="visible-lg-inline visible-md-inline">
+              {{ current_user }}&nbsp;
+              {% avatar current_user.avatar size="30" circle="True" sex=user.sex thumbnail="False" %}
+            </div>
+            <ul class="dropdown-menu">
+              <li><a href="{% url 'user' current_user.id %}">Мой профиль</a></li>
+              <li><a href="{% url 'user_update' %}">Настройки</a></li>{% if current_user.is_staff %}
+              <li><a href="/admin" target="blank">Админка</a></li>{% endif %}
+              <li role="separator" class="divider"></li>
+              <li><a href="{% url 'logout' %}">Выход</a></li>
+            </ul></a></li>{% else %}
+        <li><a href="#" data-toggle="modal" data-target="#regModal" class="topmenu">Зарегистрироваться</a></li>
+        <li><a href="#" data-toggle="modal" data-target="#loginModal" class="topmenu">Войти</a></li>{% endif %}
+      </ul>
+    </div>
+  </div>
+</nav>{% endblock %}

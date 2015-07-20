@@ -1,0 +1,9 @@
+
+{% extends 'base.html' %}
+{% load eventutils %}
+{% block content %}
+<h1>Финансы</h1>
+<hr/>{% for game in games %}
+{{ game.title }}
+{% endfor %}
+{% endblock %}

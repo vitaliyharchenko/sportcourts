@@ -1,0 +1,386 @@
+
+{% load staticfiles %}
+{% load global_tags %}<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>{% block title %}SportCourts{% endblock %} | SportCourts.ru</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <meta name="keywords" content="{% block keywords %}{% endblock %}">
+    <meta name="description" content="{% block description %}{% endblock %}">
+    <meta name="viewport" content="width=600">
+    <!--Favicon-->
+    <link href="{% static 'images/favicon.ico' %}" rel="icon" type="image/vnd.microsoft.icon">
+    <!--Styles-->
+    <link href="{% static 'css/main.css' %}" type="text/css" rel="stylesheet">
+    <!--Scripts-->
+    <script src="{% static 'js/main.js' %}"></script>
+    <!--Custom-->{% block headers %}{% endblock %}
+  </head>
+  <body>{% block navbar %}
+    <nav role="navigation" class="navbar navbar-default navbar-fixed-top">
+      <div class="container">
+        <div class="navbar-header">
+          <button type="button" data-toggle="collapse" data-target="#navbar" class="navbar-toggle collapsed"><span class="sr-only">Toogle navigation</span><span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span></button><a href="/" class="navbar-brand"><img src="{% static 'images/logo.png' %}" alt="brand"></a>
+        </div>
+        <div id="navbar" class="navbar-collapse collapse">
+          <ul class="nav navbar-nav">
+            <li class="{% active '/courts$' %}"><a href="{% url 'courts:list' %}" class="topmenu"><span class="glyphicon glyphicon-globe"></span>&nbsp;Площадки</a></li>
+            <li class="{% active '/users$' %}"><a href="{% url 'users' %}" class="topmenu">Игроки</a></li>
+            <li class="{% active '/teams$' %}"><a href="{% url 'teams:list' %}" class="topmenu">Команды</a></li>
+            <li class="{% active '/events$' %}"><a href="{% url 'events:list' %}" class="topmenu">События</a></li>
+          </ul>
+          <ul class="nav navbar-nav navbar-right">
+            {% if loggedin %}
+            {% if notifications_count > 0 %}
+            <li class="notifications-menu-item"><a href="#" data-toggle="modal" data-target="#notificationsModal" class="topmenu"><span class="glyphicon glyphicon-bell"></span>&nbsp;<span class="notifications-count">{{ notifications_count }}</span></a></li>{% endif %}
+            <li class="dropdown"><a href="#" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false" class="topmenu dropdown-toggle">
+                <div class="visible-xs-inline">Мой профиль</div>
+                <div class="visible-sm-inline">{% avatar current_user.avatar circle="True" %}</div>
+                <div class="visible-lg-inline visible-md-inline">
+                  {{ current_user }}&nbsp;
+                  {% avatar current_user.avatar size="30" circle="True" sex=user.sex thumbnail="False" %}
+                </div>
+                <ul class="dropdown-menu">
+                  <li><a href="{% url 'user' current_user.id %}">Мой профиль</a></li>
+                  <li><a href="{% url 'user_update' %}">Настройки</a></li>{% if current_user.is_staff %}
+                  <li><a href="/admin" target="blank">Админка</a></li>{% endif %}
+                  <li role="separator" class="divider"></li>
+                  <li><a href="{% url 'logout' %}">Выход</a></li>
+                </ul></a></li>{% else %}
+            <li><a href="#" data-toggle="modal" data-target="#regModal" class="topmenu">Зарегистрироваться</a></li>
+            <li><a href="#" data-toggle="modal" data-target="#loginModal" class="topmenu">Войти</a></li>{% endif %}
+          </ul>
+        </div>
+      </div>
+    </nav>{% endblock %}{% if not current_user %}
+    <div id="loginModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" class="modal fade">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <div class="row">
+              <div class="col-xs-12 text-center">
+                <button type="button" data-dismiss="modal" aria-label="Close" class="close"><span aria-hidden="true">&times;</span></button>
+                <h2>Авторизация</h2>
+                <p><a href="#" data-dismiss="modal" data-toggle="modal" data-target="#regModal">Я не зарегистрирован</a></p>
+              </div>
+            </div>
+          </div>
+          <div class="modal-body">
+            <div class="container-fluid">
+              <div class="row">
+                <div class="col-xs-6">
+                  <form method="post" action="{% url 'login' %}">{% csrf_token %}
+                    <div class="form-group">
+                      <label class="sr-only">Email</label>
+                      <input type="email" name="email" placeholder="Email" class="form-control">
+                    </div>
+                    <div class="form-group">
+                      <label class="sr-only">Пароль</label>
+                      <input type="password" name="password" placeholder="Пароль" class="form-control">
+                    </div>
+                    <button type="submit" class="btn btn-default">Войти</button><br><br><a href="">Забыли пароль?</a>
+                  </form>
+                </div>
+                <div class="col-xs-6">
+                  <div class="form-group"><a href="#" class="btn btn-default btn-block">ВКОНТАКТЕ</a></div>
+                  <div class="form-group"><a href="#" class="btn btn-default btn-block">FACEBOOK</a></div>
+                  <div class="form-group"><a href="#" class="btn btn-default btn-block">GOOGLE</a></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div id="regModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" class="modal fade">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" data-dismiss="modal" aria-label="Close" class="close"><span aria-hidden="true">&times;</span></button>
+            <h4 class="modal-title">Регистрация</h4>
+          </div>
+          <div class="modal-body">
+            <div class="input-group">
+              <input id="email" type="text" name="email" placeholder="Введи свой email" class="form-control input-lg"><span class="input-group-btn"><a id="emailbutton" disabled class="btn btn-lg btn-success">
+                  <div class="hidden-xs">Присоединиться</div>
+                  <div class="visible-xs">Go!</div></a></span>
+            </div>
+            <div id="userclient"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!--TODO: Get it to the right place-->
+    <script>/**
+ * Created by vitaliyharchenko on 16.06.15.
+ */
+var pressed = false;
+$(document).ready(function() {
+    inputfunc('email');
+    clickfunc('email');
+});
+
+function inputfunc (item) {
+    $(document).on('input','#'+item, function(){
+        if($(this).val() != '') {
+            var pattern = /^([a-z0-9_\.-])+@[a-z0-9-]+\.([a-z]{2,4}\.)?[a-z]{2,4}$/i;
+            if(pattern.test($(this).val())){
+                $(this).css({'border' : '1px solid #569b44'});
+                $('#'+item+'button').removeAttr('disabled');
+            } else {
+                $(this).css({'border' : '1px solid #ff0000'});
+                $('#'+item+'button').attr('disabled', 'disabled');
+            }
+        } else {
+            $(this).css({'border' : '1px solid #ff0000'});
+            $('#'+item+'button').attr('disabled', 'disabled');
+        };
+    });
+};
+
+function clickfunc (item) {
+    $(document).on('click','#'+item+'button', function(){
+        var email = $('#'+item).val();
+        var user_client = emailclient(email);
+        console.log(email);
+        console.log(user_client);
+        if (!pressed) {
+            $.ajax({
+                url: "{% url 'add_email_activation' %}",
+                data: {
+                    csrfmiddlewaretoken:'{{ csrf_token }}',
+                    email: email
+                },
+                async: true,
+                beforeSend: function() {
+                    pressed = true;
+                    $('#'+item+'button').attr('disabled', 'disabled');
+                    $('#'+item+'button').html('Отправка...');
+                    $('#'+item).attr('disabled', 'disabled');
+                },
+                //TODO: show/hide button message
+                success: function (data, textStatus) {
+                    if ('response' in data) {
+                        $('#'+item+'button').html('Отправлено');
+                        if (user_client[0]) {
+                            $('#userclient').html('<p>Мы отправили вам письмо.</p><p>Пожалуйста, проверьте вашу почту</p><p><a href="'+user_client[1]+'" target="_blank">'+user_client[0]+'</a></p>');
+                            console.log('Определили');
+                        } else {
+                            $('#userclient').html('<p class="lead">Сейчас на указанный Вами адрес <span class="text-primary">'+email+'</span> придет сообщение, содержащее ссылку для подтверждения email.<br><br>Пожалуйста, проверьте вашу почту.</p>');
+                            console.log('Не');
+                        };
+                        $('#activateModal').modal('show');
+                    } else {
+                        var error = data['error'];
+                        console.log(error);
+                        var error_code = error['error_code'];
+                        if (error_code == 1){
+                            alert('Ошибка, пользовтель с таким email уже зарегестрирован!')
+                            pressed = false;
+                            $('#'+item+'button').removeAttr('disabled');
+                            $('#'+item+'button').html('Присоединиться');
+                            $('#'+item).removeAttr('disabled');
+                        }
+                        if (error_code == 2){
+                            alert('Пользовтель с таким email уже активирован!')
+                            pressed = false;
+                            $('#'+item+'button').removeAttr('disabled');
+                            $('#'+item+'button').html('Присоединиться');
+                            $('#'+item).removeAttr('disabled');
+                        }
+                        if (error_code == 3){
+                            alert('Ошибка, неверный email')
+                            pressed = false;
+                            $('#'+item+'button').removeAttr('disabled');
+                            $('#'+item+'button').html('Присоединиться');
+                            $('#'+item).removeAttr('disabled');
+                        }
+                    }
+                },
+                error: function (response, status, errorThrown) {
+                    alert('Все плохо, расскажите нам про эту ошибку \n\r\n\r' + response + status + errorThrown);
+                    $('#'+item+'button').html('Ошибка');
+                },
+                type: "POST",
+                dataType: "json"
+            });
+        }
+    });
+};
+
+function emailclient(item) {
+    var arr = item.split('@');
+    var client = arr[1];
+    var result = [];
+    switch (client) {
+        case 'gmail.com':
+            result[0] = 'Открыть Gmail';
+            result[1] = 'https://mail.google.com/';
+            break
+        // case 'sportcourts.ru':
+        //   result[0] = 'Открыть Gmail';
+        //   result[1] = 'https://mail.google.com/';
+        //   break
+        case 'mail.ru':
+            result[0] = 'Открыть Почту Mail.Ru';
+            result[1] = 'https://e.mail.ru/';
+            break
+        case 'list.ru':
+            result[0] = 'Открыть Почту Mail.Ru (list.ru)';
+            result[1] = 'https://e.mail.ru/';
+            break
+        case 'inbox.ru':
+            result[0] = 'Открыть Почту Mail.Ru (inbox.ru)';
+            result[1] = 'https://e.mail.ru/';
+            break
+        case 'bk.ru':
+            result[0] = 'Открыть Почту Mail.Ru (bk.ru)';
+            result[1] = 'https://e.mail.ru/';
+            break
+        case 'yandex.ru':
+            result[0] = 'Открыть Почту Yandex';
+            result[1] = 'https://mail.yandex.ru/';
+            break
+        case 'ya.ru':
+            result[0] = 'Открыть Почту Yandex';
+            result[1] = 'https://mail.yandex.ru/';
+            break
+        case 'rambler.ru':
+            result[0] = 'Открыть Почту Rambler';
+            result[1] = 'https://mail.rambler.ru/';
+            break
+        case 'e1.ru':
+            result[0] = 'Открыть Почту E1.ru';
+            result[1] = 'https://mail.e1.ru/';
+            break
+        case 'icloud.com':
+            result[0] = 'Открыть iCloud Mail';
+            result[1] = 'https://www.icloud.com/';
+            break
+        case 'me.com':
+            result[0] = 'Открыть iCloud Mail';
+            result[1] = 'https://www.icloud.com/';
+            break
+        case 'yahoo.com':
+            result[0] = 'Открыть Yahoo! Mail';
+            result[1] = 'https://mail.yahoo.com/';
+            break
+        case 'live.ru':
+            result[0] = 'Открыть Outlook.com (live.ru)';
+            result[1] = 'https://mail.live.com/';
+            break
+        case 'live.com':
+            result[0] = 'Открыть Outlook.com (live.com)';
+            result[1] = 'https://mail.live.com/';
+            break
+        default:
+    };
+    return result;
+}
+    </script>{% else %}
+    <div id="notificationsModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" class="modal fade">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" data-dismiss="modal" aria-label="Close" class="close"><span aria-hidden="true">&times;</span></button>
+            <h4 class="modal-title">Уведомления</h4>
+          </div>
+          <div class="modal-body p-b-0">
+            <div class="container-fluid">
+              <div class="row">
+                <div class="col-xs-12">{% for notification in notifications_all %}
+                  <div class="alert fade in {% if notification.level == 0 %}alert-info{% elif notification.level == 1 %}alert-warning{% elif notification.level == 2 %}alert-danger{% endif %}">
+                    <button id="notif-{{notification.id}}" type="button" data-dismiss="alert" aria-hidden="true" class="close delete-notification">&times;</button>
+                    <p><small>{{notification.datetime}}</small></p>
+                    <p class="lead">{{ notification }} | {{ notification.level }} | {{ notification.read }}</p>
+                  </div>{% endfor %}
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>{% endif %}
+    <div class="notifications bottom-left">{% for notification in notifications_new %}
+      <div style="display: none;" class="alert {% if notification.level == 0 %}alert-info{% elif notification.level == 1 %}alert-warning{% elif notification.level == 2 %}alert-danger{% endif %}">
+        <button type="button" data-dismiss="alert" aria-hidden="true" class="close">&times;</button>
+        <p><small>{{notification.datetime}}</small></p>
+        <p class="lead">{{ notification }} | {{ notification.level }} | {{ notification.read }}</p>
+      </div>{% endfor %}
+    </div>
+    <section id="content">
+      <div class="container">{% block content %}{% endblock %}</div>
+    </section>
+    <footer class="footer">
+      <div class="container text-center">
+        <p class="text-muted clip">
+          &copy; Sportcourts 2014
+          &nbsp&nbsp&nbsp&nbsp<a href="{% url 'contacts' %}" class="topmenu">Контакты</a>&nbsp&nbsp&nbsp&nbsp<a target="_blank" href="https://vk.com/write17610278" class="topmenu">Сообщить об ошибке</a><a href="http://vk.com/sportcourts" target="_blank" class="footerright hidden-xs"><img src="{% static 'images/vk.png' %}" width="32"></a>
+        </p>
+      </div>
+    </footer><a style="display: none;" href="https://metrika.yandex.ru/stat/?id=25660223&amp;amp;from=informer" target="_blank" rel="nofollow"><img src="//bs.yandex.ru/informer/25660223/3_0_FFFFFFFF_FFFFFFFF_0_pageviews" style="width:88px; height:31px; border:0;" alt="РЇРЅРґРµРєСЃ.РњРµС‚СЂРёРєР°" title="РЇРЅРґРµРєСЃ.РњРµС‚СЂРёРєР°: РґР°РЅРЅС‹Рµ Р·Р° СЃРµРіРѕРґРЅСЏ (РїСЂРѕСЃРјРѕС‚СЂС‹, РІРёР·РёС‚С‹ Рё СѓРЅРёРєР°Р»СЊРЅС‹Рµ РїРѕСЃРµС‚РёС‚РµР»Рё)"></a>
+    <script type="text/javascript" href="{% static 'js/particles/metrika.js' %}"></script>
+    <noscript>
+      <div><img src="//mc.yandex.ru/watch/25660223" style="position:absolute; left:-9999px;" alt=""></div>
+    </noscript>
+    <script>$(document).ready(function () {
+    $('.notifications .alert').each(function () {
+        $(this).fadeIn('slow');
+    });
+    setTimeout(function () {
+        $.ajax({
+            url: "{% url 'notifications:read' %}",
+            data: {
+                csrfmiddlewaretoken: '{{ csrf_token }}'
+            },
+            async: true,
+            success: function (data, textStatus) {
+                if (data['response'] = 'OK') {
+                    $('.notifications .alert').each(function () {
+                        $(this).fadeOut('slow');
+                    });
+                } else {
+                    alert('Ошибка чтения уведомлений');
+                }
+            },
+            error: function (response, status, errorThrown) {
+                alert('Все плохо, расскажите нам про эту ошибку \n\r\n\r' + response + status + errorThrown);
+                console.log(response);
+            },
+            type: "POST",
+            dataType: "json"
+        });
+    }, 6000);
+});
+
+$(document).on('click','.delete-notification', function(){
+    var arr = $(this).attr("id").split('-');
+    var notification_id = arr[1];
+    $.ajax({
+        url: "{% url 'notifications:delete' %}",
+        data: {
+            csrfmiddlewaretoken: '{{ csrf_token }}',
+            notification_id: notification_id
+        },
+        async: true,
+        success: function (data, textStatus) {
+            var count = $(".notifications-count").html();
+            count = count - 1;
+            if (count == 0) {
+                $(".notifications-menu-item").html('');
+                $('#notificationsModal').modal('hide')
+            } else {
+                $(".notifications-count").html(count);
+            }
+        },
+        error: function (response, status, errorThrown) {
+            alert('Все плохо, расскажите нам про эту ошибку \n\r\n\r' + response + status + errorThrown);
+            console.log(response);
+        },
+        type: "POST",
+        dataType: "json"
+    });
+});
+    </script>{% block footer %}{% endblock %}
+  </body>
+</html>
