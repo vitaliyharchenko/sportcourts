@@ -93,7 +93,7 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
         'NAME': 'scdb',
-        'HOST': '',
+        'HOST': 'localhost',
         'POST': '',
         'PASSWORD': '4203',
         'USER': 'scuser'

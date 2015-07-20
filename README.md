@@ -125,6 +125,9 @@ https://www.digitalocean.com/community/tutorials/how-to-install-and-configure-dj
 15) pip install gunicorn
 16) deactivate
 17) sudo su - postgres
+18*) (Alternative) create user "scuser" with password '4203';
+create database "scdb" owner "scuser";
+alter user scuser createdb;
 18) createdb scdb
 19) createuser --interactive scuser (n n n)
 20) psql
