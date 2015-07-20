@@ -108,31 +108,60 @@ pip freeze > requirements.txt
 ```
 https://www.digitalocean.com/community/tutorials/how-to-install-and-configure-django-with-postgres-nginx-and-gunicorn
 ```
-1) Установка Ubuntu 12.04
+1) Установка Ubuntu ubuntu14.04-x86_64
 2) ssh root@194.58.108.127
 3) sudo apt-get update
 4) sudo apt-get upgrade
-5) sudo apt-get install python-virtualenv
-6) sudo virtualenv /opt/myenv
-7) source /opt/myenv/bin/activate
-8) pip install django
-9) deactivate
-10) sudo apt-get install libpq-dev python-dev
-11) sudo apt-get install postgresql postgresql-contrib
-12) sudo apt-get install nginx
-13) source /opt/myenv/bin/activate
-14) pip install gunicorn
-15)
+5) restart server
+6) sudo apt-get install python-virtualenv
+7) sudo virtualenv /opt/scenv
+8) source /opt/scenv/bin/activate
+9) pip install django
+10) deactivate
+11) sudo apt-get install libpq-dev python-dev
+12) sudo apt-get install postgresql postgresql-contrib
+13) sudo apt-get install nginx
+14) source /opt/scenv/bin/activate
+15) pip install gunicorn
+16) deactivate
+17) sudo su - postgres
+18) createdb scdb
+19) createuser --interactive scuser (n n n)
+20) psql
+21) GRANT ALL PRIVILEGES ON DATABASE scdb TO scuser;
+22) \q
+23) su - root
+24) sudo nano /etc/nginx/sites-available/sportcourts
+25) 
 ```
-sudo su - postgres
-createdb scdb
-createuser -P
-scuser, 4203, nnn
-psql
-GRANT ALL PRIVILEGES ON DATABASE scdb TO scuser;
-sudo nano /etc/nginx/sites-available/sportcourts
-```
+server {
+    server_name test.sportcourts.ru;
 
+    access_log off;
+
+    location /static/ {
+        alias /opt/sportcourts/static/;
+    }
+
+    location / {
+        proxy_pass http://127.0.0.1:8001;
+        proxy_set_header X-Forwarded-Host $server_name;
+        proxy_set_header X-Real-IP $remote_addr;
+        add_header P3P 'CP="ALL DSP COR PSAa PSDa OUR NOR ONL UNI COM NAV"';
+    }
+}
 ```
-/opt/scenv
-```
+26) cd /etc/nginx/sites-enabled
+27) sudo ln -s ../sites-available/sportcourts
+28) sudo service nginx restart
+29) sudo apt-get install git
+30) cd /opt/
+31) git clone https://github.com/vitaliyharchenko/sportcourts.git
+32) source /opt/scenv/bin/activate
+33) pip install -r /opt/sportcourts/requirements.txt
+34) cd /opt/sportcourts
+35) gunicorn sportcourts.wsgi:application --bind=127.0.0.1:8001 --daemon
+
+36) apt-get install npm
+
+
