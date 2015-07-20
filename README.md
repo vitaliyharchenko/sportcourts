@@ -160,8 +160,7 @@ server {
 32) source /opt/scenv/bin/activate
 33) pip install -r /opt/sportcourts/requirements.txt
 34) cd /opt/sportcourts
+35) python manage.py collectstatic
 35) gunicorn sportcourts.wsgi:application --bind=127.0.0.1:8001 --daemon
-
-36) apt-get install npm
 
 
