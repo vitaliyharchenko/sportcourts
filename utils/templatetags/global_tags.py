@@ -17,7 +17,7 @@ def active(context, urlname):
         pattern = '^' + reverse(urlname)
     except NoReverseMatch:
         pattern = urlname
-    path = context['request'].path
+    path = context.get('request').path
     if re.search(pattern, path):
         return 'active'
     return ''
