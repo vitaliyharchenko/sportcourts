@@ -11,7 +11,7 @@ class JasnyImageWidget(forms.FileInput):
     html = """\
            <div class="fileinput fileinput-{state}" data-provides="fileinput">
              <div class="fileinput-preview thumbnail" data-trigger="fileinput" style="width: {width}px; height: {height}px;">
-             {existing}
+             {image}
              </div>
                <div>
                  <span class="btn btn-default btn-file">
@@ -27,30 +27,24 @@ class JasnyImageWidget(forms.FileInput):
 
     def render(self, name, value, attrs=None):
         attrs = attrs or {}
-        width = attrs.get('width', None) or 150
-        height = attrs.get('width', None) or width
         state = 'exists' if value else 'new'
-        value = False
-        # value if isinstance(value, str) else (value.url if value else None)
+        width = attrs.get('width', None) or 150
+        height = attrs.get('width', None) if value else 150
+        value = value if isinstance(value, str) else (value.url if value else None)
         existing = self.existing.format(url=value, name=name, width=width, height=height) if value else ''
-        return self.html.format(state=state, width=width, height=height, existing=existing, name=name)
+        return self.html.format(state=state, width=width, height=height, image=existing, name=name)
 
     def value_from_datadict(self, data, files, name):
-        deleted = bool(int(data.pop(name+'-deleted', ['0'])[0]))
+        # deleted = bool(int(data.pop(name+'-deleted', ['0'])[0]))
         url = data.pop(name+'-url', [''])[0]
         file = files.get(name, None)
-        if deleted and not file:
+        # if deleted and not file:
+        if not file:
             return False
         if not file and url:
             result = urllib.urlretrieve(url)
             file = File(open(result[0]))
         return file
-
-    class Media:
-        css = {
-            'all': ['view/jasny/css/jasny-bootstrap.css']
-        }
-        js = ['view/jasny/js/jasny-bootstrap.js', 'view/jasny/js/jasny-image.js']
 
 
 class JasnyImageField(forms.ImageField):

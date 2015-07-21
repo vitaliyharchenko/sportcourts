@@ -5,6 +5,7 @@ from django.core.mail import send_mail
 from django.utils import timezone
 from phonenumber_field.modelfields import PhoneNumberField
 from utils.validators import validate_height, validate_weight
+from utils.witgets import JasnyImageModelField
 from courts.models import City
 import datetime
 from utils.formatters import age_format
@@ -72,7 +73,7 @@ class AbstractUser(AbstractBaseUser, PermissionsMixin):
     banned = models.BooleanField('Бан', default=False,
                                    help_text="Ставит бан пользователю")
     # TODO: Jasny image field
-    avatar = models.ImageField(upload_to='avatars', blank=True, null=True, verbose_name='Аватар')
+    avatar = JasnyImageModelField(upload_to='avatars', blank=True, null=True, verbose_name='Аватар')
 
     date_joined = models.DateTimeField('Дата регистрации', default=timezone.now)
     bdate = models.DateField('Дата рождения', auto_now_add=False, blank=True, null=True)
@@ -133,6 +134,15 @@ class User(AbstractUser):
 
     def get_absolute_url(self):
         return "/users/%i" % self.id
+
+    def save(self, *args, **kwargs):
+        try:
+            this = User.objects.get(id=self.id)
+            if this.avatar != self.avatar:
+                this.avatar.delete()
+        except:
+            pass
+        super(User, self).save(*args, **kwargs)
 
 
 class Activation(models.Model):

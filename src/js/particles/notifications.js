@@ -1,31 +1,34 @@
 $(document).ready(function () {
-    $('.notifications .alert').each(function () {
-        $(this).fadeIn('slow');
-    });
-    setTimeout(function () {
-        $.ajax({
-            url: "{% url 'notifications:read' %}",
-            data: {
-                csrfmiddlewaretoken: '{{ csrf_token }}'
-            },
-            async: true,
-            success: function (data, textStatus) {
-                if (data['response'] = 'OK') {
-                    $('.notifications .alert').each(function () {
-                        $(this).fadeOut('slow');
-                    });
-                } else {
-                    alert('Ошибка чтения уведомлений');
-                }
-            },
-            error: function (response, status, errorThrown) {
-                alert('Все плохо, расскажите нам про эту ошибку \n\r\n\r' + response + status + errorThrown);
-                console.log(response);
-            },
-            type: "POST",
-            dataType: "json"
+    var count = "{{ notifications_new|length }}"
+    if (count != "0") {
+        $('.notifications .alert').each(function () {
+            $(this).fadeIn('slow');
         });
-    }, 6000);
+        setTimeout(function () {
+            $.ajax({
+                url: "{% url 'notifications:read' %}",
+                data: {
+                    csrfmiddlewaretoken: '{{ csrf_token }}'
+                },
+                async: true,
+                success: function (data, textStatus) {
+                    if (data['response'] = 'OK') {
+                        $('.notifications .alert').each(function () {
+                            $(this).fadeOut('slow');
+                        });
+                    } else {
+                        alert('Ошибка чтения уведомлений');
+                    }
+                },
+                error: function (response, status, errorThrown) {
+                    alert('Все плохо, расскажите нам про эту ошибку \n\r\n\r' + response + status + errorThrown);
+                    console.log(response);
+                },
+                type: "POST",
+                dataType: "json"
+            });
+        }, 6000);
+    }
 });
 
 $(document).on('click','.delete-notification', function(){

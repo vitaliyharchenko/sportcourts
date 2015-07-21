@@ -42,18 +42,22 @@ def login(request):
             email, password = form.cleaned_data['email'], form.data['password']
             user = auth.authenticate(username=email, password=password)
             if not user:
-                messages.warning(request, "Пользователь не найден!", extra_tags='login')
+                messages.warning(request, "Пользователь не найден!")
+                context['form'] = form
                 return shortcut()
             else:
                 auth.login(request, user)
                 try:
                     next = request.GET.__getitem__('next')
-                    print next
                     return redirect(next)
                 except KeyError:
-                    return redirect(return_path)
+                    print return_path
+                    if return_path != settings.LOGIN_URL:
+                        return redirect(return_path)
+                    else:
+                        return redirect('index')
         else:
-            messages.warning(request, "Введенные данные некорректны!", extra_tags='login')
+            messages.warning(request, "Введенные данные некорректны!")
             context['form'] = form
             return shortcut()
     context['form'] = UserLoginForm

@@ -17,6 +17,7 @@
     "bootstrap-sass": "~3.3.4",
     "jquery-ui": "~1.11.4",
     "fontawesome": "~4.3.0",
-    "social-likes": "~3.0.14"
+    "social-likes": "~3.0.14",
+    "jasny-bootstrap": "~3.1.3"
   }
 }
