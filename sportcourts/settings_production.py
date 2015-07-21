@@ -22,7 +22,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SECRET_KEY = 'o-x00&0e=niyadeseyddr45=!s*@!5xl%)$o-ktbjz8r4lu#k('
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 
 ALLOWED_HOSTS = ['test.sportcourts.ru', 'sportcourts.ru', '127.0.0.1', '127.0.0.1:8001']
 
