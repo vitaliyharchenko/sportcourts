@@ -32,6 +32,8 @@ class _Error(api.Error):
 
 # login view
 def login(request):
+    if request.user.is_authenticated():
+        return redirect('index')
     context = dict()
     return_path = request.META.get('HTTP_REFERER', '/')
     shortcut = lambda: render(request, 'login.html', context)
@@ -51,8 +53,7 @@ def login(request):
                     next = request.GET.__getitem__('next')
                     return redirect(next)
                 except KeyError:
-                    print return_path
-                    if return_path != settings.LOGIN_URL:
+                    if return_path.rsplit('/', 1)[1] != 'login':
                         return redirect(return_path)
                     else:
                         return redirect('index')
