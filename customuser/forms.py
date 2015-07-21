@@ -102,6 +102,7 @@ class UpdateForm(BootstrapModelForm):
     class Meta:
         model = User
         fields = ['avatar', 'first_name', 'last_name', 'bdate', 'city', 'phone', 'weight', 'height', 'ampluas']
+        widgets = {'ampluas': forms.CheckboxSelectMultiple}
 
 
 class ChangePasswordForm(BootstrapForm):

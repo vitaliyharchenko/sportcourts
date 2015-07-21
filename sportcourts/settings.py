@@ -35,6 +35,8 @@ else:
 # Application definition
 
 INSTALLED_APPS = (
+    # TODO: think about admin https://github.com/sshwsfc/django-xadmin
+    'bootstrap_admin',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
