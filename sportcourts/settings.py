@@ -13,6 +13,8 @@ https://docs.djangoproject.com/en/1.8/ref/settings/
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 import os
 
+IS_PRODUCTION = False
+
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 # Quick-start development settings - unsuitable for production
@@ -24,7 +26,10 @@ SECRET_KEY = 'o-x00&0e=niyadeseyddr45=!s*@!5xl%)$o-ktbjz8r4lu#k('
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['test.sportcourts.ru', 'sportcourts.ru', '127.0.0.1']
+if IS_PRODUCTION:
+    ALLOWED_HOSTS = ['test.sportcourts.ru', 'sportcourts.ru', '127.0.0.1', '127.0.0.1:8001']
+else:
+    ALLOWED_HOSTS = ['test.sportcourts.ru', 'sportcourts.ru', '127.0.0.1']
 
 
 # Application definition
@@ -84,18 +89,34 @@ ADMINS = ('Vitaliy', 'harchenko.grape@gmail.com')
 
 YANDEX_MAPS_API_KEY = 'ADtA-FMBAAAAO_95dwIAb8cxoJ0XVsmlrrEljkqDE8QIFgsAAAAAAAAAAADwojBjdahSnZySk0zChxiVovWqNw=='
 
-CURRENT_HOST = '127.0.0.1:8000'
+if IS_PRODUCTION:
+    CURRENT_HOST = '127.0.0.1:8001'
+else:
+    CURRENT_HOST = '127.0.0.1:8000'
 
 # Database
 # https://docs.djangoproject.com/en/1.8/ref/settings/#databases
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'sc',
-        'HOST': 'localhost',
-        'PASSWORD': '4203',
-        'USER': 'sc'
+
+if IS_PRODUCTION:
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.postgresql_psycopg2',
+            'NAME': 'scdb',
+            'USER': 'scuser',
+            'PASSWORD': '4203',
+            'HOST': 'localhost',
+            'PORT': '',
+    }
+}
+else:
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.postgresql_psycopg2',
+            'NAME': 'sc',
+            'HOST': 'localhost',
+            'PASSWORD': '4203',
+            'USER': 'sc'
     }
 }
 
@@ -116,16 +137,19 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/1.8/howto/static-files/
 
+if IS_PRODUCTION:
+    STATIC_URL = '/opt/sportcourts/static/'
+    STATIC_ROOT = '/static/'
+else:
+    STATIC_URL = '/static/'
+    STATIC_ROOT = '/static/'
+    STATICFILES_DIRS = (
+        os.path.join(BASE_DIR, 'static'),
+    )
+
 MEDIA_URL = '/media/'
 
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
-
-STATIC_URL = '/static/'
-STATIC_ROOT = '/static/'
-
-STATICFILES_DIRS = (
-    os.path.join(BASE_DIR, 'static'),
-)
 
 TEMPLATE_DIRS = (
     os.path.join(BASE_DIR,  'templates'),
