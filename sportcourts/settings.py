@@ -52,6 +52,7 @@ INSTALLED_APPS = (
     'blog',
     'utils',
     'rest_framework',
+    'django_cleanup', # should go after your apps | delete orphaned old files
 )
 
 MIDDLEWARE_CLASSES = (

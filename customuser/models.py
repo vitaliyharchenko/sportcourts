@@ -82,8 +82,12 @@ class AbstractUser(AbstractBaseUser, PermissionsMixin):
     last_name = models.CharField('Фамилия', max_length=255)
 
     vkuserid = models.IntegerField(unique=True, null=True, blank=True)
-    sex = models.CharField(max_length=1, choices=(('m', 'М'), ('f', 'Ж')), verbose_name='Пол')
+    sex = models.CharField(max_length=1, choices=(('m', 'муж.'), ('f', 'жен.')), verbose_name='Пол')
+
     phone = PhoneNumberField(verbose_name='Телефон', help_text='В формате +7xxxxxxxxxx', unique=True, blank=True)
+    # TODO: create my own phone field
+    # https://github.com/daviddrysdale/python-phonenumbers
+
     ampluas = models.ManyToManyField('events.Amplua', verbose_name=u'Амплуа', blank=True)
     weight = models.PositiveSmallIntegerField(default=0, verbose_name='Вес', validators=[validate_weight])
     height = models.PositiveSmallIntegerField(default=0, verbose_name='Рост', validators=[validate_height])
@@ -134,15 +138,6 @@ class User(AbstractUser):
 
     def get_absolute_url(self):
         return "/users/%i" % self.id
-
-    def save(self, *args, **kwargs):
-        try:
-            this = User.objects.get(id=self.id)
-            if this.avatar != self.avatar:
-                this.avatar.delete()
-        except:
-            pass
-        super(User, self).save(*args, **kwargs)
 
 
 class Activation(models.Model):
