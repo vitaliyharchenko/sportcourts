@@ -3,9 +3,8 @@ from django.db import models
 from django.contrib.auth.models import (AbstractBaseUser, BaseUserManager, PermissionsMixin)
 from django.core.mail import send_mail
 from django.utils import timezone
-from phonenumber_field.modelfields import PhoneNumberField
 from utils.validators import validate_height, validate_weight
-from utils.witgets import JasnyImageModelField
+from utils.witgets import JasnyImageModelField, MyPhoneField
 from courts.models import City
 import datetime
 from utils.formatters import age_format
@@ -84,7 +83,7 @@ class AbstractUser(AbstractBaseUser, PermissionsMixin):
     vkuserid = models.IntegerField(unique=True, null=True, blank=True)
     sex = models.CharField(max_length=1, choices=(('m', 'муж.'), ('f', 'жен.')), verbose_name='Пол')
 
-    phone = PhoneNumberField(verbose_name='Телефон', help_text='В формате +7xxxxxxxxxx', unique=True, blank=True)
+    phone = MyPhoneField(verbose_name=u'Телефон', unique=True, blank=True)
     # TODO: create my own phone field
     # https://github.com/daviddrysdale/python-phonenumbers
 

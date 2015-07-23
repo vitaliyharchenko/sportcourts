@@ -1,8 +1,9 @@
 # coding=utf-8
 from django.db import models
-from phonenumber_field.modelfields import PhoneNumberField
+from utils.witgets import MyPhoneField
 from yandex_maps import api
 from sportcourts import settings
+from utils.witgets import JasnyImageModelField
 
 
 # Create your models here.
@@ -115,12 +116,12 @@ class Court(models.Model):
     # worktime = models.ForeignKey(Worktime, verbose_name='Режим работы', blank=True, null=True)
     # cover = models.ForeignKey(Cover, verbose_name='Покрытие', blank=True, null=True)
 
-    phone = PhoneNumberField(verbose_name='Телефон', help_text='В формате +7xxxxxxxxxx', blank=True)
+    phone = MyPhoneField(verbose_name='Телефон', help_text='В формате +7xxxxxxxxxx', blank=True)
 
     max_players = models.IntegerField(verbose_name='Максимальное количество игроков', default=0)
 
     cost = models.IntegerField(verbose_name='Стоимость аренды, RUB/час', default=0)
-    # photo = JasnyImageModelField(upload_to='courts', verbose_name='Изображение', blank=True, null=True)
+    photo = JasnyImageModelField(upload_to='courts', verbose_name='Изображение', blank=True, null=True)
     sporttypes = models.ManyToManyField('events.SportType', verbose_name=u'Типы спорта', blank=True)
     views = models.IntegerField(default=0)
 
@@ -128,6 +129,7 @@ class Court(models.Model):
         verbose_name = 'площадка'
         verbose_name_plural = 'площадки'
         app_label = 'courts'
+        ordering = ['-views']
 
     def get_absolute_url(self):
         return "/courts/%i" % self.id

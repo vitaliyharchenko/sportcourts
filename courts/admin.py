@@ -16,7 +16,7 @@ class CountryAdmin(admin.ModelAdmin):
 class CourtAdmin(admin.ModelAdmin):
     model = Court
     fields = (
-        'title', 'description', 'admin_description', 'place', 'type', 'phone', 'max_players', 'cost', 'sporttypes')
+        'title', 'description', 'photo', 'admin_description', 'place', 'type', 'phone', 'max_players', 'cost', 'sporttypes')
     filter_horizontal = ('sporttypes',)
 
 # Register your models here.
