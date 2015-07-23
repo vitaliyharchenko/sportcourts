@@ -1,14 +1,17 @@
 | {% extends 'base.html' %}
-
+| {% load global_tags %}
 |{% block title %}Спортивные площадки{% endblock %}
 
 | {% block content %}
 h1 Площадки
 hr
 |{% for court in courts %}
-p
-  a(href="{{ court.get_absolute_url }}") {{ court.title }}
-p {{ court.description }}
+.row
+  .col-xs-3
+    |{% image court.photo width=620 height=365 thumbnail="True"%}
+  .col-xs-9
+    a(href="{{ court.get_absolute_url }}") {{ court.title }}
+    p {{ court.description }}ы
 hr
 |{% endfor %}
 |{% endblock %}
