@@ -1,7 +1,6 @@
 | {% extends 'base.html' %}
-
 |{% block title %}Добро пожаловать! {% endblock %}
-
+| {% load vkontakte %}
 | {% block content %}
 
 .row
@@ -36,10 +35,14 @@
               .form-group
                 label.sr-only Пароль
                 input.form-control(type="password" name="password" placeholder="Пароль")
-              button(type="submit") Войти
+              button.btn.btn-default(type="submit") Войти
+              br
+              br
+              a(href="") Забыли пароль?
           .col-xs-6
             .form-group
-              a.btn.btn-default.btn-block(href="#") ВКОНТАКТЕ
+              a.btn.btn-default.btn-block(href="{% vkontakte_auth_link current_url %}") ВКОНТАКТЕ
+              //TODO: add current url as argument
             .form-group
               a.btn.btn-default.btn-block(href="#") FACEBOOK
             .form-group

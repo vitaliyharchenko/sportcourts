@@ -8,7 +8,7 @@ from django.views.decorators.http import require_POST, require_GET
 from django.contrib.auth.decorators import login_required
 from models import Activation
 from django.core import signing
-from utils import mailing, api
+from utils import mailing, api, vkontakte
 from models import User
 
 
@@ -38,6 +38,35 @@ def login(request):
     return_path = request.META.get('HTTP_REFERER', '/')
     shortcut = lambda: render(request, 'login.html', context)
 
+    if request.method == 'GET':
+        if 'code' in request.GET:
+            code = request.GET['code']
+            try:
+                access_token, user_id = vkontakte.auth_code(code, reverse('login'))
+            except vkontakte.AuthError as e:
+                messages.warning(request, 'Ошибка авторизации')
+                return shortcut()
+            try:
+                user = User.objects.get(vkuserid=user_id)
+                print user
+                backend = auth.get_backends()[0]
+                user.backend = "%s.%s" % (backend.__module__, backend.__class__.__name__)
+                auth.login(request, user)
+                print 'success auth'
+                try:
+                    next = request.GET.__getitem__('next')
+                    return redirect(next)
+                except KeyError:
+                    print return_path.rsplit('/', 1)[1]
+                    if return_path.rsplit('/', 1)[1] != 'login':
+                        return redirect(return_path)
+                    else:
+                        return redirect('index')
+            except User.DoesNotExist:
+                messages.warning(request, 'Такой пользователь не найден')
+                return shortcut()
+
+
     if request.method == 'POST':
         form = UserLoginForm(request.POST)
         if form.is_valid():
@@ -61,6 +90,7 @@ def login(request):
             messages.warning(request, "Введенные данные некорректны!")
             context['form'] = form
             return shortcut()
+
     context['form'] = UserLoginForm
     return shortcut()
 

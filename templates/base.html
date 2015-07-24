@@ -52,7 +52,9 @@
           </ul>
         </div>
       </div>
-    </nav>{% endblock %}{% if not current_user %}
+    </nav>{% endblock %}
+    {% load vkontakte %}
+    {% if not current_user %}
     <div id="loginModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" class="modal fade">
       <div class="modal-dialog">
         <div class="modal-content">
@@ -82,7 +84,7 @@
                   </form>
                 </div>
                 <div class="col-xs-6">
-                  <div class="form-group"><a href="#" class="btn btn-default btn-block">ВКОНТАКТЕ</a></div>
+                  <div class="form-group">{% url 'login' as login_url %}<a href="{% vkontakte_auth_link login_url %}" class="btn btn-default btn-block">ВКОНТАКТЕ</a></div>
                   <div class="form-group"><a href="#" class="btn btn-default btn-block">FACEBOOK</a></div>
                   <div class="form-group"><a href="#" class="btn btn-default btn-block">GOOGLE</a></div>
                 </div>

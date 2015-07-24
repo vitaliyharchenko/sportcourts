@@ -76,9 +76,7 @@ def to_standart(value):
 def validate_russian_phonenumber(value):
     try:
         x = phonenumbers.parse(value, "RU")
-        print x
     except NumberParseException:
-        print 'Error'
         raise ValidationError('Похоже, что это неправильный номер телефона')
 
 
