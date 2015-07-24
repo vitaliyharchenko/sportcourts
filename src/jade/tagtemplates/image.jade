@@ -1,0 +1,7 @@
+| {% load thumbnail %}
+| {% load static %}
+| {% thumbnail image size crop="center" as img %}
+img.m-w-100(src="{{ img.url }}" class="{% if circle %}img-circle{% endif %}{% if thumbnail == 'True' %}img-thumbnail{% endif %}" width="{{ side_size }}")
+| {% empty %}
+img.m-w-100(src="{% static 'images/blank.jpg' %}" class="{% if circle %}img-circle{% endif %}{% if thumbnail == 'True' %}img-thumbnail{% endif %}" width="{{ side_size }}")
+| {% endthumbnail %}

@@ -39,11 +39,10 @@ class JasnyImageWidget(forms.FileInput):
         return self.html.format(state=state, width=width, height=height, image=existing, name=name)
 
     def value_from_datadict(self, data, files, name):
-        # deleted = bool(int(data.pop(name+'-deleted', ['0'])[0]))
-        url = data.pop(name + '-url', [''])[0]
+        deleted = bool(int(data.pop(name+'-deleted', ['0'])[0]))
+        url = data.pop(name+'-url', [''])[0]
         file = files.get(name, None)
-        # if deleted and not file:
-        if not file:
+        if deleted and not file:
             return False
         if not file and url:
             result = urllib.urlretrieve(url)
@@ -70,14 +69,16 @@ def to_standart(value):
         x = phonenumbers.parse(value, "RU")
         phone_number = phonenumbers.format_number(x, phonenumbers.PhoneNumberFormat.E164)
     except NumberParseException:
-        return ''
+        return value
     return phone_number
 
 
 def validate_russian_phonenumber(value):
     try:
         x = phonenumbers.parse(value, "RU")
+        print x
     except NumberParseException:
+        print 'Error'
         raise ValidationError('Похоже, что это неправильный номер телефона')
 
 

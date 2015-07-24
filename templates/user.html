@@ -31,7 +31,7 @@
         {% if user.is_referee %}<span id="badge3" data-toggle="tooltip" data-placement="bottom" title="Судья" class="glyphicon glyphicon-king"></span>&nbsp;
         {% endif %}</small></h1>
     <p>{% if not current %}<small>Последний раз заходил{% ifequal user.sex 'f' %}a{% endifequal %}: {{ user.last_login }}</small>{% endif %}</p><br/>
-    <p>{{ user.beautiful_age }}{% if user.city %}, {{ user.city }}{% endif %}</p>{% if user.height > 0 %}<br/>
+    <p>{% if user.bdate %}{{ user.beautiful_age }}{% endif %}{% if user.city and user.bdate %}, {% endif %}{% if user.city %}{{ user.city }}{% endif %}</p>{% if user.height > 0 %}<br/>
     <p>Рост: {{ user.height }} см.</p>{% elif current %}
     <p>Рост:<small>&nbsp;<a href="{% url 'user_update' %}">Заполнить...</a></small></p>{% endif %}
     {% if user.weight > 0 %}

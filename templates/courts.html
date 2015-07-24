@@ -1,10 +1,15 @@
 
 {% extends 'base.html' %}
+{% load global_tags %}
 {% block title %}Спортивные площадки{% endblock %}
 {% block content %}
 <h1>Площадки</h1>
 <hr/>{% for court in courts %}
-<p><a href="{{ court.get_absolute_url }}">{{ court.title }}</a></p>
-<p>{{ court.description }}</p>
+<div class="row">
+  <div class="col-xs-3">{% image court.photo width=620 height=365 thumbnail="True"%}</div>
+  <div class="col-xs-9"><a href="{{ court.get_absolute_url }}">{{ court.title }}</a>
+    <p>{{ court.description }}ы</p>
+  </div>
+</div>
 <hr/>{% endfor %}
 {% endblock %}

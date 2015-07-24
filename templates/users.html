@@ -31,7 +31,7 @@
       <div class="col-xs-3">{% avatar user.avatar size='200' sex=user.sex thumbnail="True" %}</div>
       <div class="col-xs-9">
         <p class="lead"><a href="{{ user.get_absolute_url }}">{{ user }}</a></p>
-        <p>{{ user.beautiful_age }}{% if user.city %}, {{ user.city }}{% endif %}</p>{% if user.ampluas.count > 0 %}
+        <p>{% if user.bdate %}{{ user.beautiful_age }}{% endif %}{% if user.city and user.bdate %}, {% endif %}{% if user.city %}{{ user.city }}{% endif %}</p>{% if user.ampluas.count > 0 %}
         <p>
           {% for amplua in user.ampluas.all %}
           {{ amplua }}<br/>{% endfor %}
