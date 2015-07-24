@@ -13,6 +13,7 @@ class JasnyImageWidget(forms.FileInput):
     existing = '<img src="{url}" alt="{name}" width="{width}" height="{height}">'
 
     html = """\
+           <br>
            <div class="fileinput fileinput-{state}" data-provides="fileinput">
              <div class="fileinput-preview thumbnail" data-trigger="fileinput" style="width: {width}px; height: {height}px;">
              {image}

@@ -18,8 +18,13 @@ from models import User
 class _Error(api.Error):
     @staticmethod
     def already_registered(user):
-        data = {'user_id': user.id, 'name': user.first_name + u' ' + user.last_name}
-        return api.Error(1, u'Already registered as ({}) {}'.format(user.id, data['name']), data=data)
+        if user:
+            # data = {'user_id': user.id, 'name': user}
+            return api.Error(1, u'Already registered')
+            # return api.Error(1, u'Already registered as ({}) {}'.format(user.id, data['name']), data=data)
+        else:
+            return api.Error(1, u'Already registered')
+
 
     @staticmethod
     def already_verified(token):
@@ -110,8 +115,52 @@ def reg(request, token):
             raise Exception("Сначала подтвердите емейл")
         context = dict()
         email = Activation.objects.get(token=token).email
-        context['form'] = UserRegistrationForm(initial={'email': email})
         shortcut = lambda: render(request, 'reg.html', context)
+
+        if 'code' in request.GET and not 'vkuserid' in request.POST:
+            code = request.GET['code']
+            try:
+                access_token, user_id = vkontakte.auth_code(code, request.path)
+            except vkontakte.AuthError as e:
+                messages.warning(request, 'Ошибка авторизации')
+                context['form'] = UserRegistrationForm(request.POST)
+                return shortcut()
+            if User.objects.filter(vkuserid=user_id).count() == 0:
+                vkuser = vkontakte.api(access_token, 'users.get', fields=['sex', 'bdate', 'city',
+                                                                          'photo_max', 'contacts'])[0]
+                vkdata = dict()
+                vkdata['vkuserid'] = user_id
+                vkdata['first_name'] = vkuser['first_name']
+                vkdata['last_name'] = vkuser['last_name']
+                if 'mobile_phone' in vkuser:
+                    vkdata['phone'] = vkuser['mobile_phone']
+                elif 'home_phone' in vkuser:
+                    vkdata['phone'] = vkuser['home_phone']
+                if vkuser['sex']:
+                    vkdata['sex'] = 'm' if vkuser['sex'] == 2 else 'f'
+                if 'bdate' in vkuser:
+                    if len(vkuser['bdate']) == 10:
+                        vkdata['bdate'] = vkuser['bdate']
+                    else:
+                        messages.warning(request, 'Неполная дата')
+                if 'camera' not in vkuser['photo_max']:
+                    vkdata['vkphoto'] = vkuser['photo_max']
+                    request.session['vkphoto'] = vkdata['vkphoto']
+                context['vkdata'] = vkdata
+                context['vkuserid'] = user_id
+
+                initial = {'email': email,
+                           'sex': vkdata['sex'],
+                           'first_name': vkdata['first_name'],
+                           'last_name': vkdata['last_name'],
+                           'phone': vkdata['phone'],
+                           'bdate': vkdata['bdate'],
+                           'vkuserid': user_id
+                           }
+
+                context['form'] = UserRegistrationForm(initial=initial)
+            else:
+                messages.warning(request, 'Такой пользователь уже зарегестрирован в системе')
 
         if request.method == 'POST':
             form = UserRegistrationForm(request.POST)
@@ -126,8 +175,10 @@ def reg(request, token):
                 auth.login(request, newuser)
                 return redirect('index')
             else:
+                context['form'] = form
                 messages.success(request, "Form is not valid!")
                 return shortcut()
+        context['form'] = UserRegistrationForm(initial={'email': email})
         return shortcut()
 
 
@@ -171,8 +222,12 @@ def check_email(email):
     if activation.status == Activation.EMAIL_VERIFIED:
         raise _Error.already_verified(activation.token)
     if activation.status == Activation.REGISTERED:
-        user = User.objects.get(email=email)
-        raise _Error.already_registered(user)
+        user = User.objects.filter(email=email)
+        print user
+        if user.count() > 0:
+            raise _Error.already_registered(user)
+        else:
+            raise _Error.already_registered(None)
 
 
 def verify_email(request, token):
@@ -180,8 +235,9 @@ def verify_email(request, token):
         signing.loads(token)
         activation = Activation.objects.get(token=token)
     except:
-        return messages.success(request, u'Неверный код')
-        # TODO: page with veriication error render
+        messages.warning(request, u'Неверный код.Возможно, это старое письмо.')
+        context = {'form': None}
+        return render(request, 'reg.html', context)
     if activation.status == Activation.EMAIL_SENT:
         activation.status = Activation.EMAIL_VERIFIED
         activation.save()

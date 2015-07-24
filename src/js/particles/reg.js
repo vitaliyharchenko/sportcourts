@@ -3,27 +3,27 @@
  */
 var pressed = false;
 $(document).ready(function() {
-    inputfunc('email');
+    //inputfunc('email');
     clickfunc('email');
 });
 
-function inputfunc (item) {
-    $(document).on('input','#'+item, function(){
-        if($(this).val() != '') {
-            var pattern = /^([a-z0-9_\.-])+@[a-z0-9-]+\.([a-z]{2,4}\.)?[a-z]{2,4}$/i;
-            if(pattern.test($(this).val())){
-                $(this).css({'border' : '1px solid #569b44'});
-                $('#'+item+'button').removeAttr('disabled');
-            } else {
-                $(this).css({'border' : '1px solid #ff0000'});
-                $('#'+item+'button').attr('disabled', 'disabled');
-            }
-        } else {
-            $(this).css({'border' : '1px solid #ff0000'});
-            $('#'+item+'button').attr('disabled', 'disabled');
-        };
-    });
-};
+//function inputfunc (item) {
+//    $(document).on('input','#'+item, function(){
+//        if($(this).val() != '') {
+//            var pattern = /^([a-z0-9_\.-])+@[a-z0-9-]+\.([a-z]{2,4}\.)?[a-z]{2,4}$/i;
+//            if(pattern.test($(this).val())){
+//                $(this).css({'border' : '1px solid #569b44'});
+//                $('#'+item+'button').removeAttr('disabled');
+//            } else {
+//                $(this).css({'border' : '1px solid #ff0000'});
+//                $('#'+item+'button').attr('disabled', 'disabled');
+//            }
+//        } else {
+//            $(this).css({'border' : '1px solid #ff0000'});
+//            $('#'+item+'button').attr('disabled', 'disabled');
+//        };
+//    });
+//};
 
 function clickfunc (item) {
     $(document).on('click','#'+item+'button', function(){
@@ -45,7 +45,6 @@ function clickfunc (item) {
                     $('#'+item+'button').html('Отправка...');
                     $('#'+item).attr('disabled', 'disabled');
                 },
-                //TODO: show/hide button message
                 success: function (data, textStatus) {
                     if ('response' in data) {
                         $('#'+item+'button').html('Отправлено');

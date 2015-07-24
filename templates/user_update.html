@@ -1,6 +1,6 @@
 
 {% extends 'base.html' %}
-{% load bootstrap %}
+{% load bootstrap3 %}
 {% block title %}Редактирование профиля{% endblock %}
 {% block headers %}
 {{ form.media }}
@@ -22,7 +22,7 @@
         {% endif %}
         <form method="post" action="{% url 'user_update' %}" enctype="multipart/form-data">
           {% csrf_token %}
-          {{ form|bootstrap }}
+          {% bootstrap_form form %}
           <button type="submit" name="saveinfo" class="btn btn-primary">Сохранить</button>
         </form>
       </div>
@@ -46,7 +46,7 @@
         {% endif %}
         <form method="post" action="{% url 'changepass' %}" enctype="multipart/form-data">
           {% csrf_token %}
-          {{ passform|bootstrap }}<br/>
+          {% bootstrap_form passform %}<br/>
           <button type="submit" name="changepass" class="btn btn-warning">Изменить пароль</button>
         </form>
       </div>

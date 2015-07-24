@@ -46,9 +46,17 @@
         .input-group
           input#email.form-control.input-lg(type="text" name="email" placeholder="Введи свой email")
           span.input-group-btn
-            a#emailbutton.btn.btn-lg.btn-success(disabled)
+            a#emailbutton.btn.btn-lg.btn-success()
               .hidden-xs Присоединиться
               .visible-xs Go!
+#activateModal.modal.fade(tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true")
+  .modal-dialog
+    .modal-content
+      .modal-header
+        button.close(type="button" data-dismiss="modal" aria-label="Close")
+          span(aria-hidden="true") &times;
+        h4.modal-title Регистрация
+      .modal-body
         #userclient
 
 //TODO: Get it to the right place

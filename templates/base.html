@@ -103,10 +103,22 @@
           </div>
           <div class="modal-body">
             <div class="input-group">
-              <input id="email" type="text" name="email" placeholder="Введи свой email" class="form-control input-lg"><span class="input-group-btn"><a id="emailbutton" disabled class="btn btn-lg btn-success">
+              <input id="email" type="text" name="email" placeholder="Введи свой email" class="form-control input-lg"><span class="input-group-btn"><a id="emailbutton" class="btn btn-lg btn-success">
                   <div class="hidden-xs">Присоединиться</div>
                   <div class="visible-xs">Go!</div></a></span>
             </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div id="activateModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" class="modal fade">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" data-dismiss="modal" aria-label="Close" class="close"><span aria-hidden="true">&times;</span></button>
+            <h4 class="modal-title">Регистрация</h4>
+          </div>
+          <div class="modal-body">
             <div id="userclient"></div>
           </div>
         </div>
@@ -118,27 +130,27 @@
  */
 var pressed = false;
 $(document).ready(function() {
-    inputfunc('email');
+    //inputfunc('email');
     clickfunc('email');
 });
 
-function inputfunc (item) {
-    $(document).on('input','#'+item, function(){
-        if($(this).val() != '') {
-            var pattern = /^([a-z0-9_\.-])+@[a-z0-9-]+\.([a-z]{2,4}\.)?[a-z]{2,4}$/i;
-            if(pattern.test($(this).val())){
-                $(this).css({'border' : '1px solid #569b44'});
-                $('#'+item+'button').removeAttr('disabled');
-            } else {
-                $(this).css({'border' : '1px solid #ff0000'});
-                $('#'+item+'button').attr('disabled', 'disabled');
-            }
-        } else {
-            $(this).css({'border' : '1px solid #ff0000'});
-            $('#'+item+'button').attr('disabled', 'disabled');
-        };
-    });
-};
+//function inputfunc (item) {
+//    $(document).on('input','#'+item, function(){
+//        if($(this).val() != '') {
+//            var pattern = /^([a-z0-9_\.-])+@[a-z0-9-]+\.([a-z]{2,4}\.)?[a-z]{2,4}$/i;
+//            if(pattern.test($(this).val())){
+//                $(this).css({'border' : '1px solid #569b44'});
+//                $('#'+item+'button').removeAttr('disabled');
+//            } else {
+//                $(this).css({'border' : '1px solid #ff0000'});
+//                $('#'+item+'button').attr('disabled', 'disabled');
+//            }
+//        } else {
+//            $(this).css({'border' : '1px solid #ff0000'});
+//            $('#'+item+'button').attr('disabled', 'disabled');
+//        };
+//    });
+//};
 
 function clickfunc (item) {
     $(document).on('click','#'+item+'button', function(){
@@ -160,7 +172,6 @@ function clickfunc (item) {
                     $('#'+item+'button').html('Отправка...');
                     $('#'+item).attr('disabled', 'disabled');
                 },
-                //TODO: show/hide button message
                 success: function (data, textStatus) {
                     if ('response' in data) {
                         $('#'+item+'button').html('Отправлено');

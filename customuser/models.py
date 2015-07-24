@@ -98,7 +98,7 @@ class AbstractUser(AbstractBaseUser, PermissionsMixin):
 
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = ['first_name', 'last_name']
-    REGISTRATION_FIELDS = REQUIRED_FIELDS + ['sex'] + ['bdate'] + ['phone'] + [USERNAME_FIELD] + ['password']
+    REGISTRATION_FIELDS = REQUIRED_FIELDS + ['sex'] + ['vkuserid'] + ['bdate'] + ['phone'] + [USERNAME_FIELD] + ['password']
 
     class Meta:
         verbose_name = 'Игрок'

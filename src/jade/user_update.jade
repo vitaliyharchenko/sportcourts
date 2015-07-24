@@ -1,5 +1,5 @@
 | {% extends 'base.html' %}
-|{% load bootstrap %}
+|{% load bootstrap3 %}
 
 | {% block title %}Редактирование профиля{% endblock %}
 | {% block headers %}
@@ -27,7 +27,7 @@ hr
 
         form(method="post" action="{% url 'user_update' %}" enctype='multipart/form-data')
           | {% csrf_token %}
-          |{{ form|bootstrap }}
+          |{% bootstrap_form form %}
           button.btn.btn-primary(type="submit" name="saveinfo") Сохранить
   .col-md-6
     .panel.panel-default
@@ -50,7 +50,7 @@ hr
 
         form(method="post" action="{% url 'changepass' %}" enctype='multipart/form-data')
           | {% csrf_token %}
-          |{{ passform|bootstrap }}
+          |{% bootstrap_form passform %}
           br
           button.btn.btn-warning(type="submit" name="changepass") Изменить пароль
 | {% endblock %}

@@ -44,7 +44,7 @@ INSTALLED_APPS = (
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'sorl.thumbnail',
-    'bootstrapform',
+    'bootstrap3',
     'customuser',
     'notifications',
     'courts',

@@ -1,26 +1,39 @@
 | {% extends 'base.html' %}
 | {% load vkontakte %}
+| {% load bootstrap3 %}
+| {% load staticfiles %}
 
 |{% block title %}Регистрация{% endblock %}
 
 | {% block content %}
-h2 Reg form
-| {% if messages %}
-|{% for message in messages %}
-.alert(class="alert-{{ message.tags }}") {{ message }}
-|{% endfor %}
-|{% endif %}
+.row
+  .col-md-6.col-md-offset-3
+    .panel.panel-default
+      .panel-body
+        h2.m-t-0 Регистрация
+        | {% if messages %}
+        |{% for message in messages %}
+        .alert(class="alert-{{ message.tags }}") {{ message }}
+        |{% endfor %}
+        |{% endif %}
 
-//TODO: check vk auth
-| {% if not vkuserid %}
-p
-  a(href="{% vkontakte_auto_auth_link %}") Получить данные из вконтакте
-| {% endif %}
+        |{% if form %}
 
-form(method="post")
-  |{% csrf_token %}
-  |{{ form.as_div }}
-  |{{ email }}
-  button(type="submit") Зарегистрироваться
+        //TODO: check vk auth
+        | {% if not vkuserid %}
+        br
+        p
+          a.btn.btn-warning(href="{% vkontakte_auto_auth_link %}")
+            |Получить данные из вконтакте&nbsp;
+            img(src="{% static 'images/vk.png' %}" width="32")
+        br
+        | {% endif %}
+
+        form(method="post")
+          |{% csrf_token %}
+          |{% bootstrap_form form %}
+          button.btn.btn-primary(type="submit") Зарегистрироваться
+
+        |{% endif %}
 
 |{% endblock %}
