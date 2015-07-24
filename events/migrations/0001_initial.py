@@ -2,16 +2,15 @@
 from __future__ import unicode_literals
 
 from django.db import models, migrations
-import utils.validators
 from django.conf import settings
 
 
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('courts', '0001_initial'),
         ('contenttypes', '0002_remove_content_type_name'),
         migrations.swappable_dependency(settings.AUTH_USER_MODEL),
+        ('courts', '0001_initial'),
     ]
 
     operations = [
@@ -32,10 +31,11 @@ class Migration(migrations.Migration):
                 ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
                 ('title', models.CharField(max_length=100, verbose_name=b'\xd0\x9d\xd0\xb0\xd0\xb7\xd0\xb2\xd0\xb0\xd0\xbd\xd0\xb8\xd0\xb5')),
                 ('description', models.CharField(max_length=300, verbose_name=b'\xd0\x9e\xd0\xbf\xd0\xb8\xd1\x81\xd0\xb0\xd0\xbd\xd0\xb8\xd0\xb5')),
+                ('is_public', models.BooleanField(default=True, help_text=b'\xd0\x94\xd0\xb5\xd0\xbb\xd0\xb0\xd0\xb5\xd1\x82 \xd0\xb2\xd0\xb8\xd0\xb4\xd0\xb8\xd0\xbc\xd1\x8b\xd0\xbc \xd0\xb2 \xd0\xbf\xd0\xbe\xd1\x82\xd0\xbe\xd0\xba\xd0\xb5', verbose_name=b'\xd0\x9f\xd1\x83\xd0\xb1\xd0\xbb\xd0\xb8\xd1\x87\xd0\xbd\xd1\x8b\xd0\xb9 \xd1\x81\xd1\x82\xd0\xb0\xd1\x82\xd1\x83\xd1\x81')),
                 ('capacity', models.IntegerField(verbose_name=b'\xd0\x92\xd0\xbc\xd0\xb5\xd1\x81\xd1\x82\xd0\xb8\xd0\xbc\xd0\xbe\xd1\x81\xd1\x82\xd1\x8c')),
                 ('cost', models.PositiveIntegerField(verbose_name=b'\xd0\xa6\xd0\xb5\xd0\xbd\xd0\xb0')),
-                ('datetime', models.DateTimeField(verbose_name=b'\xd0\x94\xd0\xb0\xd1\x82\xd0\xb0 \xd0\xbf\xd1\x80\xd0\xbe\xd0\xb2\xd0\xb5\xd0\xb4\xd0\xb5\xd0\xbd\xd0\xb8\xd1\x8f', validators=[utils.validators.gte_now])),
-                ('datetime_to', models.DateTimeField(blank=True, verbose_name=b'\xd0\x94\xd0\xb0\xd1\x82\xd0\xb0 \xd0\xbe\xd0\xba\xd0\xbe\xd0\xbd\xd1\x87\xd0\xb0\xd0\xbd\xd0\xb8\xd1\x8f', validators=[utils.validators.gte_now])),
+                ('datetime', models.DateTimeField(verbose_name=b'\xd0\x94\xd0\xb0\xd1\x82\xd0\xb0 \xd0\xbf\xd1\x80\xd0\xbe\xd0\xb2\xd0\xb5\xd0\xb4\xd0\xb5\xd0\xbd\xd0\xb8\xd1\x8f')),
+                ('datetime_to', models.DateTimeField(verbose_name=b'\xd0\x94\xd0\xb0\xd1\x82\xd0\xb0 \xd0\xbe\xd0\xba\xd0\xbe\xd0\xbd\xd1\x87\xd0\xb0\xd0\xbd\xd0\xb8\xd1\x8f', blank=True)),
             ],
             options={
                 'ordering': ['-datetime'],
@@ -85,6 +85,7 @@ class Migration(migrations.Migration):
                 ('event_ptr', models.OneToOneField(parent_link=True, auto_created=True, primary_key=True, serialize=False, to='events.Event')),
                 ('reserved_count', models.PositiveIntegerField(default=0, verbose_name=b'\xd0\xa0\xd0\xb5\xd0\xb7\xd0\xb5\xd1\x80\xd0\xb2\xd0\xbd\xd1\x8b\xd1\x85 \xd0\xbc\xd0\xb5\xd1\x81\xd1\x82')),
                 ('deleted', models.BooleanField(default=False, verbose_name=b'\xd0\x98\xd0\xb3\xd1\x80\xd0\xb0 \xd1\x83\xd0\xb4\xd0\xb0\xd0\xbb\xd0\xb5\xd0\xbd\xd0\xb0')),
+                ('is_reported', models.BooleanField(default=False, verbose_name=b'\xd0\x9e\xd1\x82\xd1\x87\xd0\xb5\xd1\x82 \xd0\xbe\xd1\x82\xd0\xbf\xd1\x80\xd0\xb0\xd0\xb2\xd0\xbb\xd0\xb5\xd0\xbd')),
                 ('coach', models.ForeignKey(related_name='coach', blank=True, to=settings.AUTH_USER_MODEL, null=True)),
             ],
             options={

@@ -61,11 +61,11 @@ class Event(models.Model):
                                    help_text="Делает видимым в потоке")
     # TODO: add working status for unclosed events
 
-    responsible_user = models.ForeignKey(User, related_name='responsible_games',
+    responsible_user = models.ForeignKey('customuser.User', related_name='responsible_games',
                                          limit_choices_to={'is_responsible': True},
                                          verbose_name='Ответственный')
     # auto define in admin.py
-    created_by = models.ForeignKey(User)
+    created_by = models.ForeignKey('customuser.User')
 
     court = models.ForeignKey(Court, verbose_name='Площадка')
 
@@ -253,7 +253,7 @@ class UserGameAction(models.Model):
         (NOTVISITED, 'Не пришел'),
         (NOTPAY, 'Не заплатил')
     )
-    user = models.ForeignKey(User, verbose_name='Пользователь')
+    user = models.ForeignKey('customuser.User', verbose_name='Пользователь')
     game = models.ForeignKey(Game, verbose_name='Игра')
     datetime = models.DateTimeField(verbose_name='Дата действия', auto_now=True)
     action = models.PositiveSmallIntegerField(verbose_name='Действие', choices=ACTIONS)

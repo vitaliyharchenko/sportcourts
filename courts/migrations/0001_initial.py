@@ -2,7 +2,7 @@
 from __future__ import unicode_literals
 
 from django.db import models, migrations
-import phonenumber_field.modelfields
+import utils.witgets
 
 
 class Migration(migrations.Migration):
@@ -40,11 +40,14 @@ class Migration(migrations.Migration):
                 ('title', models.CharField(unique=True, max_length=100, verbose_name=b'\xd0\x9d\xd0\xb0\xd0\xb7\xd0\xb2\xd0\xb0\xd0\xbd\xd0\xb8\xd0\xb5')),
                 ('description', models.CharField(max_length=300, verbose_name=b'\xd0\x9e\xd0\xbf\xd0\xb8\xd1\x81\xd0\xb0\xd0\xbd\xd0\xb8\xd0\xb5')),
                 ('admin_description', models.CharField(max_length=200, verbose_name=b'\xd0\x9f\xd1\x80\xd0\xb8\xd0\xbc\xd0\xb5\xd1\x87\xd0\xb0\xd0\xbd\xd0\xb8\xd1\x8f \xd0\xb4\xd0\xbb\xd1\x8f \xd0\xb0\xd0\xb4\xd0\xbc\xd0\xb8\xd0\xbd\xd0\xbe\xd0\xb2', blank=True)),
-                ('phone', phonenumber_field.modelfields.PhoneNumberField(help_text=b'\xd0\x92 \xd1\x84\xd0\xbe\xd1\x80\xd0\xbc\xd0\xb0\xd1\x82\xd0\xb5 +7xxxxxxxxxx', max_length=128, verbose_name=b'\xd0\xa2\xd0\xb5\xd0\xbb\xd0\xb5\xd1\x84\xd0\xbe\xd0\xbd', blank=True)),
+                ('phone', utils.witgets.MyPhoneField(help_text=b'\xd0\x92 \xd1\x84\xd0\xbe\xd1\x80\xd0\xbc\xd0\xb0\xd1\x82\xd0\xb5 +7xxxxxxxxxx', max_length=128, verbose_name=b'\xd0\xa2\xd0\xb5\xd0\xbb\xd0\xb5\xd1\x84\xd0\xbe\xd0\xbd', blank=True)),
                 ('max_players', models.IntegerField(default=0, verbose_name=b'\xd0\x9c\xd0\xb0\xd0\xba\xd1\x81\xd0\xb8\xd0\xbc\xd0\xb0\xd0\xbb\xd1\x8c\xd0\xbd\xd0\xbe\xd0\xb5 \xd0\xba\xd0\xbe\xd0\xbb\xd0\xb8\xd1\x87\xd0\xb5\xd1\x81\xd1\x82\xd0\xb2\xd0\xbe \xd0\xb8\xd0\xb3\xd1\x80\xd0\xbe\xd0\xba\xd0\xbe\xd0\xb2')),
                 ('cost', models.IntegerField(default=0, verbose_name=b'\xd0\xa1\xd1\x82\xd0\xbe\xd0\xb8\xd0\xbc\xd0\xbe\xd1\x81\xd1\x82\xd1\x8c \xd0\xb0\xd1\x80\xd0\xb5\xd0\xbd\xd0\xb4\xd1\x8b, RUB/\xd1\x87\xd0\xb0\xd1\x81')),
+                ('photo', utils.witgets.JasnyImageModelField(upload_to=b'courts', null=True, verbose_name=b'\xd0\x98\xd0\xb7\xd0\xbe\xd0\xb1\xd1\x80\xd0\xb0\xd0\xb6\xd0\xb5\xd0\xbd\xd0\xb8\xd0\xb5', blank=True)),
+                ('views', models.IntegerField(default=0)),
             ],
             options={
+                'ordering': ['-views'],
                 'verbose_name': '\u043f\u043b\u043e\u0449\u0430\u0434\u043a\u0430',
                 'verbose_name_plural': '\u043f\u043b\u043e\u0449\u0430\u0434\u043a\u0438',
             },
@@ -109,15 +112,5 @@ class Migration(migrations.Migration):
             model_name='court',
             name='place',
             field=models.ForeignKey(verbose_name=b'\xd0\x9c\xd0\xb5\xd1\x81\xd1\x82\xd0\xbe', to='courts.Place'),
-        ),
-        migrations.AddField(
-            model_name='court',
-            name='type',
-            field=models.ForeignKey(related_name='+', verbose_name=b'\xd0\xa2\xd0\xb8\xd0\xbf \xd0\xbf\xd0\xbb\xd0\xbe\xd1\x89\xd0\xb0\xd0\xb4\xd0\xba\xd0\xb8', to='courts.CourtType', null=True),
-        ),
-        migrations.AddField(
-            model_name='city',
-            name='region',
-            field=models.ForeignKey(to='courts.Region'),
         ),
     ]
