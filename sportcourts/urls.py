@@ -42,5 +42,5 @@ urlpatterns += patterns('',
                         (r"^media/(?P<path>.*)$", 'django.views.static.serve', {
                             'document_root': settings.MEDIA_ROOT}))
 
-if settings.IS_PRODUCTION is True:
-    urlpatterns += staticfiles_urlpatterns()
+# if settings.IS_PRODUCTION is True:
+#     urlpatterns += staticfiles_urlpatterns()
