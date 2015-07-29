@@ -141,7 +141,7 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/1.8/howto/static-files/
 
 if IS_PRODUCTION:
-    STATIC_URL = '/opt/sportcourts/static/'
+    STATIC_URL = '/opt/myenv/sportcourts/static/'
     STATIC_ROOT = '/static/'
 else:
     STATIC_URL = '/static/'
