@@ -143,6 +143,9 @@ USE_TZ = True
 if IS_PRODUCTION:
     STATIC_URL = '/static/'
     STATIC_ROOT = '/opt/scenv/static/'
+    STATICFILES_DIRS = (
+        os.path.join(BASE_DIR, 'static'),
+    )
 else:
     STATIC_URL = '/static/'
     STATIC_ROOT = '/static/'

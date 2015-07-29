@@ -246,6 +246,11 @@ server {
 27) sudo ln -s ../sites-available/sportcourts
 28) sudo rm default
 29) sudo service nginx restart
+30) sudo apt-get install git
+31) git clone https://github.com/vitaliyharchenko/sportcourts.git
+32) pip install -r /opt/scenv/sportcourts/requirements.txt
+33) cd /opt/scenv/sportcourts
+34) python manage.py syncdb
 
 
 
