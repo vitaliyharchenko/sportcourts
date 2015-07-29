@@ -6,7 +6,7 @@ from sportcourts import settings
 
 
 def build_login_link(redirect_uri, host='', scope=''):
-    raw_link = 'https://oauth.vk.com/authorize?client_id={appid}&scope={scope}&redirect_uri=http://{host}{redirect_uri}&response_type=code&v=5.27'
+    raw_link = 'https://oauth.vk.com/authorize?client_id={appid}&scope={scope}&redirect_uri=http://{host}{redirect_uri}&response_type=code&v=5.8'
     if not host:
         host = settings.CURRENT_HOST
     if not redirect_uri.startswith('/'):

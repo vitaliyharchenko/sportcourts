@@ -5,6 +5,7 @@ from django.contrib.auth.forms import ReadOnlyPasswordHashField
 from models import User
 from utils.forms import BootstrapModelForm, BootstrapForm
 from utils.validators import validate_password
+from utils.witgets import JasnyImageWidget
 
 
 class UserCreationForm(BootstrapModelForm):
@@ -90,7 +91,8 @@ class UserRegistrationForm(BootstrapModelForm):
         fields = User.REGISTRATION_FIELDS
         widgets = {'vkuserid': forms.HiddenInput(),
                    'password': forms.PasswordInput(render_value=False),
-                   'email': forms.EmailInput({'readonly': 'True'})}
+                   'email': forms.EmailInput({'readonly': 'True'}),
+                   'avatar': JasnyImageWidget()}
 
     def clean_password(self):
         value = self.cleaned_data['password']
@@ -101,7 +103,7 @@ class UserRegistrationForm(BootstrapModelForm):
 class UpdateForm(BootstrapModelForm):
     class Meta:
         model = User
-        fields = ['avatar', 'first_name', 'last_name', 'bdate', 'city', 'phone', 'weight', 'height', 'ampluas']
+        fields = ['avatar', 'first_name', 'last_name', 'sex', 'bdate', 'city', 'phone', 'weight', 'height', 'ampluas']
         widgets = {'ampluas': forms.CheckboxSelectMultiple}
 
 

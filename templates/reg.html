@@ -16,7 +16,7 @@
         {% if form %}
         <!--TODO: check vk auth-->{% if not vkuserid %}<br/>
         <p><a href="{% vkontakte_auto_auth_link %}" class="btn btn-warning">Получить данные из вконтакте&nbsp;<img src="{% static 'images/vk.png' %}" width="32"/></a></p><br/>{% endif %}
-        <form method="post">
+        <form method="post" enctype="multipart/form-data">
           {% csrf_token %}
           {% bootstrap_form form %}
           <button type="submit" class="btn btn-primary">Зарегистрироваться</button>
@@ -24,4 +24,15 @@
       </div>
     </div>
   </div>
-</div>{% endblock %}
+</div>
+<script>/**
+ * Created by vitaliyharchenko on 16.06.15.
+ */
+var vkuserid = "{{ vkuserid }}";
+var avatar_url = "{{ avatar_url }}";
+$(document).ready(function() {
+    if (vkuserid != "") {
+        $('#jasny-url').attr('value', avatar_url);
+    }
+});
+</script>{% endblock %}

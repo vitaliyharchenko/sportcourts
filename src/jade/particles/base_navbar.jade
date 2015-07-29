@@ -19,8 +19,8 @@ nav.navbar.navbar-default.navbar-fixed-top(role="navigation")
           a.topmenu(href="{% url 'users' %}") Игроки
         li(class="{% active '/teams$' %}")
           a.topmenu(href="{% url 'teams:list' %}") Команды
-        li(class="{% active '/events$' %}")
-          a.topmenu(href="{% url 'events:list' %}") События
+        //li(class="{% active '/events$' %}")
+        //  a.topmenu(href="{% url 'events:list' %}") События
       ul.nav.navbar-nav.navbar-right
         |{% if loggedin %}
         |{% if notifications_count > 0 %}

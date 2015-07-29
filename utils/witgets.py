@@ -31,18 +31,39 @@ class JasnyImageWidget(forms.FileInput):
            """
 
     def render(self, name, value, attrs=None):
+        print value
         attrs = attrs or {}
         state = 'exists' if value else 'new'
         width = attrs.get('width', None) or 150
         height = attrs.get('width', None) if value else 150
-        value = value if isinstance(value, str) else (value.url if value else None)
+        if isinstance(value, str):
+            value = value
+        elif isinstance(value, unicode):
+            value = value
+        elif isinstance(value, File):
+            if hasattr(value, 'url'):
+                value = value.url
+            else:
+                value = value
+        else:
+            value = None
         existing = self.existing.format(url=value, name=name, width=width, height=height) if value else ''
         return self.html.format(state=state, width=width, height=height, image=existing, name=name)
 
     def value_from_datadict(self, data, files, name):
-        deleted = bool(int(data.pop(name+'-deleted', ['0'])[0]))
-        url = data.pop(name+'-url', [''])[0]
+        del_query = unicode(name+'-deleted', "utf-8")
+        if del_query in data:
+            deleted = bool(int(data[del_query]))
+        else:
+            deleted = False
+        url_query = unicode(name+'-url', "utf-8")
+        if url_query in data:
+            url = data[url_query]
+        else:
+            url = None
+
         file = files.get(name, None)
+
         if deleted and not file:
             return False
         if not file and url:

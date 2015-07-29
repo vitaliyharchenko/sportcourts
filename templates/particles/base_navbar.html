@@ -9,7 +9,8 @@
         <li class="{% active '/courts$' %}"><a href="{% url 'courts:list' %}" class="topmenu"><span class="glyphicon glyphicon-globe"></span>&nbsp;Площадки</a></li>
         <li class="{% active '/users$' %}"><a href="{% url 'users' %}" class="topmenu">Игроки</a></li>
         <li class="{% active '/teams$' %}"><a href="{% url 'teams:list' %}" class="topmenu">Команды</a></li>
-        <li class="{% active '/events$' %}"><a href="{% url 'events:list' %}" class="topmenu">События</a></li>
+        <!--li(class="{% active '/events$' %}")-->
+        <!--  a.topmenu(href="{% url 'events:list' %}") События-->
       </ul>
       <ul class="nav navbar-nav navbar-right">
         {% if loggedin %}

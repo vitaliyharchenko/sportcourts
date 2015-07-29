@@ -9,7 +9,10 @@ from django.contrib.auth.decorators import login_required
 from models import Activation
 from django.core import signing
 from utils import mailing, api, vkontakte
+from utils.witgets import JasnyImageModelField
 from models import User
+import urllib
+from django.core.files import File
 
 
 # Create your views here.
@@ -143,9 +146,11 @@ def reg(request, token):
                         vkdata['bdate'] = vkuser['bdate']
                     else:
                         messages.warning(request, 'Неполная дата')
-                if 'camera' not in vkuser['photo_max']:
-                    vkdata['vkphoto'] = vkuser['photo_max']
-                    request.session['vkphoto'] = vkdata['vkphoto']
+                if 'photo_max' in vkuser:
+                    url = vkuser['photo_max']
+                    vkdata['avatar'] = url
+                    context['avatar_url'] = url
+
                 context['vkdata'] = vkdata
                 context['vkuserid'] = user_id
 
@@ -155,16 +160,19 @@ def reg(request, token):
                            'last_name': vkdata['last_name'],
                            'phone': vkdata['phone'],
                            'bdate': vkdata['bdate'],
-                           'vkuserid': user_id
+                           'vkuserid': user_id,
+                           'avatar': vkdata['avatar']
                            }
 
                 context['form'] = UserRegistrationForm(initial=initial)
+                return shortcut()
             else:
                 messages.warning(request, 'Такой пользователь уже зарегестрирован в системе')
 
         if request.method == 'POST':
             form = UserRegistrationForm(request.POST)
             if form.is_valid():
+                print form.cleaned_data
                 user = form.save(commit=False)
                 user.set_password(user.password)
                 activation = Activation.objects.get(email=user.email)
