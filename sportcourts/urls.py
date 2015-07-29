@@ -24,6 +24,7 @@ import teams.urls
 import finances.urls
 import blog.urls
 import notifications.urls
+from django.contrib.staticfiles.urls import staticfiles_urlpatterns
 
 urlpatterns = patterns('',
                        url(r'^admin/', include(admin.site.urls)),
@@ -42,7 +43,4 @@ urlpatterns += patterns('',
                             'document_root': settings.MEDIA_ROOT}))
 
 if settings.IS_PRODUCTION is True:
-    urlpatterns += patterns('',
-                            url(r'^static/(?P<path>.*)$', 'django.views.static.serve',
-                                {'document_root': settings.STATIC_URL}),
-                            )
+    urlpatterns += staticfiles_urlpatterns()
