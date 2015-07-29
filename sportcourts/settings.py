@@ -93,7 +93,7 @@ ADMINS = ('Vitaliy', 'harchenko.grape@gmail.com')
 YANDEX_MAPS_API_KEY = 'ADtA-FMBAAAAO_95dwIAb8cxoJ0XVsmlrrEljkqDE8QIFgsAAAAAAAAAAADwojBjdahSnZySk0zChxiVovWqNw=='
 
 if IS_PRODUCTION:
-    CURRENT_HOST = '127.0.0.1:8001'
+    CURRENT_HOST = 'test.sportcourts.ru'
 else:
     CURRENT_HOST = '127.0.0.1:8000'
 
