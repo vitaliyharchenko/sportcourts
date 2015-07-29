@@ -142,7 +142,7 @@ USE_TZ = True
 
 if IS_PRODUCTION:
     STATIC_URL = '/static/'
-    STATIC_ROOT = '/opt/myenv/sportcourts/static/'
+    STATIC_ROOT = '/opt/scenv/static/'
 else:
     STATIC_URL = '/static/'
     STATIC_ROOT = '/static/'
