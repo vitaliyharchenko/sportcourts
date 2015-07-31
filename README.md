@@ -251,6 +251,7 @@ server {
 32) pip install -r /opt/scenv/sportcourts/requirements.txt
 33) cd /opt/scenv/sportcourts
 34) python manage.py syncdb
+35) sudo apt-get install memcached
 
 
 
@@ -286,5 +287,6 @@ server {
 34) cd /opt/sportcourts
 35) python manage.py collectstatic
 35) gunicorn sportcourts.wsgi:application --bind=127.0.0.1:8001 --daemon
+36) sudo apt-get install memcached
 
 
