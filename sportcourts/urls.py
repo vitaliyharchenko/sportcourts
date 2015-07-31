@@ -28,7 +28,7 @@ from django.contrib.staticfiles.urls import staticfiles_urlpatterns
 
 urlpatterns = patterns('',
                        url(r'^admin/', include(admin.site.urls)),
-                       url(r'^$', events.views.events, name='index'),
+                       url(r'^$', views.index, name='index'),
                        url(r'^contacts$', views.contacts, name='contacts'),
                        url(r'^courts', include(courts.urls, 'courts')),
                        url(r'^teams', include(teams.urls, 'teams')),
