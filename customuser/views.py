@@ -154,6 +154,7 @@ def reg(request, token):
                         vkdata['bdate'] = vkuser['bdate']
                     elif vkuser['bdate'] != '':
                         messages.warning(request, 'Неполная дата')
+                        vkdata['bdate'] = vkuser['bdate']
                 else:
                     vkdata['bdate'] = None
 
