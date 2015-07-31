@@ -159,7 +159,7 @@ def reg(request, token):
                         messages.warning(request, 'Неполная дата')
                         vkdata['bdate'] = vkuser['bdate']
                 else:
-                    vkdata['bdate'] = None
+                    vkdata['bdate'] = ''
 
                 if 'photo_max' in vkuser:
                     url = vkuser['photo_max']
