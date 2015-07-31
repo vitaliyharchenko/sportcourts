@@ -85,6 +85,9 @@ class JasnyImageModelField(models.ImageField):
         defaults.update(kwargs)
         return super(JasnyImageModelField, self).formfield(**defaults)
 
+    def __unicode__(self):
+        return "%s" % self.url
+
 
 # CUSTOM PHONE FIELD
 #
