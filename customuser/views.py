@@ -145,7 +145,10 @@ def reg(request, token):
                     vkdata['phone'] = None
 
                 if vkuser['sex']:
-                    vkdata['sex'] = 'm' if vkuser['sex'] == 2 else vkdata['sex'] = 'f' if vkuser['sex'] == 1
+                    if vkuser['sex'] == 2:
+                        vkdata['sex'] = 'm'
+                    elif vkuser['sex'] == 1:
+                        vkdata['sex'] = 'f'
                 else:
                     vkdata['sex'] = None
 
