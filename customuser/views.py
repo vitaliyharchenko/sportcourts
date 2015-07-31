@@ -120,7 +120,7 @@ def reg(request, token):
         email = Activation.objects.get(token=token).email
         shortcut = lambda: render(request, 'reg.html', context)
 
-        if 'code' in request.GET and not 'vkuserid' in request.POST:
+        if 'code' in request.GET:
             code = request.GET['code']
             try:
                 access_token, user_id = vkontakte.auth_code(code, request.path)
@@ -128,7 +128,7 @@ def reg(request, token):
                 messages.warning(request, 'Ошибка авторизации')
                 context['form'] = UserRegistrationForm(request.POST)
                 return shortcut()
-            if User.objects.filter(vkuserid=user_id).count() == 0:
+            if User.objects.filter(vkuserid=user_id).count() == 0 and user_id != 0:
                 vkuser = vkontakte.api(access_token, 'users.get', fields=['sex', 'bdate', 'city',
                                                                           'photo_max', 'contacts'])[0]
                 vkdata = dict()
