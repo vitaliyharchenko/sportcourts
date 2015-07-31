@@ -301,7 +301,8 @@ def update(request):
             return redirect('user_update')
         else:
             messages.warning(request, "Некорректные данные", extra_tags='info')
-    return render(request, 'user_update.html', {'form': form, 'passform': ChangePasswordForm})
+    context = {'avatar_url': user.avatar, 'form': form, 'passform': ChangePasswordForm}
+    return render(request, 'user_update.html', context)
 
 
 @login_required
