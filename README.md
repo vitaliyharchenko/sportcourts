@@ -229,7 +229,7 @@ STATIC_ROOT = '/opt/scenv/static'
 server {
         server_name test.sportcourts.ru;
         charset utf-8;
-
+        client_max_body_size 75M;  
 
         access_log off;
 
@@ -256,42 +256,5 @@ server {
 34) python manage.py syncdb
 35) sudo apt-get install memcached
 36) locale-gen ru_RU.UTF-8
-
-
-
-
-
-24) sudo nano /etc/nginx/sites-available/sportcourts
-25) 
-```
-server {
-    server_name test.sportcourts.ru;
-
-    access_log off;
-
-    location /static/ {
-        alias /opt/sportcourts/static/;
-    }
-
-    location / {
-        proxy_pass http://127.0.0.1:8001;
-        proxy_set_header X-Forwarded-Host $server_name;
-        proxy_set_header X-Real-IP $remote_addr;
-        add_header P3P 'CP="ALL DSP COR PSAa PSDa OUR NOR ONL UNI COM NAV"';
-    }
-}
-```
-26) cd /etc/nginx/sites-enabled
-27) sudo ln -s ../sites-available/sportcourts
-28) sudo service nginx restart
-29) sudo apt-get install git
-30) cd /opt/
-31) git clone https://github.com/vitaliyharchenko/sportcourts.git
-32) source /opt/scenv/bin/activate
-33) pip install -r /opt/sportcourts/requirements.txt
-34) cd /opt/sportcourts
-35) python manage.py collectstatic
-35) gunicorn sportcourts.wsgi:application --bind=127.0.0.1:8001 --daemon
-36) sudo apt-get install memcached
 
 
