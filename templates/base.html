@@ -185,6 +185,7 @@ function clickfunc (item) {
                             $('#userclient').html('<p class="lead">Сейчас на указанный Вами адрес <span class="text-primary">'+email+'</span> придет сообщение, содержащее ссылку для подтверждения email.<br><br>Пожалуйста, проверьте вашу почту.</p>');
                             console.log('Не');
                         };
+                        $('#regModal').modal('hide');
                         $('#activateModal').modal('show');
                     } else {
                         var error = data['error'];
