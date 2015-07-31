@@ -139,6 +139,8 @@ def reg(request, token):
                     vkdata['phone'] = vkuser['mobile_phone']
                 elif 'home_phone' in vkuser:
                     vkdata['phone'] = vkuser['home_phone']
+                else:
+                    vkdata['phone'] = None
                 if vkuser['sex']:
                     vkdata['sex'] = 'm' if vkuser['sex'] == 2 else 'f'
                 if 'bdate' in vkuser:
