@@ -153,7 +153,7 @@ def reg(request, token):
                     vkdata['sex'] = None
 
                 if 'bdate' in vkuser:
-                    if len(vkuser['bdate']) == 10:
+                    if len(vkuser['bdate']) >= 8:
                         vkdata['bdate'] = vkuser['bdate']
                     elif vkuser['bdate'] != '':
                         messages.warning(request, 'Неполная дата')
