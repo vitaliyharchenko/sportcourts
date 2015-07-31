@@ -133,21 +133,30 @@ def reg(request, token):
                                                                           'photo_max', 'contacts'])[0]
                 vkdata = dict()
                 vkdata['vkuserid'] = user_id
+
                 vkdata['first_name'] = vkuser['first_name']
                 vkdata['last_name'] = vkuser['last_name']
+
                 if 'mobile_phone' in vkuser:
                     vkdata['phone'] = vkuser['mobile_phone']
                 elif 'home_phone' in vkuser:
                     vkdata['phone'] = vkuser['home_phone']
                 else:
                     vkdata['phone'] = None
+
                 if vkuser['sex']:
-                    vkdata['sex'] = 'm' if vkuser['sex'] == 2 else 'f'
+                    vkdata['sex'] = 'm' if vkuser['sex'] == 2 else vkdata['sex'] = 'f' if vkuser['sex'] == 1
+                else:
+                    vkdata['sex'] = None
+
                 if 'bdate' in vkuser:
                     if len(vkuser['bdate']) == 10:
                         vkdata['bdate'] = vkuser['bdate']
-                    else:
+                    elif vkuser['bdate'] != '':
                         messages.warning(request, 'Неполная дата')
+                else:
+                    vkdata['bdate'] = None
+
                 if 'photo_max' in vkuser:
                     url = vkuser['photo_max']
                     vkdata['avatar'] = url
