@@ -256,5 +256,7 @@ server {
 34) python manage.py syncdb
 35) sudo apt-get install memcached
 36) locale-gen ru_RU.UTF-8
+37) /opt/scenv/bin/gunicorn -c /opt/scenv/gunicorn_config.py sportcourts.wsgi
+
 
 
