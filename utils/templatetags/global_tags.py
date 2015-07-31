@@ -1,6 +1,7 @@
+# coding=utf-8
 from django import template
 from django.core.urlresolvers import reverse, NoReverseMatch
-import re
+import re, random
 
 register = template.Library()
 
@@ -18,6 +19,7 @@ def image(image, width='30', height='', thumbnail='False'):
     return {'img': image, 'size': x + 'x' + y, 'side_size': x, 'thumbnail': thumbnail}
 
 
+# Определяет активный пункт меню
 @register.simple_tag(takes_context=True)
 def active(context, urlname):
     try:
@@ -28,3 +30,8 @@ def active(context, urlname):
     if re.search(pattern, path):
         return 'active'
     return ''
+
+
+@register.simple_tag
+def random_choice(*args):
+    return random.choice(args)

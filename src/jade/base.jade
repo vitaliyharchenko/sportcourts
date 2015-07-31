@@ -20,7 +20,9 @@ html(lang="en")
     include particles/base_navbar
     include particles/base_modals
     include particles/base_notifications
+    |{% block globalcontent %}
     section#content
       .container
         |{% block content %}{% endblock %}
+    |{% endblock %}
     include particles/base_footer
