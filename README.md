@@ -165,6 +165,7 @@ server {
 34) cd /opt/sportcourts
 35) python manage.py collectstatic
 35) gunicorn sportcourts.wsgi:application --bind=127.0.0.1:8001 --daemon
+36) locale-gen en_US.UTF-8
 
 
 # Вторая попытка test.sportcourts.ru #
@@ -227,6 +228,8 @@ STATIC_ROOT = '/opt/scenv/static'
 ```
 server {
         server_name test.sportcourts.ru;
+        charset utf-8;
+
 
         access_log off;
 
@@ -252,6 +255,8 @@ server {
 33) cd /opt/scenv/sportcourts
 34) python manage.py syncdb
 35) sudo apt-get install memcached
+36) locale-gen ru_RU.UTF-8
+
 
 
 
