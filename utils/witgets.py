@@ -1,5 +1,5 @@
 # coding=utf-8
-import urllib, urlparse
+import urllib, urlparse, re
 from django import forms
 from django.core.files import File
 from django.db import models
@@ -7,6 +7,18 @@ import phonenumbers
 from django.core import validators
 from phonenumbers.phonenumberutil import NumberParseException
 from django.core.exceptions import ValidationError
+
+
+def urlencodenonascii(b):
+    return re.sub('[\x80-\xFF]', lambda c: '%%%02x' % ord(c.group(0)), b)
+
+
+def iritouri(iri):
+    parts= urlparse.urlparse(iri)
+    return urlparse.urlunparse(
+        part.encode('idna') if parti==1 else urlencodenonascii(part.encode('utf-8'))
+        for parti, part in enumerate(parts)
+    )
 
 
 class JasnyImageWidget(forms.FileInput):
@@ -70,7 +82,7 @@ class JasnyImageWidget(forms.FileInput):
         if not file and not url:
             return False
         if not file and url:
-            url = url.encode('utf8')
+            url = iritouri(u"%s" % url)
             parsed_link = urlparse.urlsplit(url)
             parsed_link = parsed_link._replace(path=urllib.quote(parsed_link.path.encode('utf8')))
             encoded_link = parsed_link.geturl()
