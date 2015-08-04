@@ -82,7 +82,9 @@ class JasnyImageWidget(forms.FileInput):
         if not file and not url:
             return False
         if not file and url:
+            print url
             url = iritouri(u"%s" % url)
+            print url
             parsed_link = urlparse.urlsplit(url)
             parsed_link = parsed_link._replace(path=urllib.quote(parsed_link.path.encode('utf8')))
             encoded_link = parsed_link.geturl()
