@@ -1,5 +1,5 @@
 # coding=utf-8
-import urllib
+import urllib, urlparse
 from django import forms
 from django.core.files import File
 from django.db import models
@@ -70,7 +70,12 @@ class JasnyImageWidget(forms.FileInput):
         if not file and not url:
             return False
         if not file and url:
-            result = urllib.urlretrieve(url)
+
+            parsed_link = urlparse.urlsplit(url)
+            parsed_link = parsed_link._replace(path=urllib.quote(parsed_link.path.encode('utf8')))
+            encoded_link = parsed_link.geturl()
+
+            result = urllib.urlretrieve(encoded_link)
             file = File(open(result[0]))
         return file
 
