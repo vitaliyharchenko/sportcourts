@@ -7,6 +7,7 @@ import phonenumbers
 from django.core import validators
 from phonenumbers.phonenumberutil import NumberParseException
 from django.core.exceptions import ValidationError
+from sorl.thumbnail import ImageField
 
 
 def urlencodenonascii(b):
@@ -98,7 +99,7 @@ class JasnyImageField(forms.ImageField):
     widget = JasnyImageWidget
 
 
-class JasnyImageModelField(models.ImageField):
+class JasnyImageModelField(ImageField):
     def formfield(self, **kwargs):
         defaults = {'form_class': JasnyImageField}
         defaults.update(kwargs)

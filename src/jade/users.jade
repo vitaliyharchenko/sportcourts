@@ -26,7 +26,6 @@
     |{% for user in users %}
     .row
       .col-xs-3
-        img(src="{{ user.avatar }}")
         |{% avatar user.avatar size='200' sex=user.sex thumbnail="True" %}
       .col-xs-9
         p.lead

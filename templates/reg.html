@@ -16,7 +16,6 @@
         {% if form %}
         <!--TODO: check vk auth-->{% if not vkuserid %}<br/>
         <p><a href="{% vkontakte_auto_auth_link %}" class="btn btn-warning">Получить данные из вконтакте&nbsp;<img src="{% static 'images/vk.png' %}" width="32"/></a></p><br/>{% endif %}
-        {{}}
         <form method="post" enctype="multipart/form-data">
           {% csrf_token %}
           {% bootstrap_form form %}
