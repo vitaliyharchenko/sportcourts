@@ -36,8 +36,6 @@ class JasnyImageWidget(forms.FileInput):
                  <span class="fileinput-exists">Изменить</span>
                  <input type="file" name="{name}" accept="images/*"></span>
                  <input type="hidden" id="jasny-deleted" name="{name}-deleted" value="0">
-                 <input type="hidden" id="jasny-url" name="{name}-url" value="">
-                 <a href="#" id="a-jasny-deleted" class="btn btn-default fileinput-exists" data-dismiss="fileinput">Удалить</a>
                </div>
            </div>
            """
