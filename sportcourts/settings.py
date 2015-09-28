@@ -15,6 +15,8 @@ import os
 
 IS_PRODUCTION = False
 
+THUMBNAIL_DEBUG = True
+
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 # Quick-start development settings - unsuitable for production
