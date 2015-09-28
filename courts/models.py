@@ -121,7 +121,7 @@ class Court(models.Model):
     max_players = models.IntegerField(verbose_name='Максимальное количество игроков', default=0)
 
     cost = models.IntegerField(verbose_name='Стоимость аренды, RUB/час', default=0)
-    photo = JasnyImageModelField(upload_to='courts', verbose_name='Изображение', blank=True, null=True)
+    photo = models.ImageField(upload_to='courts', verbose_name='Изображение', blank=True, null=True)
     sporttypes = models.ManyToManyField('events.SportType', verbose_name=u'Типы спорта', blank=True)
     views = models.IntegerField(default=0)
 
